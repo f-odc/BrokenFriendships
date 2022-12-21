@@ -1,4 +1,4 @@
-package de.tud.gdi1.dropofwater.ui;
+package ui;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Vector2f;
@@ -43,13 +43,8 @@ public class GameplayState extends BasicGameState {
 
 
     	
-    	// Hintergrund laden
-    	Entity background = new Entity("background");	// Entitaet fuer Hintergrund
-    	background.setPosition(new Vector2f(400,300));	// Startposition des Hintergrunds
-    	background.addComponent(new ImageRenderComponent(new Image("/assets/background.png"))); // Bildkomponente
-    	    	
-    	// Hintergrund-Entitaet an StateBasedEntityManager uebergeben
-    	StateBasedEntityManager.getInstance().addEntity(stateID, background);
+    	// setzen des Hintergrunds
+		container.getGraphics().setBackground(Color.white);
     	
     	// Bei Drücken der ESC-Taste zurueck ins Hauptmenue wechseln
     	Entity esc_Listener = new Entity("ESC_Listener");
@@ -57,47 +52,6 @@ public class GameplayState extends BasicGameState {
     	esc_pressed.addAction(new ChangeStateAction(Launch.MAINMENU_STATE));
     	esc_Listener.addComponent(esc_pressed);    	
     	entityManager.addEntity(stateID, esc_Listener);
-    	
-    	// Bei Mausklick soll Wassertropfen erscheinen
-    	Entity mouse_Clicked_Listener = new Entity("Mouse_Clicked_Listener");
-    	MouseClickedEvent mouse_Clicked = new MouseClickedEvent();
-    	
-    	mouse_Clicked.addAction(new Action() {
-			@Override
-			public void update(GameContainer gc, StateBasedGame sb, int delta,
-					Component event) {
-				// Wassertropfen wird erzeugt
-				Entity drop = new Entity("drop of water");
-				drop.setPosition(new Vector2f(gc.getInput().getMouseX(),gc.getInput().getMouseY()));
-				
-				try {
-					// Bild laden und zuweisen
-					drop.addComponent(new ImageRenderComponent(new Image("assets/drop.png")));
-				} catch (SlickException e) {
-					System.err.println("Cannot find file assets/drop.png!");
-					e.printStackTrace();
-				}
-				
-				// Wassertropfen faellt nach unten
-				LoopEvent loop = new LoopEvent();
-		    	loop.addAction(new MoveDownAction(0.5f));
-		    	drop.addComponent(loop);
-		    	
-		    	// Wenn der Bildschirm verlassen wird, dann ...
-		    	LeavingScreenEvent lse = new LeavingScreenEvent();
-		    	
-		    	// ... zerstoere den Wassertropfen
-		    	lse.addAction(new DestroyEntityAction());
-		    	// ... und wechsle ins Hauptmenue
-		    	lse.addAction(new ChangeStateAction(Launch.MAINMENU_STATE));
-		    	
-		    	drop.addComponent(lse);
-		    	entityManager.addEntity(stateID, drop);
-			}    		
-    	});
-    	mouse_Clicked_Listener.addComponent(mouse_Clicked);
-    	
-    	entityManager.addEntity(stateID, mouse_Clicked_Listener);    	
     	
     }
 

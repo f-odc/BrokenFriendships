@@ -1,9 +1,6 @@
-package de.tud.gdi1.dropofwater.ui;
+package ui;
 
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -43,13 +40,8 @@ public class MainMenuState extends BasicGameState {
      */
     @Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
-    	// Hintergrund laden
-    	Entity background = new Entity("menu");	// Entitaet fuer Hintergrund
-    	background.setPosition(new Vector2f(400,300));	// Startposition des Hintergrunds
-    	background.addComponent(new ImageRenderComponent(new Image("/assets/menu.png"))); // Bildkomponente
-    	    	
-    	// Hintergrund-Entitaet an StateBasedEntityManager uebergeben
-    	entityManager.addEntity(stateID, background);
+    	// setzen des Hintergrunds
+		container.getGraphics().setBackground(Color.white);
     	
     	/* Neues Spiel starten-Entitaet */
     	String new_Game = "Neues Spiel starten";
@@ -58,7 +50,7 @@ public class MainMenuState extends BasicGameState {
     	// Setze Position und Bildkomponente
     	new_Game_Entity.setPosition(new Vector2f(218, 190));
     	new_Game_Entity.setScale(0.28f);
-    	new_Game_Entity.addComponent(new ImageRenderComponent(new Image("assets/entry.png")));
+    	new_Game_Entity.addComponent(new ImageRenderComponent(new Image("assets/entryButton.png")));
     	
     	// Erstelle das Ausloese-Event und die zugehoerige Action
     	ANDEvent mainEvents = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
@@ -75,7 +67,7 @@ public class MainMenuState extends BasicGameState {
     	// Setze Position und Bildkomponente
     	quit_Entity.setPosition(new Vector2f(218, 290));
     	quit_Entity.setScale(0.28f);
-    	quit_Entity.addComponent(new ImageRenderComponent(new Image("assets/entry.png")));
+    	quit_Entity.addComponent(new ImageRenderComponent(new Image("assets/entryButton.png")));
     	
     	// Erstelle das Ausloese-Event und die zugehoerige Action
     	ANDEvent mainEvents_q = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());

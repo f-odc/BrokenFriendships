@@ -1,4 +1,4 @@
-package de.tud.gdi1.dropofwater.ui;
+package ui;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
