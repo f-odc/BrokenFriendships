@@ -1,3 +1,7 @@
+.idea
+.out
+native
+
 # Compiled class file
 *.class
 
