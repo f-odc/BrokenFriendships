@@ -23,7 +23,7 @@ public class Launch extends StateBasedGame {
     
     public Launch()
     {
-        super("Drop of Water");
+        super("Broken friendships");
     }
  
     public static void main(String[] args) throws SlickException
@@ -51,8 +51,10 @@ public class Launch extends StateBasedGame {
 		
 		// Fuege dem StateBasedGame die States hinzu 
 		// (der zuerst hinzugefuegte State wird als erster State gestartet)
+        GameplayState gameplayState = new GameplayState(GAMEPLAY_STATE);
 		addState(new MainMenuState(MAINMENU_STATE));
-        addState(new GameplayState(GAMEPLAY_STATE));
+        addState(gameplayState);
+
         
         // Fuege dem StateBasedEntityManager die States hinzu
         StateBasedEntityManager.getInstance().addState(MAINMENU_STATE);
