@@ -1,6 +1,9 @@
 package ui;
 
+import eea.engine.action.basicactions.MoveUpAction;
 import eea.engine.component.RenderComponent;
+import eea.engine.event.ANDEvent;
+import eea.engine.event.basicevents.*;
 import org.lwjgl.Sys;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Color;
@@ -18,10 +21,6 @@ import eea.engine.component.Component;
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
 import eea.engine.entity.StateBasedEntityManager;
-import eea.engine.event.basicevents.KeyPressedEvent;
-import eea.engine.event.basicevents.LeavingScreenEvent;
-import eea.engine.event.basicevents.LoopEvent;
-import eea.engine.event.basicevents.MouseClickedEvent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,20 +36,22 @@ public class GameplayState extends BasicGameState {
     private int stateID;                            // Identifier dieses BasicGameState
     private StateBasedEntityManager entityManager;    // zugehoeriger entityManager
 
-    private Point[][] Coordinates = new Point[11][11];
+    private Field[][] Coordinates = new Field[11][11];
 
     GameplayState(int sid) {
         stateID = sid;
         entityManager = StateBasedEntityManager.getInstance();
 
-        int width = Toolkit.getDefaultToolkit().getScreenSize().width;
+        int width = Toolkit.getDefaultToolkit().getScreenSize().height;
         int height = Toolkit.getDefaultToolkit().getScreenSize().height;
+
+        int offsetX = Toolkit.getDefaultToolkit().getScreenSize().width/2 - width/2;
 
         int xSteps = width / 11;
         int ySteps = height / 11;
         for (int i = 0; i < 11; i++) {
             for (int j = 0; j < 11; j++){
-                Coordinates[i][j] = new Point(i * xSteps,j * ySteps);
+                Coordinates[i][j] = new Field(new Point(i * xSteps + offsetX,j * ySteps), new Point((i+1) * xSteps + offsetX, (j+ 1) * ySteps));
             }
         }
     }
@@ -61,7 +62,7 @@ public class GameplayState extends BasicGameState {
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         // setzen des Hintergrunds
-        container.getGraphics().setBackground(Color.white);
+        container.getGraphics().setBackground(Color.black);
 
         // Bei Drücken der ESC-Taste zurueck ins Hauptmenue wechseln
         Entity esc_Listener = new Entity("ESC_Listener");
@@ -70,12 +71,21 @@ public class GameplayState extends BasicGameState {
         esc_Listener.addComponent(esc_pressed);
         entityManager.addEntity(stateID, esc_Listener);
 
-        for (Point[] row: Coordinates) {
-            for (Point coordinate: row) {
-                Entity point = new Entity("grid point" + coordinate.getX());
-                point.setPosition(new Vector2f(coordinate.getX(), coordinate.getY()));
+        //field sizes
+        float normalSize = 0.18f;
+        float homeSize = 0.12f;
+
+        //init
+        for (Field[] row: Coordinates) {
+            for (Field coordinate: row) {
+                Entity point = new Entity("grid point" + coordinate.getMid().getX());
+                point.setPosition(new Vector2f(coordinate.getMid().getX(), coordinate.getMid().getY()));
                 point.addComponent(new ImageRenderComponent(new Image("assets/point.png")));
-                point.setScale(0.02f);
+                point.setScale(normalSize);
+                //TODO delete
+                ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
+                clickEvent.addAction(new MoveUpAction(0.5f));
+                point.addComponent(clickEvent);
                 entityManager.addEntity(stateID, point);
             }
         }
