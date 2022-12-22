@@ -41,7 +41,6 @@ public class Launch extends StateBasedGame {
         AppGameContainer app = new AppGameContainer(new Launch());
  
         // Lege die Einstellungen des Fensters fest und starte das Fenster
-        // (nicht aber im Vollbildmodus)
         app.setDisplayMode(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, true);
         app.start();
     }

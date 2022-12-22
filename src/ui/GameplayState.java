@@ -1,10 +1,11 @@
 package ui;
 
 import eea.engine.action.basicactions.MoveUpAction;
-import eea.engine.component.RenderComponent;
 import eea.engine.event.ANDEvent;
 import eea.engine.event.basicevents.*;
-import org.lwjgl.Sys;
+import model.global;
+import model.logic.Field;
+import model.logic.Point;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -12,17 +13,10 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-
-import eea.engine.action.Action;
 import eea.engine.action.basicactions.ChangeStateAction;
-import eea.engine.action.basicactions.DestroyEntityAction;
-import eea.engine.action.basicactions.MoveDownAction;
-import eea.engine.component.Component;
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
 import eea.engine.entity.StateBasedEntityManager;
-
-import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -33,25 +27,30 @@ import java.awt.*;
  */
 public class GameplayState extends BasicGameState {
 
+    private int NUM_OF_FIELDS = global.NUM_OF_FIELDS;
     private int stateID;                            // Identifier dieses BasicGameState
     private StateBasedEntityManager entityManager;    // zugehoeriger entityManager
 
-    private Field[][] Coordinates = new Field[11][11];
+    private Field[][] fields = new Field[NUM_OF_FIELDS][NUM_OF_FIELDS];     //Felder auf dem Spielbrett
 
     GameplayState(int sid) {
         stateID = sid;
         entityManager = StateBasedEntityManager.getInstance();
 
-        int width = Toolkit.getDefaultToolkit().getScreenSize().height;
-        int height = Toolkit.getDefaultToolkit().getScreenSize().height;
+        //Initialisieren des Spielbrettes
+        int dimensions = Toolkit.getDefaultToolkit().getScreenSize().height;
 
-        int offsetX = Toolkit.getDefaultToolkit().getScreenSize().width/2 - width/2;
+        //offset um das Spielbrett in die Mitte des Fensters zu schieben
+        int offsetX = Toolkit.getDefaultToolkit().getScreenSize().width/2 - dimensions/2;
 
-        int xSteps = width / 11;
-        int ySteps = height / 11;
-        for (int i = 0; i < 11; i++) {
-            for (int j = 0; j < 11; j++){
-                Coordinates[i][j] = new Field(new Point(i * xSteps + offsetX,j * ySteps), new Point((i+1) * xSteps + offsetX, (j+ 1) * ySteps));
+        //Initialisieren des fields array, mit den einzelnen Feldern des Spielbrettes
+        //Schrittweite in die breite
+        int xSteps = dimensions / NUM_OF_FIELDS;
+        //Schrittweite in die Höhe
+        int ySteps = dimensions / NUM_OF_FIELDS;
+        for (int i = 0; i < NUM_OF_FIELDS; i++) {
+            for (int j = 0; j < NUM_OF_FIELDS; j++){
+                fields[i][j] = new Field(new Point(i * xSteps + offsetX,j * ySteps), new Point((i+1) * xSteps + offsetX, (j+ 1) * ySteps));
             }
         }
     }
@@ -71,15 +70,16 @@ public class GameplayState extends BasicGameState {
         esc_Listener.addComponent(esc_pressed);
         entityManager.addEntity(stateID, esc_Listener);
 
-        //field sizes
+        //größen der Felder
         float normalSize = 0.18f;
         float homeSize = 0.12f;
 
-        //init
-        for (Field[] row: Coordinates) {
-            for (Field coordinate: row) {
-                Entity point = new Entity("grid point" + coordinate.getMid().getX());
-                point.setPosition(new Vector2f(coordinate.getMid().getX(), coordinate.getMid().getY()));
+        //initialisieren der Entities für jedes Feld
+        for (Field[] row: fields) {
+            for (Field field: row) {
+                //erstellen einer neuen Entity
+                Entity point = new Entity("grid point" + field.getMid().getX());
+                point.setPosition(new Vector2f(field.getMid().getX(), field.getMid().getY()));
                 point.addComponent(new ImageRenderComponent(new Image("assets/point.png")));
                 point.setScale(normalSize);
                 //TODO delete

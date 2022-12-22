@@ -1,13 +1,13 @@
-package ui;
+package model.logic;
 
 public class Field {
-    Point start;
+    private Point start;
 
-    Point mid;
+    private Point mid;
 
-    Point end;
+    private Point end;
 
-    Field(Point start, Point end) {
+    public Field(Point start, Point end) {
         this.start = start;
         this.end = end;
         this.mid = new Point((start.getX() + end.getX()) / 2, (start.getY() + end.getY()) / 2);
