@@ -1,10 +1,16 @@
 package model.logic;
 
+/**
+ * Klasse um die einzelnen Felder des Spielbrettes zu implementieren
+ */
 public class Field {
+    //linke obere Ecke
     private Point start;
 
+    //mitte von x und y Werten der Kanten
     private Point mid;
 
+    //rechte untere Ecke
     private Point end;
 
     public Field(Point start, Point end) {

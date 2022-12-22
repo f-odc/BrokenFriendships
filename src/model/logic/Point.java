@@ -1,5 +1,8 @@
 package model.logic;
 
+/**
+ * Klasse um einen Koordinatenpunkt zu implementieren
+ */
 public class Point {
 
     private int x;
