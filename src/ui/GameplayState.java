@@ -1,28 +1,16 @@
 package ui;
 
-import eea.engine.event.ANDEvent;
 import eea.engine.event.basicevents.*;
-import model.fields.HomeField;
-import model.fields.StandardField;
-import model.fields.StartField;
 import model.global;
-import model.interfaces.IGameField;
 import model.logic.Board;
-import model.logic.LogAction;
-import model.logic.Point;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import eea.engine.action.basicactions.ChangeStateAction;
-import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
 import eea.engine.entity.StateBasedEntityManager;
-
-import java.awt.*;
 
 /**
  * @author Timo Bähr
@@ -31,8 +19,6 @@ import java.awt.*;
  * erscheint und nach unten faellt.
  */
 public class GameplayState extends BasicGameState {
-
-    private final int[][] BOARD = global.board;
 
     private final int stateID;
     // Identifier dieses BasicGameState
@@ -58,6 +44,7 @@ public class GameplayState extends BasicGameState {
         esc_Listener.addComponent(esc_pressed);
         entityManager.addEntity(stateID, esc_Listener);
 
+        //initialisieren des Spielbrettes
         global.BOARD = new Board(entityManager,stateID);
 
     }

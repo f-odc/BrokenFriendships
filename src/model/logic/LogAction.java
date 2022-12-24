@@ -5,8 +5,6 @@ import eea.engine.component.Component;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.state.StateBasedGame;
 
-import java.awt.*;
-
 public class LogAction implements Action {
     private Point position;
 
@@ -19,6 +17,6 @@ public class LogAction implements Action {
 
     @Override
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int i, Component component) {
-        System.out.println("Color: " + this.color.toString() + " |X: " + position.getX() + " |Y: " + position.getY());
+        System.out.println("Color: " + this.color + " |X: " + position.getX() + " |Y: " + position.getY());
     }
 }

@@ -14,8 +14,7 @@ import model.interfaces.IGameField;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
-
-import java.awt.*;
+import java.awt.Toolkit;
 
 public class Board {
 
@@ -67,8 +66,7 @@ public class Board {
                 //zuweisen des richtigen Bildes
                 if(tmpField != null) {
                     String img = tmpField instanceof StandardField ? "assets/standardField.png" :
-                            tmpField instanceof HomeField ? getImg(((HomeField) tmpField).getColor()) :
-                                    getImg(((StartField) tmpField).getColor());
+                            getImg(tmpField.getColor());
 
                     //erstellen einer neuen Entity
                     Entity point = new Entity("grid point" + tmpField.getPosition().getX());
@@ -88,18 +86,18 @@ public class Board {
     }
 
 
-    private java.awt.Color getFieldColor(Point point) {
-        return point.getX() <= 5 && point.getY() <= 4 ? java.awt.Color.red :
-                point.getX() >= 5 && point.getY() <= 5 ? java.awt.Color.yellow :
-                        point.getX() <= 4 && point.getY() >= 5 ? java.awt.Color.green :
-                                point.getX() >= 5 && point.getY() >= 5 ? java.awt.Color.blue :
-                                        null;
+    private Color getFieldColor(Point point) {
+        return point.getX() <= 5 && point.getY() <= 4 ? Color.RED :
+                point.getX() >= 5 && point.getY() <= 5 ? Color.YELLOW :
+                        point.getX() <= 4 && point.getY() >= 5 ? Color.GREEN :
+                                point.getX() >= 5 && point.getY() >= 5 ? Color.BLUE :
+                                        Color.NONE;
     }
 
-    private String getImg(java.awt.Color color) {
-        return color == java.awt.Color.red ? "assets/redField.png" :
-                color == java.awt.Color.blue ? "assets/blueField.png" :
-                        color == java.awt.Color.yellow ? "assets/yellowField.png" :
+    private String getImg(Color color) {
+        return color == Color.RED ? "assets/redField.png" :
+                color == Color.BLUE ? "assets/blueField.png" :
+                        color == Color.YELLOW ? "assets/yellowField.png" :
                                 "assets/greenField.png";
 
     }

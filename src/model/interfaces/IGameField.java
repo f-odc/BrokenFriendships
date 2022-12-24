@@ -1,13 +1,12 @@
 package model.interfaces;
 
-
-import java.awt.*;
+import model.logic.Color;
 
 public interface IGameField {
 
-    public boolean isOccupied();
-    public model.logic.Point getPosition();
-    public float getSize();
-    public Color getColor();
+    boolean isOccupied();
+    model.logic.Point getPosition();
+    float getSize();
+    Color getColor();
 
 }

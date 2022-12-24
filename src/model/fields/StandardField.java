@@ -1,16 +1,14 @@
 package model.fields;
 
 import model.interfaces.IGameField;
+import model.logic.Color;
 import model.logic.Point;
-
-import java.awt.*;
-
 
 public class StandardField implements IGameField {
 
     private Point position;
 
-    private Color color = Color.gray;
+    private Color color = Color.NONE;
 
     private float size = 0.12f;
 

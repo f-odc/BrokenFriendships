@@ -1,6 +1,7 @@
 package model.fields;
 
 import model.interfaces.IGameField;
+import model.logic.Color;
 import model.logic.Point;
 
 import java.awt.*;
