@@ -7,8 +7,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="slick" level="project" />
-    <orderEntry type="library" exported="" name="lwjgl" level="project" />
     <orderEntry type="library" name="eea" level="project" />
+    <orderEntry type="library" name="lwjgl" level="project" />
+    <orderEntry type="library" name="slick" level="project" />
   </component>
 </module>

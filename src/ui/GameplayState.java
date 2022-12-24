@@ -1,10 +1,14 @@
 package ui;
 
-import eea.engine.action.basicactions.MoveUpAction;
 import eea.engine.event.ANDEvent;
 import eea.engine.event.basicevents.*;
+import model.fields.HomeField;
+import model.fields.StandardField;
+import model.fields.StartField;
 import model.global;
-import model.logic.Field;
+import model.interfaces.IGameField;
+import model.logic.Board;
+import model.logic.LogAction;
 import model.logic.Point;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Color;
@@ -17,6 +21,7 @@ import eea.engine.action.basicactions.ChangeStateAction;
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
 import eea.engine.entity.StateBasedEntityManager;
+
 import java.awt.*;
 
 /**
@@ -27,32 +32,15 @@ import java.awt.*;
  */
 public class GameplayState extends BasicGameState {
 
-    private int NUM_OF_FIELDS = global.NUM_OF_FIELDS;
-    private int stateID;                            // Identifier dieses BasicGameState
-    private StateBasedEntityManager entityManager;    // zugehoeriger entityManager
+    private final int[][] BOARD = global.board;
 
-    private Field[][] fields = new Field[NUM_OF_FIELDS][NUM_OF_FIELDS];     //Felder auf dem Spielbrett
+    private final int stateID;
+    // Identifier dieses BasicGameState
+    private final StateBasedEntityManager entityManager;    // zugehoeriger entityManager
 
     GameplayState(int sid) {
         stateID = sid;
         entityManager = StateBasedEntityManager.getInstance();
-
-        //Initialisieren des Spielbrettes
-        int dimensions = Toolkit.getDefaultToolkit().getScreenSize().height;
-
-        //offset um das Spielbrett in die Mitte des Fensters zu schieben
-        int offsetX = Toolkit.getDefaultToolkit().getScreenSize().width/2 - dimensions/2;
-
-        //Initialisieren des fields array, mit den einzelnen Feldern des Spielbrettes
-        //Schrittweite in die breite
-        int xSteps = dimensions / NUM_OF_FIELDS;
-        //Schrittweite in die Höhe
-        int ySteps = dimensions / NUM_OF_FIELDS;
-        for (int i = 0; i < NUM_OF_FIELDS; i++) {
-            for (int j = 0; j < NUM_OF_FIELDS; j++){
-                fields[i][j] = new Field(new Point(i * xSteps + offsetX,j * ySteps), new Point((i+1) * xSteps + offsetX, (j+ 1) * ySteps));
-            }
-        }
     }
 
     /**
@@ -70,25 +58,8 @@ public class GameplayState extends BasicGameState {
         esc_Listener.addComponent(esc_pressed);
         entityManager.addEntity(stateID, esc_Listener);
 
-        //größen der Felder
-        float normalSize = 0.18f;
-        float homeSize = 0.12f;
+        global.BOARD = new Board(entityManager,stateID);
 
-        //initialisieren der Entities für jedes Feld
-        for (Field[] row: fields) {
-            for (Field field: row) {
-                //erstellen einer neuen Entity
-                Entity point = new Entity("grid point" + field.getMid().getX());
-                point.setPosition(new Vector2f(field.getMid().getX(), field.getMid().getY()));
-                point.addComponent(new ImageRenderComponent(new Image("assets/point.png")));
-                point.setScale(normalSize);
-                //TODO delete
-                ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
-                clickEvent.addAction(new MoveUpAction(0.5f));
-                point.addComponent(clickEvent);
-                entityManager.addEntity(stateID, point);
-            }
-        }
     }
 
     /**

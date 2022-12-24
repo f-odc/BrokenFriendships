@@ -1,0 +1,106 @@
+package model.logic;
+
+import eea.engine.component.render.ImageRenderComponent;
+import eea.engine.entity.Entity;
+import eea.engine.entity.StateBasedEntityManager;
+import eea.engine.event.ANDEvent;
+import eea.engine.event.basicevents.MouseClickedEvent;
+import eea.engine.event.basicevents.MouseEnteredEvent;
+import model.fields.HomeField;
+import model.fields.StandardField;
+import model.fields.StartField;
+import model.global;
+import model.interfaces.IGameField;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Vector2f;
+
+import java.awt.*;
+
+public class Board {
+
+    static public int[][] board = {
+            {2,2,0,0,1,1,3,0,0,2,2},
+            {2,2,0,0,1,2,1,0,0,2,2},
+            {0,0,0,0,1,2,1,0,0,0,0},
+            {0,0,0,0,1,2,1,0,0,0,0},
+            {3,1,1,1,1,2,1,1,1,1,1},
+            {1,2,2,2,2,0,2,2,2,2,1},
+            {1,1,1,1,1,2,1,1,1,1,3},
+            {0,0,0,0,1,2,1,0,0,0,0},
+            {0,0,0,0,1,2,1,0,0,0,0},
+            {2,2,0,0,1,2,1,0,0,2,2},
+            {2,2,0,0,3,1,1,0,0,2,2},
+    };
+
+    static public IGameField[][] BOARD = new IGameField[global.NUM_OF_FIELDS][global.NUM_OF_FIELDS];
+
+    public Board(StateBasedEntityManager entityManager, int stateID) throws SlickException {
+        //Initialisieren des Spielbrettes
+        int dimensions = Toolkit.getDefaultToolkit().getScreenSize().height;
+
+        //offset um das Spielbrett in die Mitte des Fensters zu schieben
+        int offsetX = Toolkit.getDefaultToolkit().getScreenSize().width / 2 - dimensions / 2;
+
+        //Initialisieren des fields array, mit den einzelnen Feldern des Spielbrettes
+        //Schrittweite in die breite
+        int xSteps = dimensions / global.NUM_OF_FIELDS;
+        //Schrittweite in die Höhe
+        int ySteps = dimensions / global.NUM_OF_FIELDS;
+
+
+        IGameField[][] tmp = new IGameField[11][11];
+
+        //initialisieren der Entities für jedes Feld
+        for (int i = 0; i < global.NUM_OF_FIELDS; i++) {
+            for (int j = 0; j < global.NUM_OF_FIELDS; j++) {
+                Point x = new Point(i * xSteps + offsetX, j * ySteps);
+                Point y = new Point((i + 1) * xSteps + offsetX, (j + 1) * ySteps);
+
+                //initialisieren des richtigen Feldes
+                IGameField tmpField = board[i][j] == 1 ? new StandardField(x, y) :
+                        board[i][j] == 2 ? new HomeField(getFieldColor(new Point(i, j)), x, y) :
+                                board[i][j] == 3 ? new StartField(getFieldColor(new Point(i, j)), x, y) :
+                                        null;
+                tmp[i][j] = tmpField;
+
+                //zuweisen des richtigen Bildes
+                if(tmpField != null) {
+                    String img = tmpField instanceof StandardField ? "assets/standardField.png" :
+                            tmpField instanceof HomeField ? getImg(((HomeField) tmpField).getColor()) :
+                                    getImg(((StartField) tmpField).getColor());
+
+                    //erstellen einer neuen Entity
+                    Entity point = new Entity("grid point" + tmpField.getPosition().getX());
+                    point.setPosition(new Vector2f(tmpField.getPosition().getX(), tmpField.getPosition().getY()));
+                    point.addComponent(new ImageRenderComponent(new Image(img)));
+                    point.setScale(tmpField.getSize());
+                    //TODO delete
+                    ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
+                    clickEvent.addAction(new LogAction(tmpField.getPosition(),tmpField.getColor()));
+                    point.addComponent(clickEvent);
+                    entityManager.addEntity(stateID, point);
+                }
+            }
+        }
+        //globales board mit dem temporären initialisieren
+        BOARD = tmp;
+    }
+
+
+    private java.awt.Color getFieldColor(Point point) {
+        return point.getX() <= 5 && point.getY() <= 4 ? java.awt.Color.red :
+                point.getX() >= 5 && point.getY() <= 5 ? java.awt.Color.yellow :
+                        point.getX() <= 4 && point.getY() >= 5 ? java.awt.Color.green :
+                                point.getX() >= 5 && point.getY() >= 5 ? java.awt.Color.blue :
+                                        null;
+    }
+
+    private String getImg(java.awt.Color color) {
+        return color == java.awt.Color.red ? "assets/redField.png" :
+                color == java.awt.Color.blue ? "assets/blueField.png" :
+                        color == java.awt.Color.yellow ? "assets/yellowField.png" :
+                                "assets/greenField.png";
+
+    }
+}
