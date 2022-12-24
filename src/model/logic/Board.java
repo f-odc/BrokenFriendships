@@ -103,4 +103,8 @@ public class Board {
                                 "assets/greenField.png";
 
     }
+
+    public IGameField getField(Point point){
+        return BOARD[point.getX()][point.getY()];
+    }
 }
