@@ -18,7 +18,9 @@ import java.awt.Toolkit;
 
 public class Board {
 
-    static public int[][] board = {
+    //0 == kein Feld, 1 == standard-Feld
+    //2 == Haus-Feld, 3 == Start-Feld
+    static public int[][] boardTemplate = {
             {2,2,0,0,1,1,3,0,0,2,2},
             {2,2,0,0,1,2,1,0,0,2,2},
             {0,0,0,0,1,2,1,0,0,0,0},
@@ -57,9 +59,9 @@ public class Board {
                 Point y = new Point((i + 1) * xSteps + offsetX, (j + 1) * ySteps);
 
                 //initialisieren des richtigen Feldes
-                IGameField tmpField = board[i][j] == 1 ? new StandardField(x, y) :
-                        board[i][j] == 2 ? new HomeField(getFieldColor(new Point(i, j)), x, y) :
-                                board[i][j] == 3 ? new StartField(getFieldColor(new Point(i, j)), x, y) :
+                IGameField tmpField = boardTemplate[i][j] == 1 ? new StandardField(x, y) :
+                        boardTemplate[i][j] == 2 ? new HomeField(getFieldColor(new Point(i, j)), x, y) :
+                                boardTemplate[i][j] == 3 ? new StartField(getFieldColor(new Point(i, j)), x, y) :
                                         null;
                 tmp[i][j] = tmpField;
 

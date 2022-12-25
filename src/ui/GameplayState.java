@@ -53,7 +53,7 @@ public class GameplayState extends BasicGameState {
      * Wird vor dem Frame ausgefuehrt
      */
     @Override
-    public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+    public void update(GameContainer container, StateBasedGame game, int delta){
         // StatedBasedEntityManager soll alle Entities aktualisieren
         entityManager.updateEntities(container, game, delta);
     }
