@@ -6,7 +6,6 @@ import eea.engine.entity.StateBasedEntityManager;
 import eea.engine.event.ANDEvent;
 import eea.engine.event.basicevents.MouseClickedEvent;
 import eea.engine.event.basicevents.MouseEnteredEvent;
-import model.global;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
@@ -21,15 +20,18 @@ public class Dice {
 
     private int STATEID;
 
+    private Point position;
+
     private StateBasedEntityManager entityManager;
 
     private ImageRenderComponent imgComponent;
 
-    Dice(int value, int state, StateBasedEntityManager entityManager) throws SlickException {
+    Dice(int value, Point position, int state, StateBasedEntityManager entityManager) throws SlickException {
         this.img = getImg(value);
         this.value = value;
         this.STATEID = state;
         this.entityManager = entityManager;
+        this.position = position;
 
         addEntity();
     }
@@ -44,7 +46,7 @@ public class Dice {
 
     public int throwDice() throws SlickException {
         Random rand = new Random();
-        int diceThrow = rand.nextInt(1,6);
+        int diceThrow = rand.nextInt(1,7);
         this.value = diceThrow;
         this.img = getImg(diceThrow);
 
@@ -54,8 +56,7 @@ public class Dice {
 
     private void addEntity() throws SlickException {
         Entity dice = new Entity("dice");
-        Point boardPosition = global.BOARD.getField(new Point(10,2)).getPosition();
-        dice.setPosition(new Vector2f(boardPosition.getX(),boardPosition.getY()));
+        dice.setPosition(new Vector2f(position.getX(),position.getY()));
         ImageRenderComponent comp = new ImageRenderComponent(new Image(this.img));
         this.imgComponent = comp;
         dice.addComponent(comp);

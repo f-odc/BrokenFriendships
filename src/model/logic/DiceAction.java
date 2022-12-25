@@ -15,7 +15,6 @@ public class DiceAction implements Action {
         try {
             global.BOARD.dice.throwDice();
             System.out.println("has thrown: " + global.BOARD.dice.getValue());
-            component.getOwnerEntity().addComponent(new ImageRenderComponent(new Image(global.BOARD.dice.getImg())));
         } catch (SlickException e) {
             System.out.println("throw has failed");
             throw new RuntimeException(e);

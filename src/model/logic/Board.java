@@ -6,9 +6,8 @@ import eea.engine.entity.StateBasedEntityManager;
 import eea.engine.event.ANDEvent;
 import eea.engine.event.basicevents.MouseClickedEvent;
 import eea.engine.event.basicevents.MouseEnteredEvent;
-import model.fields.HomeField;
+import model.fields.ColoredField;
 import model.fields.StandardField;
-import model.fields.StartField;
 import model.global;
 import model.interfaces.IGameField;
 import org.newdawn.slick.Image;
@@ -16,6 +15,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 
 import java.awt.Toolkit;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Board {
 
@@ -23,21 +24,41 @@ public class Board {
     //2 == Haus-Feld, 3 == Start-Feld
     static public int[][] boardTemplate = {
             {2, 2, 0, 0, 1, 1, 3, 0, 0, 2, 2},
-            {2, 2, 0, 0, 1, 2, 1, 0, 0, 2, 2},
-            {0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0},
-            {0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0},
-            {3, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1},
-            {1, 2, 2, 2, 2, 0, 2, 2, 2, 2, 1},
-            {1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 3},
-            {0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0},
-            {0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0},
-            {2, 2, 0, 0, 1, 2, 1, 0, 0, 2, 2},
+            {2, 2, 0, 0, 1, 4, 1, 0, 0, 2, 2},
+            {0, 0, 0, 0, 1, 4, 1, 0, 0, 0, 0},
+            {0, 0, 0, 0, 1, 4, 1, 0, 0, 0, 0},
+            {3, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1},
+            {1, 4, 4, 4, 4, 0, 4, 4, 4, 4, 1},
+            {1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 3},
+            {0, 0, 0, 0, 1, 4, 1, 0, 0, 0, 0},
+            {0, 0, 0, 0, 1, 4, 1, 0, 0, 0, 0},
+            {2, 2, 0, 0, 1, 4, 1, 0, 0, 2, 2},
             {2, 2, 0, 0, 3, 1, 1, 0, 0, 2, 2},
     };
 
     private IGameField[][] BOARD;
 
     public Dice dice;
+
+    private Point dicePosition;
+
+    public List<ColoredField> redHome = new ArrayList<>();
+
+    public List<ColoredField> blueHome = new ArrayList<>();
+
+    public List<ColoredField> greenHome = new ArrayList<>();
+
+    public List<ColoredField> yellowHome = new ArrayList<>();
+
+    public List<IGameField> gameFields = new ArrayList<>();
+
+    public List<ColoredField> redBase = new ArrayList<>();
+
+    public List<ColoredField> blueBase = new ArrayList<>();
+
+    public List<ColoredField> greenBase = new ArrayList<>();
+
+    public List<ColoredField> yellowBase = new ArrayList<>();
 
     public Board(StateBasedEntityManager entityManager, int stateID) throws SlickException {
         //Initialisieren des Spielbrettes
@@ -58,32 +79,60 @@ public class Board {
         //initialisieren der Entities für jedes Feld
         for (int i = 0; i < global.NUM_OF_FIELDS; i++) {
             for (int j = 0; j < global.NUM_OF_FIELDS; j++) {
-                Point x = new Point(i * xSteps + offsetX, j * ySteps);
-                Point y = new Point((i + 1) * xSteps + offsetX, (j + 1) * ySteps);
+                Point start = new Point(i * xSteps + offsetX, j * ySteps);
+                Point end = new Point((i + 1) * xSteps + offsetX, (j + 1) * ySteps);
 
-                //initialisieren des richtigen Feldes
-                IGameField tmpField = boardTemplate[i][j] == 1 ? new StandardField(x, y) :
-                        boardTemplate[i][j] == 2 ? new HomeField(getFieldColor(new Point(i, j)), x, y) :
-                                boardTemplate[i][j] == 3 ? new StartField(getFieldColor(new Point(i, j)), x, y) :
-                                        null;
-                //Würfel Position
-                if(i == 10 && j == 2){
-                    tmpField = new StandardField(x,y);
+                int type = boardTemplate[i][j];
+                Color color = type != 1 ? getFieldColor(new Point(i, j)) : Color.NONE;
+                IGameField tmpField = null;
+
+                switch (type) {
+                    case 1 -> {
+                        tmpField = new StandardField(start, end);
+                        gameFields.add(tmpField);
+                    }
+                    case 2 -> {
+                        tmpField = new ColoredField(color, start, end, Field.HOME);
+                        switch (color) {
+                            case RED -> redHome.add((ColoredField) tmpField);
+                            case BLUE -> blueHome.add((ColoredField) tmpField);
+                            case YELLOW -> yellowHome.add((ColoredField) tmpField);
+                            case GREEN -> greenHome.add((ColoredField) tmpField);
+                        }
+                    }
+                    case 3 -> {
+                        tmpField = new ColoredField(color, start, end, Field.START);
+                        gameFields.add(tmpField);
+                    }
+                    case 4 -> {
+                        tmpField = new ColoredField(color, start, end, Field.BASE);
+                        switch (color) {
+                            case RED -> redBase.add((ColoredField) tmpField);
+                            case BLUE -> blueBase.add((ColoredField) tmpField);
+                            case YELLOW -> yellowBase.add((ColoredField) tmpField);
+                            case GREEN -> greenBase.add((ColoredField) tmpField);
+                        }
+                    }
                 }
-                tmp[i][j] = tmpField;
+
+                //Würfel Position
+                if (i == 10 && j == 2) {
+                    tmpField = new StandardField(start, end);
+                    this.dicePosition = tmpField.getPosition();
+                }
 
                 //zuweisen des richtigen Bildes
                 if (tmpField != null) {
-                    String img = tmpField instanceof StandardField ? "assets/standardField.png" :
-                            getImg(tmpField.getColor());
+                    String img = getImg(color);
 
                     //erstellen einer neuen Entity
                     Entity point = new Entity("grid point" + tmpField.getPosition().getX());
                     point.setPosition(new Vector2f(tmpField.getPosition().getX(), tmpField.getPosition().getY()));
-                    if(i != 10 || j != 2 /*Würfel Position*/) point.addComponent(new ImageRenderComponent(new Image(img)));
+                    if (i != 10 || j != 2 /*Würfel Position*/)
+                        point.addComponent(new ImageRenderComponent(new Image(img)));
                     point.setScale(tmpField.getSize());
                     //TODO delete
-                    if(tmpField.getPosition().getX() == 10 && tmpField.getPosition().getY() == 2){
+                    if (tmpField.getPosition().getX() == 10 && tmpField.getPosition().getY() == 2) {
                         ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
                         clickEvent.addAction(new LogAction(tmpField.getPosition(), tmpField.getColor()));
                         point.addComponent(clickEvent);
@@ -92,13 +141,11 @@ public class Board {
                 }
             }
         }
-        //globales board mit dem temporären initialisieren
-        BOARD = tmp;
     }
 
     public void initDice(int stateID, StateBasedEntityManager entityManager) throws SlickException {
         //init dice
-        Dice tmpDice = new Dice(1, stateID, entityManager);
+        Dice tmpDice = new Dice(1,this.dicePosition, stateID, entityManager);
         this.dice = tmpDice;
     }
 
@@ -115,7 +162,8 @@ public class Board {
         return color == Color.RED ? "assets/redField.png" :
                 color == Color.BLUE ? "assets/blueField.png" :
                         color == Color.YELLOW ? "assets/yellowField.png" :
-                                "assets/greenField.png";
+                                color == Color.GREEN ? "assets/greenField.png" :
+                                        "assets/standardField.png";
 
     }
 
