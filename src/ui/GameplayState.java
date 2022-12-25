@@ -2,7 +2,7 @@ package ui;
 
 import eea.engine.event.basicevents.*;
 import model.global;
-import model.logic.Board;
+import model.boardLogic.Board;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;

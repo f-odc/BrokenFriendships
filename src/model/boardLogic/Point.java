@@ -1,4 +1,4 @@
-package model.logic;
+package model.boardLogic;
 
 /**
  * Klasse um einen Koordinatenpunkt zu implementieren

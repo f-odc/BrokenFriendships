@@ -1,4 +1,4 @@
-package model.logic;
+package model.boardLogic;
 
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
@@ -6,6 +6,7 @@ import eea.engine.entity.StateBasedEntityManager;
 import eea.engine.event.ANDEvent;
 import eea.engine.event.basicevents.MouseClickedEvent;
 import eea.engine.event.basicevents.MouseEnteredEvent;
+import model.actions.DiceAction;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;

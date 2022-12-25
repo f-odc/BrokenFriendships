@@ -1,7 +1,6 @@
 package model;
 
-import model.interfaces.IGameField;
-import model.logic.Board;
+import model.boardLogic.Board;
 
 /**
  * Class to store any global variables

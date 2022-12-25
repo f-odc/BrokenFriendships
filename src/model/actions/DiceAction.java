@@ -1,4 +1,4 @@
-package model.logic;
+package model.actions;
 
 import eea.engine.action.Action;
 import eea.engine.component.Component;

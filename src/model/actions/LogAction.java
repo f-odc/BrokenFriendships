@@ -1,7 +1,9 @@
-package model.logic;
+package model.actions;
 
 import eea.engine.action.Action;
 import eea.engine.component.Component;
+import model.enums.Color;
+import model.boardLogic.Point;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.state.StateBasedGame;
 
