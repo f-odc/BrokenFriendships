@@ -12,6 +12,11 @@ public class StandardField implements IGameField {
 
     private float size = 0.12f;
 
+    /**
+     * @param start Koordinaten der linken oberen Ecke des grafischen Feldes.
+     * @param end Koordinaten der rechten unteren Ecke des grafischen Feldes.
+     * @param boardPosition Koordinaten des Feldes auf dem Spielbrett.
+     */
     public StandardField(Point start, Point end, Point boardPosition){
         this.position = new Point((start.getX() + end.getX()) / 2, (start.getY() + end.getY()) / 2);
         this.boardPosition = boardPosition;

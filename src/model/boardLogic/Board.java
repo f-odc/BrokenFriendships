@@ -76,9 +76,9 @@ public class Board {
                 Point end = new Point((i + 1) * xSteps + offsetX, (j + 1) * ySteps);
 
                 int type = boardTemplate[i][j];
-                Color color = type < 0 ? getFieldColor(new Point(i, j)) :
-                        (type == 1 || type == 11 || type == 21 || type == 31) ? getFieldColor(new Point(i, j)) :
-                                Color.NONE;
+                Color color = type < 0 ? getFieldColor(new Point(i, j)) :   //Haus- oder Zielfeld
+                        (type == 1 || type == 11 || type == 21 || type == 31) ? getFieldColor(new Point(i, j)) :    //Startfelder
+                                Color.NONE; //Standardfelder
                 IGameField tmpField = null;
 
                 //zuweisung von den verschiedenen Feldern und hinzufügen zu den Felderlisten
