@@ -14,6 +14,7 @@ import model.interfaces.IGameField;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
+
 import java.awt.Toolkit;
 
 public class Board {
@@ -21,20 +22,22 @@ public class Board {
     //0 == kein Feld, 1 == standard-Feld
     //2 == Haus-Feld, 3 == Start-Feld
     static public int[][] boardTemplate = {
-            {2,2,0,0,1,1,3,0,0,2,2},
-            {2,2,0,0,1,2,1,0,0,2,2},
-            {0,0,0,0,1,2,1,0,0,0,0},
-            {0,0,0,0,1,2,1,0,0,0,0},
-            {3,1,1,1,1,2,1,1,1,1,1},
-            {1,2,2,2,2,0,2,2,2,2,1},
-            {1,1,1,1,1,2,1,1,1,1,3},
-            {0,0,0,0,1,2,1,0,0,0,0},
-            {0,0,0,0,1,2,1,0,0,0,0},
-            {2,2,0,0,1,2,1,0,0,2,2},
-            {2,2,0,0,3,1,1,0,0,2,2},
+            {2, 2, 0, 0, 1, 1, 3, 0, 0, 2, 2},
+            {2, 2, 0, 0, 1, 2, 1, 0, 0, 2, 2},
+            {0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0},
+            {0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0},
+            {3, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1},
+            {1, 2, 2, 2, 2, 0, 2, 2, 2, 2, 1},
+            {1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 3},
+            {0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0},
+            {0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0},
+            {2, 2, 0, 0, 1, 2, 1, 0, 0, 2, 2},
+            {2, 2, 0, 0, 3, 1, 1, 0, 0, 2, 2},
     };
 
-    static public IGameField[][] BOARD = new IGameField[global.NUM_OF_FIELDS][global.NUM_OF_FIELDS];
+    private IGameField[][] BOARD;
+
+    public Dice dice;
 
     public Board(StateBasedEntityManager entityManager, int stateID) throws SlickException {
         //Initialisieren des Spielbrettes
@@ -63,28 +66,40 @@ public class Board {
                         boardTemplate[i][j] == 2 ? new HomeField(getFieldColor(new Point(i, j)), x, y) :
                                 boardTemplate[i][j] == 3 ? new StartField(getFieldColor(new Point(i, j)), x, y) :
                                         null;
+                //Würfel Position
+                if(i == 10 && j == 2){
+                    tmpField = new StandardField(x,y);
+                }
                 tmp[i][j] = tmpField;
 
                 //zuweisen des richtigen Bildes
-                if(tmpField != null) {
+                if (tmpField != null) {
                     String img = tmpField instanceof StandardField ? "assets/standardField.png" :
                             getImg(tmpField.getColor());
 
                     //erstellen einer neuen Entity
                     Entity point = new Entity("grid point" + tmpField.getPosition().getX());
                     point.setPosition(new Vector2f(tmpField.getPosition().getX(), tmpField.getPosition().getY()));
-                    point.addComponent(new ImageRenderComponent(new Image(img)));
+                    if(i != 10 || j != 2 /*Würfel Position*/) point.addComponent(new ImageRenderComponent(new Image(img)));
                     point.setScale(tmpField.getSize());
                     //TODO delete
-                    ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
-                    clickEvent.addAction(new LogAction(tmpField.getPosition(),tmpField.getColor()));
-                    point.addComponent(clickEvent);
+                    if(tmpField.getPosition().getX() == 10 && tmpField.getPosition().getY() == 2){
+                        ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
+                        clickEvent.addAction(new LogAction(tmpField.getPosition(), tmpField.getColor()));
+                        point.addComponent(clickEvent);
+                    }
                     entityManager.addEntity(stateID, point);
                 }
             }
         }
         //globales board mit dem temporären initialisieren
         BOARD = tmp;
+    }
+
+    public void initDice(int stateID, StateBasedEntityManager entityManager) throws SlickException {
+        //init dice
+        Dice tmpDice = new Dice(1, stateID, entityManager);
+        this.dice = tmpDice;
     }
 
 
@@ -104,7 +119,7 @@ public class Board {
 
     }
 
-    public IGameField getField(Point point){
+    public IGameField getField(Point point) {
         return BOARD[point.getX()][point.getY()];
     }
 }

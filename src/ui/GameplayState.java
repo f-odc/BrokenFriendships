@@ -46,6 +46,7 @@ public class GameplayState extends BasicGameState {
 
         //initialisieren des Spielbrettes
         global.BOARD = new Board(entityManager,stateID);
+        global.BOARD.initDice(stateID, entityManager);
 
     }
 
