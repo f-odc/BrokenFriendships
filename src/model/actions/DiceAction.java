@@ -13,8 +13,8 @@ public class DiceAction implements Action {
     @Override
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int i, Component component) {
         try {
-            global.BOARD.dice.throwDice();
-            System.out.println("has thrown: " + global.BOARD.dice.getValue());
+            global.BOARD.getDice().throwDice();
+            System.out.println("has thrown: " + global.BOARD.getDice().getValue());
         } catch (SlickException e) {
             System.out.println("throw has failed");
             throw new RuntimeException(e);

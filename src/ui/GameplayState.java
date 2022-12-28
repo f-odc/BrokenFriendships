@@ -45,8 +45,7 @@ public class GameplayState extends BasicGameState {
         entityManager.addEntity(stateID, esc_Listener);
 
         //initialisieren des Spielbrettes
-        global.BOARD = new Board(entityManager,stateID);
-        global.BOARD.initDice(stateID, entityManager);
+        global.BOARD = new Board(entityManager, stateID);
 
     }
 
@@ -54,7 +53,7 @@ public class GameplayState extends BasicGameState {
      * Wird vor dem Frame ausgefuehrt
      */
     @Override
-    public void update(GameContainer container, StateBasedGame game, int delta){
+    public void update(GameContainer container, StateBasedGame game, int delta) {
         // StatedBasedEntityManager soll alle Entities aktualisieren
         entityManager.updateEntities(container, game, delta);
     }

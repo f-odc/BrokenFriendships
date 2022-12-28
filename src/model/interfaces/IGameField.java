@@ -6,7 +6,7 @@ import model.enums.Color;
 public interface IGameField {
 
     boolean isOccupied();
-    Point getPosition();
+    Point getDisplayPosition();
     float getSize();
     Color getColor();
     Point getBoardPosition();

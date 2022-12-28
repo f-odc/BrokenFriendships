@@ -26,25 +26,23 @@ import java.util.List;
  */
 public class Board {
 
-    //-2 == Haus-Feld, -3 == Ziel-Feld
+    //-2 == Haus-Feld, -3 == Ziel-Feld, -1 == kein Feld
     //alles andere sind standardfelder in der richtigen Reihenfolge
     static public int[][] boardTemplate = {
-            {-2, -2, 0, 0, 39, 40, 1, 0, 0, -2, -2},
-            {-2, -2, 0, 0, 38, -3, 2, 0, 0, -2, -2},
-            {0, 0, 0, 0, 37, -3, 3, 0, 0, 0, 0},
-            {0, 0, 0, 0, 36, -3, 4, 0, 0, 0, 0},
-            {31, 32, 33, 34, 35, -3, 5, 6, 7, 8, 9},
-            {30, -3, -3, -3, -3, 0, -3, -3, -3, -3, 10},
-            {29, 28, 27, 26, 25, -3, 15, 14, 13, 12, 11},
-            {0, 0, 0, 0, 24, -3, 16, 0, 0, 0, 0},
-            {0, 0, 0, 0, 23, -3, 17, 0, 0, 0, 0},
-            {-2, -2, 0, 0, 22, -3, 18, 0, 0, -2, -2},
-            {-2, -2, 0, 0, 21, 20, 19, 0, 0, -2, -2},
+            {-2, -2, -1, -1, 38, 39, 0, -1, -1, -2, -2},
+            {-2, -2, -1, -1, 37, -3, 1, -1, -1, -2, -2},
+            {-1, -1, -1, -1, 36, -3, 2, -1, -1, -1, -1},
+            {-1, -1, -1, -1, 35, -3, 3, -1, -1, -1, -1},
+            {30, 31, 32, 33, 34, -3, 4, 5, 6, 7, 8},
+            {29, -3, -3, -3, -3, -1, -3, -3, -3, -3, 9},
+            {28, 27, 26, 25, 24, -3, 14, 13, 12, 11, 10},
+            {-1, -1, -1, -1, 23, -3, 15, -1, -1, -1, -1},
+            {-1, -1, -1, -1, 22, -3, 16, -1, -1, -1, -1},
+            {-2, -2, -1, -1, 21, -3, 17, -1, -1, -2, -2},
+            {-2, -2, -1, -1, 20, 19, 18, -1, -1, -2, -2},
     };
 
-    public Dice dice;
-
-    private Point dicePosition;
+    private Dice dice;
 
     public FieldCluster bases;  //Zielfelder
 
@@ -70,32 +68,24 @@ public class Board {
 
         //initialisieren der Entities für jedes Feld
         //durchläuft das boardTemplate um zu erkennen welche Felder hinzugefügt werden
-        for (int i = 0; i < global.NUM_OF_FIELDS; i++) {
-            for (int j = 0; j < global.NUM_OF_FIELDS; j++) {
-                Point start = new Point(i * xSteps + offsetX, j * ySteps);
-                Point end = new Point((i + 1) * xSteps + offsetX, (j + 1) * ySteps);
+        for (int j = 0; j < global.NUM_OF_FIELDS; j++) {    //Y-Richtung
+            for (int i = 0; i < global.NUM_OF_FIELDS; i++) {    //X-Richtung
+                Point displayStartPoint = new Point(i * xSteps + offsetX, j * ySteps);
+                Point displayEndPoint = new Point((i + 1) * xSteps + offsetX, (j + 1) * ySteps);
 
                 int type = boardTemplate[i][j];
                 Color color = type < 0 ? getFieldColor(new Point(i, j)) :   //Haus- oder Zielfeld
-                        (type == 1 || type == 11 || type == 21 || type == 31) ? getFieldColor(new Point(i, j)) :    //Startfelder
+                        (type == 0 || type == 10 || type == 20 || type == 30) ? getFieldColor(new Point(i, j)) :    //Startfelder
                                 Color.NONE; //Standardfelder
                 IGameField tmpField = null;
 
                 //zuweisung von den verschiedenen Feldern und hinzufügen zu den Felderlisten
                 switch (type) {
-                    case -2 -> {
-                        //Home Feld
-                        tmpField = new ColoredField(color, start, end, new Point(i, j), Field.HOME);
-                        switch (color) {
-                            case RED -> homes.red.add((ColoredField) tmpField);
-                            case BLUE -> homes.blue.add((ColoredField) tmpField);
-                            case YELLOW -> homes.yellow.add((ColoredField) tmpField);
-                            case GREEN -> homes.green.add((ColoredField) tmpField);
-                        }
-                    }
                     case -3 -> {
                         //Ziel Feld
-                        tmpField = new ColoredField(color, start, end, new Point(i, j), Field.BASE);
+                        tmpField = new ColoredField(color,
+                                displayStartPoint, displayEndPoint,
+                                new Point(i, j), Field.BASE);
                         switch (color) {
                             case RED -> bases.red.add((ColoredField) tmpField);
                             case BLUE -> bases.blue.add((ColoredField) tmpField);
@@ -103,43 +93,57 @@ public class Board {
                             case GREEN -> bases.green.add((ColoredField) tmpField);
                         }
                     }
-                    case 0 -> {
+                    case -2 -> {
+                        //Home Feld
+                        tmpField = new ColoredField(color,
+                                displayStartPoint, displayEndPoint,
+                                new Point(i, j), Field.HOME);
+                        switch (color) {
+                            case RED -> homes.red.add((ColoredField) tmpField);
+                            case BLUE -> homes.blue.add((ColoredField) tmpField);
+                            case YELLOW -> homes.yellow.add((ColoredField) tmpField);
+                            case GREEN -> homes.green.add((ColoredField) tmpField);
+                        }
+                    }
+                    case -1 -> {
+                        //no Field
                     }
                     default -> {
-                        if (type == 1 || type == 11 || type == 21 || type == 31) {
+                        if (type == 0 || type == 10 || type == 20 || type == 30) {
                             //Start Feld
-                            tmpField = new ColoredField(color, start, end, new Point(i, j), Field.START);
-                            gameFields[type - 1] = tmpField;
+                            tmpField = new ColoredField(color,
+                                    displayStartPoint, displayEndPoint,
+                                    new Point(i, j), Field.START);
+                            gameFields[type] = tmpField;
                         } else {
                             //Standard Feld
                             System.out.println("x: " + i + " y: " + j);
-                            tmpField = new StandardField(start, end, new Point(i, j));
-                            gameFields[type - 1] = tmpField;
+                            tmpField = new StandardField(displayStartPoint, displayEndPoint, new Point(i, j));
+                            gameFields[type] = tmpField;
                         }
                     }
                 }
 
                 //Würfel Position
                 if (i == 10 && j == 2) {
-                    tmpField = new StandardField(start, end, new Point(10, 2));
-                    this.dicePosition = tmpField.getPosition();
+                    tmpField = new StandardField(displayStartPoint, displayEndPoint, new Point(10, 2));
+                    this.dice = new Dice(1, tmpField.getDisplayPosition(), stateID, entityManager);
                 }
 
                 //Zuweisen des richtigen Bildes
                 if (tmpField != null) {
-                    String img = getImg(color);
-
+                    Point displayPosition = tmpField.getDisplayPosition();
                     //Erstellen einer neuen Entity
-                    Entity point = new Entity("grid point" + tmpField.getPosition().getX());
-                    point.setPosition(new Vector2f(tmpField.getPosition().getX(), tmpField.getPosition().getY()));
+                    Entity point = new Entity("grid point" + tmpField.getDisplayPosition().getX());
+                    point.setPosition(new Vector2f(displayPosition.getX(), displayPosition.getY()));
                     if (i != 10 || j != 2 /*Würfel Position*/)
-                        point.addComponent(new ImageRenderComponent(new Image(img)));
+                        point.addComponent(new ImageRenderComponent(new Image(getImg(color))));
                     point.setScale(tmpField.getSize());
                     //Hinzufügen von Action zur Entity
                     //TODO change to receive click action
-                    if (tmpField.getPosition().getX() == 10 && tmpField.getPosition().getY() == 2) {
+                    if (tmpField.getDisplayPosition().getX() == 10 && tmpField.getDisplayPosition().getY() == 2) {
                         ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
-                        clickEvent.addAction(new LogAction(tmpField.getPosition(), tmpField.getColor()));
+                        clickEvent.addAction(new LogAction(tmpField.getDisplayPosition(), tmpField.getColor()));
                         point.addComponent(clickEvent);
                     }
                     entityManager.addEntity(stateID, point);
@@ -150,19 +154,6 @@ public class Board {
         for (IGameField gameField : gameFields) {
             System.out.println(gameField.getColor() + "|" + gameField.getBoardPosition().getX() + "," + gameField.getBoardPosition().getY());
         }
-    }
-
-    /**
-     * Funktion um den Würfel zu initialisieren
-     *
-     * @param stateID       wird benötigt um die Würfel entity dem Spielbrett hinzuzufügen
-     * @param entityManager wird benötigt um die Würfel entity dem Spielbrett hinzuzufügen
-     * @throws SlickException wenn das zum Würfel pasende img nicht vorhanden ist
-     */
-    public void initDice(int stateID, StateBasedEntityManager entityManager) throws SlickException {
-        //init dice
-        Dice tmpDice = new Dice(1, this.dicePosition, stateID, entityManager);
-        this.dice = tmpDice;
     }
 
     /**
@@ -194,6 +185,15 @@ public class Board {
 
     }
 
+    /**
+     * Funktion um Zugriff auf den Würfel zu bekommen.
+     * @return der Würfel
+     */
+    public Dice getDice() {
+        return dice;
+    }
+
+    //TODO implement and set parameter fields to private
     public IGameField getField(Point point) {
         return null;
     }

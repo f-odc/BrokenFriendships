@@ -6,23 +6,25 @@ import model.boardLogic.Point;
 
 public class StandardField implements IGameField {
 
-    private Point position;
+    private Point displayPosition;
 
     private Point boardPosition;
 
     private float size = 0.12f;
 
     /**
-     * @param start Koordinaten der linken oberen Ecke des grafischen Feldes.
-     * @param end Koordinaten der rechten unteren Ecke des grafischen Feldes.
+     * @param start         Koordinaten der linken oberen Ecke des Feldes auf dem Monitor.
+     * @param end           Koordinaten der rechten unteren Ecke des Feldes auf dem Monitor.
      * @param boardPosition Koordinaten des Feldes auf dem Spielbrett.
      */
-    public StandardField(Point start, Point end, Point boardPosition){
-        this.position = new Point((start.getX() + end.getX()) / 2, (start.getY() + end.getY()) / 2);
+    public StandardField(Point start, Point end, Point boardPosition) {
+        this.displayPosition = new Point((start.getX() + end.getX()) / 2, (start.getY() + end.getY()) / 2);
         this.boardPosition = boardPosition;
     }
 
-    public float getSize(){return this.size;}
+    public float getSize() {
+        return this.size;
+    }
 
     @Override
     public Color getColor() {
@@ -36,12 +38,11 @@ public class StandardField implements IGameField {
 
     @Override
     public boolean isOccupied() {
-        //TODO
-        return false;
+        return false;        //TODO
     }
 
     @Override
-    public Point getPosition() {
-        return this.position;
+    public Point getDisplayPosition() {
+        return this.displayPosition;
     }
 }
