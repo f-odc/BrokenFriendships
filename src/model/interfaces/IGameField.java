@@ -10,5 +10,6 @@ public interface IGameField {
     float getSize();
     Color getColor();
     Point getBoardPosition();
+    boolean equals(Point other);
 
 }

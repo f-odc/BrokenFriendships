@@ -37,6 +37,12 @@ public class StandardField implements IGameField {
     }
 
     @Override
+    public boolean equals(Point other) {
+        return this.boardPosition.getX() == other.getX() &&
+                this.boardPosition.getY() == other.getY();
+    }
+
+    @Override
     public boolean isOccupied() {
         return false;        //TODO
     }

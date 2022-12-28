@@ -28,30 +28,31 @@ public class Board {
 
     //-2 == Haus-Feld, -3 == Ziel-Feld, -1 == kein Feld
     //alles andere sind standardfelder in der richtigen Reihenfolge
-    static public int[][] boardTemplate = {
-            {-2, -2, -1, -1, 38, 39, 0, -1, -1, -2, -2},
-            {-2, -2, -1, -1, 37, -3, 1, -1, -1, -2, -2},
-            {-1, -1, -1, -1, 36, -3, 2, -1, -1, -1, -1},
-            {-1, -1, -1, -1, 35, -3, 3, -1, -1, -1, -1},
-            {30, 31, 32, 33, 34, -3, 4, 5, 6, 7, 8},
-            {29, -3, -3, -3, -3, -1, -3, -3, -3, -3, 9},
-            {28, 27, 26, 25, 24, -3, 14, 13, 12, 11, 10},
-            {-1, -1, -1, -1, 23, -3, 15, -1, -1, -1, -1},
-            {-1, -1, -1, -1, 22, -3, 16, -1, -1, -1, -1},
-            {-2, -2, -1, -1, 21, -3, 17, -1, -1, -2, -2},
-            {-2, -2, -1, -1, 20, 19, 18, -1, -1, -2, -2},
+    //nur mit accesTemplate() Funktion drauf zugreifen
+    private final int[][] boardTemplate = {
+            {-2, -2, -1, -1, 10, 11, 12, -1, -1, -2, -2},
+            {-2, -2, -1, -1, 9, -3, 13, -1, -1, -2, -2},
+            {-1, -1, -1, -1, 8, -3, 14, -1, -1, -1, -1},
+            {-1, -1, -1, -1, 7, -3, 15, -1, -1, -1, -1},
+            {2, 3, 4, 5, 6, -3, 16, 17, 18, 19, 20},
+            {1, -3, -3, -3, -3, -1, -3, -3, -3, -3, 21},
+            {0, 39, 38, 37, 36, -3, 26, 25, 24, 23, 22},
+            {-1, -1, -1, -1, 35, -3, 27, -1, -1, -1, -1},
+            {-1, -1, -1, -1, 34, -3, 28, -1, -1, -1, -1},
+            {-2, -2, -1, -1, 33, -3, 29, -1, -1, -2, -2},
+            {-2, -2, -1, -1, 32, 31, 30, -1, -1, -2, -2},
     };
 
     private Dice dice;
 
-    public FieldCluster bases;  //Zielfelder
+    private FieldCluster bases;  //Zielfelder
 
-    public FieldCluster homes;  //Hausfelder
+    private FieldCluster homes;  //Hausfelder
 
-    public IGameField[] gameFields = new IGameField[40]; //Standard- und Startfelder
+    private IGameField[] gameFields = new IGameField[40]; //Standard- und Startfelder
 
     public Board(StateBasedEntityManager entityManager, int stateID) throws SlickException {
-        //Initialisieren von den Haus und Ziel Feldern
+        //Initialisieren von den Haus- und Zielfeldern
         this.bases = new FieldCluster();
         this.homes = new FieldCluster();
 
@@ -62,19 +63,19 @@ public class Board {
         int offsetX = Toolkit.getDefaultToolkit().getScreenSize().width / 2 - dimensions / 2;
 
         //Schrittweite in die Breite
-        int xSteps = dimensions / global.NUM_OF_FIELDS;
+        int xStep = dimensions / global.NUM_OF_FIELDS;
         //Schrittweite in die Höhe
-        int ySteps = dimensions / global.NUM_OF_FIELDS;
+        int yStep = dimensions / global.NUM_OF_FIELDS;
 
         //initialisieren der Entities für jedes Feld
         //durchläuft das boardTemplate um zu erkennen welche Felder hinzugefügt werden
         for (int j = 0; j < global.NUM_OF_FIELDS; j++) {    //Y-Richtung
             for (int i = 0; i < global.NUM_OF_FIELDS; i++) {    //X-Richtung
-                Point displayStartPoint = new Point(i * xSteps + offsetX, j * ySteps);
-                Point displayEndPoint = new Point((i + 1) * xSteps + offsetX, (j + 1) * ySteps);
+                Point displayStartPoint = new Point(i * xStep + offsetX, j * yStep);
+                Point displayEndPoint = new Point((i + 1) * xStep + offsetX, (j + 1) * yStep);
 
-                int type = boardTemplate[i][j];
-                Color color = type < 0 ? getFieldColor(new Point(i, j)) :   //Haus- oder Zielfeld
+                int type = accessGameTemplate(i, j);
+                Color color = type < -1 ? getFieldColor(new Point(i, j)) :   //Haus- oder Zielfeld
                         (type == 0 || type == 10 || type == 20 || type == 30) ? getFieldColor(new Point(i, j)) :    //Startfelder
                                 Color.NONE; //Standardfelder
                 IGameField tmpField = null;
@@ -86,24 +87,14 @@ public class Board {
                         tmpField = new ColoredField(color,
                                 displayStartPoint, displayEndPoint,
                                 new Point(i, j), Field.BASE);
-                        switch (color) {
-                            case RED -> bases.red.add((ColoredField) tmpField);
-                            case BLUE -> bases.blue.add((ColoredField) tmpField);
-                            case YELLOW -> bases.yellow.add((ColoredField) tmpField);
-                            case GREEN -> bases.green.add((ColoredField) tmpField);
-                        }
+                        bases.add(color, (ColoredField) tmpField);
                     }
                     case -2 -> {
                         //Home Feld
                         tmpField = new ColoredField(color,
                                 displayStartPoint, displayEndPoint,
                                 new Point(i, j), Field.HOME);
-                        switch (color) {
-                            case RED -> homes.red.add((ColoredField) tmpField);
-                            case BLUE -> homes.blue.add((ColoredField) tmpField);
-                            case YELLOW -> homes.yellow.add((ColoredField) tmpField);
-                            case GREEN -> homes.green.add((ColoredField) tmpField);
-                        }
+                        homes.add(color, (ColoredField) tmpField);
                     }
                     case -1 -> {
                         //no Field
@@ -117,14 +108,13 @@ public class Board {
                             gameFields[type] = tmpField;
                         } else {
                             //Standard Feld
-                            System.out.println("x: " + i + " y: " + j);
                             tmpField = new StandardField(displayStartPoint, displayEndPoint, new Point(i, j));
                             gameFields[type] = tmpField;
                         }
                     }
                 }
 
-                //Würfel Position
+                //Würfel initialisieren
                 if (i == 10 && j == 2) {
                     tmpField = new StandardField(displayStartPoint, displayEndPoint, new Point(10, 2));
                     this.dice = new Dice(1, tmpField.getDisplayPosition(), stateID, entityManager);
@@ -141,18 +131,14 @@ public class Board {
                     point.setScale(tmpField.getSize());
                     //Hinzufügen von Action zur Entity
                     //TODO change to receive click action
-                    if (tmpField.getDisplayPosition().getX() == 10 && tmpField.getDisplayPosition().getY() == 2) {
+                    if (tmpField.getDisplayPosition().getX() != 10 || tmpField.getDisplayPosition().getY() != 2) {
                         ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
-                        clickEvent.addAction(new LogAction(tmpField.getDisplayPosition(), tmpField.getColor()));
+                        clickEvent.addAction(new LogAction(new Point(i, j), tmpField.getColor()));
                         point.addComponent(clickEvent);
                     }
                     entityManager.addEntity(stateID, point);
                 }
             }
-        }
-        //TODO delete
-        for (IGameField gameField : gameFields) {
-            System.out.println(gameField.getColor() + "|" + gameField.getBoardPosition().getX() + "," + gameField.getBoardPosition().getY());
         }
     }
 
@@ -187,14 +173,50 @@ public class Board {
 
     /**
      * Funktion um Zugriff auf den Würfel zu bekommen.
+     *
      * @return der Würfel
      */
     public Dice getDice() {
         return dice;
     }
 
-    //TODO implement and set parameter fields to private
+    /**
+     * Funktion um auf die einzelnen Felder des Brettes zuzugreifen.
+     *
+     * @param point Brettkoordinaten des Feldes.
+     * @return Das gewünschte Feld oder null wenn dort kein Feld ist.
+     */
     public IGameField getField(Point point) {
+        int fieldType = accessGameTemplate(point.getX(), point.getY());
+        Color color = getFieldColor(point);
+        switch (fieldType) {
+            case -3 -> {
+                System.out.println("Zielfeld");
+                return bases.get(color, point).isPresent() ? bases.get(color, point).get() : null;
+            }
+            case -2 -> {
+                System.out.println("Hausfeld");
+                return homes.get(color, point).isPresent() ? homes.get(color, point).get() : null;
+            }
+            case -1 -> {
+                System.out.println("kein Feld");
+            }
+            default -> {
+                System.out.println("Standardfeld mit nummer: " + fieldType);
+                return gameFields[fieldType];
+            }
+        }
         return null;
+    }
+
+    /**
+     * Funktion um den Zugriff auf Brettelemente einheitlich zu halten.
+     *
+     * @param x X-Koordinate
+     * @param y Y-Koordinate
+     * @return Typ des Feldes.
+     */
+    private int accessGameTemplate(int x, int y) {
+        return boardTemplate[y][x];
     }
 }

@@ -17,11 +17,11 @@ public class ColoredField implements IGameField {
     private Field type;
 
     /**
-     * @param color Die Farbe zu welcher das Feld gehört.
-     * @param start Koordinaten der linken oberen Ecke des Feldes auf dem Monitor.
-     * @param end Koordinaten der rechten unteren Ecke des Fedles auf dem Monitor.
+     * @param color         Die Farbe zu welcher das Feld gehört.
+     * @param start         Koordinaten der linken oberen Ecke des Feldes auf dem Monitor.
+     * @param end           Koordinaten der rechten unteren Ecke des Fedles auf dem Monitor.
      * @param boardPosition Koordinaten des Feldes auf dem Spielbrett.
-     * @param type 'Field.HOME' für Hausfeld, 'Field.START' für Startfeld, 'Field.BASE' für Zielfeld.
+     * @param type          'Field.HOME' für Hausfeld, 'Field.START' für Startfeld, 'Field.BASE' für Zielfeld.
      */
     public ColoredField(Color color, Point start, Point end, Point boardPosition, Field type) {
         this.color = color;
@@ -55,4 +55,11 @@ public class ColoredField implements IGameField {
     public Point getBoardPosition() {
         return this.boardPosition;
     }
+
+    @Override
+    public boolean equals(Point other) {
+        return this.boardPosition.getX() == other.getX() &&
+                this.boardPosition.getY() == other.getY();
+    }
+
 }
