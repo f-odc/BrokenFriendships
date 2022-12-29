@@ -1,8 +1,8 @@
 package ui;
 
 import eea.engine.event.basicevents.*;
+import model.game.SetupGame;
 import model.global;
-import model.boardLogic.Board;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -46,8 +46,8 @@ public class GameplayState extends BasicGameState {
         esc_Listener.addComponent(esc_pressed);
         entityManager.addEntity(global.GAMEPLAY_STATE, esc_Listener);
 
-        //initialisieren des Spielbrettes
-        global.BOARD = new Board();
+        //initialisiert das Spielbrett und die Figuren
+        SetupGame.setup();
 
     }
 

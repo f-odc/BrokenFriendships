@@ -7,8 +7,7 @@ import eea.engine.event.basicevents.MouseClickedEvent;
 import eea.engine.event.basicevents.MouseEnteredEvent;
 import model.actions.LogAction;
 import model.enums.Color;
-import model.enums.Field;
-import model.fields.GameField;
+import model.boardLogic.fields.BoardField;
 import model.global;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -25,17 +24,17 @@ public class Board {
     //alles andere sind standardfelder in der richtigen Reihenfolge
     //nur mit accessTemplate() Funktion drauf zugreifen
     private final int[][] boardTemplate = {
-            {-2, -2, -1, -1, 10, 11, 12, -1, -1, -2, -2},
-            {-2, -2, -1, -1, 9, -3, 13, -1, -1, -2, -2},
-            {-1, -1, -1, -1, 8, -3, 14, -1, -1, -1, -1},
-            {-1, -1, -1, -1, 7, -3, 15, -1, -1, -1, -1},
-            {2, 3, 4, 5, 6, -3, 16, 17, 18, 19, 20},
-            {1, -3, -3, -3, -3, -1, -3, -3, -3, -3, 21},
-            {0, 39, 38, 37, 36, -3, 26, 25, 24, 23, 22},
-            {-1, -1, -1, -1, 35, -3, 27, -1, -1, -1, -1},
-            {-1, -1, -1, -1, 34, -3, 28, -1, -1, -1, -1},
-            {-2, -2, -1, -1, 33, -3, 29, -1, -1, -2, -2},
-            {-2, -2, -1, -1, 32, 31, 30, -1, -1, -2, -2},
+            {-2, -2, -1, -1, 8, 9, 10, -1, -1, -2, -2},
+            {-2, -2, -1, -1, 7, -3, 11, -1, -1, -2, -2},
+            {-1, -1, -1, -1, 6, -3, 12, -1, -1, -1, -1},
+            {-1, -1, -1, -1, 5, -3, 13, -1, -1, -1, -1},
+            {0, 1, 2, 3, 4, -3, 14, 15, 16, 17, 18},
+            {39, -3, -3, -3, -3, -1, -3, -3, -3, -3, 19},
+            {38, 37, 36, 35, 34, -3, 24, 23, 22, 21, 20},
+            {-1, -1, -1, -1, 33, -3, 25, -1, -1, -1, -1},
+            {-1, -1, -1, -1, 32, -3, 26, -1, -1, -1, -1},
+            {-2, -2, -1, -1, 31, -3, 27, -1, -1, -2, -2},
+            {-2, -2, -1, -1, 30, 29, 28, -1, -1, -2, -2},
     };
     private int xOffset;
     private int xStep;
@@ -43,7 +42,7 @@ public class Board {
     private Dice dice;
     private FieldCluster bases;  //Zielfelder
     private FieldCluster homes;  //Hausfelder
-    private GameField[] gameFields = new GameField[40]; //Standard- und Startfelder
+    private BoardField[] gameFields = new BoardField[40]; //Standard- und Startfelder
 
     public Board() throws SlickException {
         //initialisiere die Feld größe und Offset des Spielbrettes
@@ -58,7 +57,6 @@ public class Board {
      * Funktion um die Größe der Felder und den offset des Spielbrettes auszurechnen.
      */
     private void initSizeAndOffset() {
-
         //Initialisieren der Spielbrett-Dimensionen
         int dimensions = Toolkit.getDefaultToolkit().getScreenSize().height;
 
@@ -75,6 +73,7 @@ public class Board {
      * Funktion um das Feld mit den einzelnen Feldern zu initialisieren.
      */
     private void initBoardFields() throws SlickException {
+        //TODO change startfields
         //Initialisieren von den Haus- und Zielfeldern
         this.bases = new FieldCluster();
         this.homes = new FieldCluster();
@@ -83,77 +82,87 @@ public class Board {
         //durchläuft das boardTemplate um zu erkennen welche Felder hinzugefügt werden
         for (int j = 0; j < global.NUM_OF_FIELDS; j++) {    //Y-Richtung
             for (int i = 0; i < global.NUM_OF_FIELDS; i++) {    //X-Richtung
-                Point displayStartPoint = new Point(i * xStep + xOffset, j * yStep);
-                Point displayEndPoint = new Point((i + 1) * xStep + xOffset, (j + 1) * yStep);
 
                 int type = accessGameTemplate(i, j);
-                Color color = type < -1 ? getFieldColor(new Point(i, j)) :   //Haus- oder Zielfeld
-                        (type == 0 || type == 10 || type == 20 || type == 30) ? getFieldColor(new Point(i, j)) :    //Startfelder
+                Color color = type < -1 ? getFieldColor(new Vector2f(i, j)) :   //Haus- oder Zielfeld
+                        (type == 0 || type == 10 || type == 20 || type == 30) ? getFieldColor(new Vector2f(i, j)) :    //Startfelder
                                 Color.NONE; //Standardfelder
-                GameField tmpField = null;
 
-                //zuweisung von den verschiedenen Feldern und hinzufügen zu den Felderlisten
+                //Würfel initialisieren
+                //TODO change position of code
+                if (i == 10 && j == 2) {
+                    Vector2f position = getMidPoint(i, j);
+                    this.dice = new Dice(1, position);
+                }
+
+                //continue, wenn kein Feld an diesen Koorinaten existiert
+                if (type == -1) continue;
+
+                Entity currentEntity = createEntity(i, j, type, color);
+
                 switch (type) {
                     case -3 -> {
                         //Ziel Feld
-                        tmpField = new GameField(color,
-                                displayStartPoint, displayEndPoint,
-                                new Point(i, j), Field.BASE);
-                        bases.add(tmpField);
+                        bases.add(new BoardField(currentEntity), color);
                     }
                     case -2 -> {
                         //Home Feld
-                        tmpField = new GameField(color,
-                                displayStartPoint, displayEndPoint,
-                                new Point(i, j), Field.HOME);
-                        homes.add(tmpField);
-                    }
-                    case -1 -> {
-                        //no Field
+                        homes.add(new BoardField(currentEntity), color);
                     }
                     default -> {
-                        if (type == 0 || type == 10 || type == 20 || type == 30) {
-                            //Start Feld
-                            tmpField = new GameField(color,
-                                    displayStartPoint, displayEndPoint,
-                                    new Point(i, j), Field.START);
-                            gameFields[type] = tmpField;
-                        } else {
-                            //Standard Feld
-                            tmpField = new GameField(Color.NONE,
-                                    displayStartPoint, displayEndPoint,
-                                    new Point(i, j), Field.STANDARD);
-                            gameFields[type] = tmpField;
-                        }
+                        //Startfeld und Standardfeld
+                        gameFields[type] = new BoardField(currentEntity);
                     }
-                }
-
-                //Würfel initialisieren
-                if (i == 10 && j == 2) {
-                    tmpField = new GameField(Color.NONE, displayStartPoint, displayEndPoint, new Point(10, 2), Field.STANDARD);
-                    this.dice = new Dice(1, tmpField.getDisplayPosition());
-                }
-
-                //Zuweisen des richtigen Bildes
-                if (tmpField != null) {
-                    Point displayPosition = tmpField.getDisplayPosition();
-                    //Erstellen einer neuen Entity
-                    Entity point = new Entity("grid point" + tmpField.getDisplayPosition().getX());
-                    point.setPosition(new Vector2f(displayPosition.getX(), displayPosition.getY()));
-                    if (i != 10 || j != 2 /*Würfel Position*/)
-                        point.addComponent(new ImageRenderComponent(new Image(getImg(color))));
-                    point.setScale(tmpField.getSize());
-                    //Hinzufügen von Action zur Entity
-                    //TODO change to receive click action
-                    if (tmpField.getDisplayPosition().getX() != 10 || tmpField.getDisplayPosition().getY() != 2) {
-                        ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
-                        clickEvent.addAction(new LogAction(new Point(i, j), tmpField.getColor()));
-                        point.addComponent(clickEvent);
-                    }
-                    global.entityManager.addEntity(global.GAMEPLAY_STATE, point);
                 }
             }
         }
+    }
+
+    /**
+     * Funktion um eine Entity für ein Feld zu erstellen.
+     * @param i x-Index
+     * @param j y-Index
+     * @param type Art des Feldes aus dem Template.
+     * @param color Farbe des Feldes.
+     * @return Entity für das Feld
+     * @throws SlickException wenn Das Bild des Fledes nicht vorhanden ist
+     */
+    private Entity createEntity(int i, int j, int type, Color color) throws SlickException {
+        Entity fieldEntity = new Entity("gameField:" + i + "," + j);
+        Vector2f position = getMidPoint(i, j);
+        fieldEntity.setPosition(position);
+
+        if (i != 10 || j != 2 /*Würfel Position*/) {
+            //initialisieren das Bild und die Größe der Entity
+            fieldEntity.addComponent(new ImageRenderComponent(new Image(getImg(color))));
+            fieldEntity.setScale(type == -3 ? global.STANDARD_AND_BASE_FIELD_SIZE :
+                    type == -2 ? global.HOME_AND_START_FIELD_SIZE :
+                            (type == 0 || type == 10 || type == 20 || type == 30) ? global.HOME_AND_START_FIELD_SIZE :
+                                    global.STANDARD_AND_BASE_FIELD_SIZE);
+        }
+
+        //Hinzufügen von Action
+        //TODO change to actual action
+        if (i != 10 || j != 2 /*Würfel Position*/) {
+            ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
+            clickEvent.addAction(new LogAction(new Vector2f(i, j), color));
+            fieldEntity.addComponent(clickEvent);
+        }
+
+        global.entityManager.addEntity(global.GAMEPLAY_STATE, fieldEntity);
+        return fieldEntity;
+    }
+
+    /**
+     * Funktion um dem Mittleren Punkt eines Feldes auszurechnen.
+     * @param i x-Index
+     * @param j y-Index
+     * @return Vector2f mit den x und y Koorindaten des mittleren Punktes.
+     */
+    private Vector2f getMidPoint(int i, int j) {
+        Vector2f start = new Vector2f(i * xStep + xOffset, j * yStep);
+        Vector2f end = new Vector2f((i + 1) * xStep + xOffset, (j + 1) * yStep);
+        return new Vector2f((start.getX() + end.getX()) / 2, (start.getY() + end.getY()) / 2);
     }
 
     /**
@@ -162,10 +171,10 @@ public class Board {
      * @param point Koordinaten des Feldes
      * @return die Farbe des feldes
      */
-    private Color getFieldColor(Point point) {
-        return point.getX() <= 5 && point.getY() <= 4 ? Color.RED :
-                point.getX() >= 5 && point.getY() <= 5 ? Color.YELLOW :
-                        point.getX() <= 4 && point.getY() >= 5 ? Color.GREEN :
+    private Color getFieldColor(Vector2f point) {
+        return point.getX() <= 4 && point.getY() <= 5 ? Color.RED :
+                point.getX() >= 5 && point.getY() <= 4 ? Color.YELLOW :
+                        point.getX() <= 5 && point.getY() >= 4 ? Color.GREEN :
                                 point.getX() >= 5 && point.getY() >= 5 ? Color.BLUE :
                                         Color.NONE;
     }
@@ -200,7 +209,7 @@ public class Board {
      * @param point Brettkoordinaten des Feldes.
      * @return Das gewünschte Feld oder null wenn dort kein Feld ist.
      */
-    public GameField getField(Point point) {
+    public BoardField getField(Vector2f point) {
         int fieldType = accessGameTemplate(point.getX(), point.getY());
         Color color = getFieldColor(point);
         switch (fieldType) {
@@ -230,7 +239,7 @@ public class Board {
      * @param y Y-Koordinate
      * @return Typ des Feldes.
      */
-    private int accessGameTemplate(int x, int y) {
-        return boardTemplate[y][x];
+    private int accessGameTemplate(float x, float y) {
+        return boardTemplate[(int) y][(int) x];
     }
 }

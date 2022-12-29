@@ -1,25 +1,25 @@
 package model.boardLogic;
 
 import model.enums.Color;
-import model.fields.GameField;
+import model.boardLogic.fields.BoardField;
+import org.newdawn.slick.geom.Vector2f;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class FieldCluster {
-    protected List<GameField> red = new ArrayList<>();
-    protected List<GameField> blue = new ArrayList<>();
-    protected List<GameField> green = new ArrayList<>();
-    protected List<GameField> yellow = new ArrayList<>();
+    protected List<BoardField> red = new ArrayList<>();
+    protected List<BoardField> blue = new ArrayList<>();
+    protected List<BoardField> green = new ArrayList<>();
+    protected List<BoardField> yellow = new ArrayList<>();
 
     /**
      * Funktion um ein ColoredField zu einer der Listen hinzuzufügen.
      *
      * @param field Was hinzugefügt wird.
      */
-    public void add(GameField field) {
-        Color color = field.getColor();
+    public void add(BoardField field, Color color) {
         if (color == Color.BLUE && blue.size() <= 4) blue.add(field);
         else if (color == Color.GREEN && green.size() <= 4) green.add(field);
         else if (color == Color.RED && red.size() <= 4) red.add(field);
@@ -33,8 +33,8 @@ public class FieldCluster {
      * @param boardPosition Mit welcher Position verlgichen werden soll.
      * @return Optional<ColoredField> das gewünschte Feld
      */
-    public Optional<GameField> get(Color color, Point boardPosition) {
-        return color == Color.BLUE ? blue.stream().filter(ele -> ele.equals(boardPosition)).findAny() :
+    public Optional<BoardField> get(Color color, Vector2f boardPosition) {
+        return color == Color.BLUE ? blue.stream().filter(ele -> ele.getPosition().equals(boardPosition)).findAny() :
                 color == Color.GREEN ? green.stream().filter(ele -> ele.equals(boardPosition)).findAny() :
                         color == Color.RED ? red.stream().filter(ele -> ele.equals(boardPosition)).findAny() :
                                 yellow.stream().filter(ele -> ele.equals(boardPosition)).findAny();

@@ -17,7 +17,7 @@ public class Dice {
 
     private int value;  //Augenzahl des Würfels
 
-    private Point displayPosition;  //Position auf dem Monitor
+    private Vector2f displayPosition;  //Position auf dem Monitor
 
 
     private ImageRenderComponent imgComponent; //zwischenspeicher des ImageRenderComponent um dies in updateEntity() zu überschreiben
@@ -27,7 +27,7 @@ public class Dice {
      * @param displayPosition die Koordinaten auf dem Monitor.
      * @throws SlickException falls das zum Würfel gehörige Bild nicht gefunden wurde.
      */
-    Dice(int value, Point displayPosition) throws SlickException {
+    Dice(int value, Vector2f displayPosition) throws SlickException {
         this.value = value;
         this.displayPosition = displayPosition;
 
