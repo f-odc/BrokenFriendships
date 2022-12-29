@@ -1,5 +1,6 @@
 package model;
 
+import eea.engine.entity.StateBasedEntityManager;
 import model.boardLogic.Board;
 
 /**
@@ -11,4 +12,11 @@ public class global {
 
     //Spielbrett
     static public Board BOARD;
+
+    //zum hinzufügen und löschen von Entities
+    static public StateBasedEntityManager entityManager;
+
+    // Jeder State wird durch einen Integer-Wert gekennzeichnet
+    public static final int MAINMENU_STATE = 0;
+    public static final int GAMEPLAY_STATE = 1;
 }

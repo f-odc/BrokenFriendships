@@ -19,14 +19,16 @@ import eea.engine.entity.StateBasedEntityManager;
  * erscheint und nach unten faellt.
  */
 public class GameplayState extends BasicGameState {
-
-    private final int stateID;
     // Identifier dieses BasicGameState
     private final StateBasedEntityManager entityManager;    // zugehoeriger entityManager
 
-    GameplayState(int sid) {
-        stateID = sid;
+    GameplayState() {
         entityManager = StateBasedEntityManager.getInstance();
+    }
+
+    @Override
+    public int getID() {
+        return global.GAMEPLAY_STATE;
     }
 
     /**
@@ -40,12 +42,12 @@ public class GameplayState extends BasicGameState {
         // Bei Drücken der ESC-Taste zurueck ins Hauptmenue wechseln
         Entity esc_Listener = new Entity("ESC_Listener");
         KeyPressedEvent esc_pressed = new KeyPressedEvent(Input.KEY_ESCAPE);
-        esc_pressed.addAction(new ChangeStateAction(Launch.MAINMENU_STATE));
+        esc_pressed.addAction(new ChangeStateAction(global.MAINMENU_STATE));
         esc_Listener.addComponent(esc_pressed);
-        entityManager.addEntity(stateID, esc_Listener);
+        entityManager.addEntity(global.GAMEPLAY_STATE, esc_Listener);
 
         //initialisieren des Spielbrettes
-        global.BOARD = new Board(entityManager, stateID);
+        global.BOARD = new Board();
 
     }
 
@@ -67,8 +69,4 @@ public class GameplayState extends BasicGameState {
         entityManager.renderEntities(container, game, g);
     }
 
-    @Override
-    public int getID() {
-        return stateID;
-    }
 }

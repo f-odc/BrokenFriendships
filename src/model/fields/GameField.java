@@ -1,11 +1,10 @@
 package model.fields;
 
-import model.interfaces.IGameField;
 import model.enums.Color;
 import model.enums.Field;
 import model.boardLogic.Point;
 
-public class ColoredField implements IGameField {
+public class GameField {
     private Color color;
 
     private Point displayPosition;
@@ -23,7 +22,7 @@ public class ColoredField implements IGameField {
      * @param boardPosition Koordinaten des Feldes auf dem Spielbrett.
      * @param type          'Field.HOME' für Hausfeld, 'Field.START' für Startfeld, 'Field.BASE' für Zielfeld.
      */
-    public ColoredField(Color color, Point start, Point end, Point boardPosition, Field type) {
+    public GameField(Color color, Point start, Point end, Point boardPosition, Field type) {
         this.color = color;
         this.type = type;
         this.displayPosition = new Point((start.getX() + end.getX()) / 2, (start.getY() + end.getY()) / 2);
@@ -31,32 +30,27 @@ public class ColoredField implements IGameField {
         this.size = type == Field.START ? 0.15f : 0.1f;
     }
 
-    @Override
+    //TODO implement
     public boolean isOccupied() {
         return false;
     }
 
-    @Override
     public Point getDisplayPosition() {
         return this.displayPosition;
     }
 
-    @Override
     public float getSize() {
         return this.size;
     }
 
-    @Override
     public Color getColor() {
         return this.color;
     }
 
-    @Override
     public Point getBoardPosition() {
         return this.boardPosition;
     }
 
-    @Override
     public boolean equals(Point other) {
         return this.boardPosition.getX() == other.getX() &&
                 this.boardPosition.getY() == other.getY();

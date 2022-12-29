@@ -2,11 +2,11 @@ package model.boardLogic;
 
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
-import eea.engine.entity.StateBasedEntityManager;
 import eea.engine.event.ANDEvent;
 import eea.engine.event.basicevents.MouseClickedEvent;
 import eea.engine.event.basicevents.MouseEnteredEvent;
 import model.actions.DiceAction;
+import model.global;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
@@ -17,25 +17,18 @@ public class Dice {
 
     private int value;  //Augenzahl des Würfels
 
-    private int stateID;
-
     private Point displayPosition;  //Position auf dem Monitor
 
-    private StateBasedEntityManager entityManager;
 
     private ImageRenderComponent imgComponent; //zwischenspeicher des ImageRenderComponent um dies in updateEntity() zu überschreiben
 
     /**
      * @param value der initialisierungs Wert des Würfels.
      * @param displayPosition die Koordinaten auf dem Monitor.
-     * @param state notwendig für das hinzufügen der Entity.
-     * @param entityManager notwendig für das hinzufügen der Entity.
      * @throws SlickException falls das zum Würfel gehörige Bild nicht gefunden wurde.
      */
-    Dice(int value, Point displayPosition, int state, StateBasedEntityManager entityManager) throws SlickException {
+    Dice(int value, Point displayPosition) throws SlickException {
         this.value = value;
-        this.stateID = state;
-        this.entityManager = entityManager;
         this.displayPosition = displayPosition;
 
         addEntity();
@@ -78,7 +71,7 @@ public class Dice {
         ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
         clickEvent.addAction(new DiceAction());
         dice.addComponent(clickEvent);
-        entityManager.addEntity(stateID, dice);
+        global.entityManager.addEntity(global.GAMEPLAY_STATE, dice);
     }
 
     /**
@@ -86,7 +79,7 @@ public class Dice {
      * @throws SlickException falls das zum Würfel gehörige Bild nicht gefunden wurde.
      */
     private void updateEntity() throws SlickException {
-        Entity dice = entityManager.getEntity(stateID, "dice");
+        Entity dice = global.entityManager.getEntity(global.GAMEPLAY_STATE, "dice");
         dice.removeComponent(this.imgComponent);
         ImageRenderComponent comp = new ImageRenderComponent(new Image(getImg(this.value)));
         this.imgComponent = comp;
