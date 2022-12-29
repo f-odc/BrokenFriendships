@@ -1,5 +1,6 @@
 package ui;
 
+import model.global;
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
@@ -10,7 +11,6 @@ import eea.engine.action.basicactions.ChangeStateInitAction;
 import eea.engine.action.basicactions.QuitAction;
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
-import eea.engine.entity.StateBasedEntityManager;
 import eea.engine.event.ANDEvent;
 import eea.engine.event.basicevents.MouseClickedEvent;
 import eea.engine.event.basicevents.MouseEnteredEvent;
@@ -22,18 +22,10 @@ import eea.engine.event.basicevents.MouseEnteredEvent;
  * Spiel gestartet werden kann und das gesamte Spiel beendet 
  * werden kann.
  */
-public class MainMenuState extends BasicGameState {
-
-	private int stateID; 							// Identifier von diesem BasicGameState
-	private StateBasedEntityManager entityManager; 	// zugehoeriger entityManager
+public class MainMenuState extends BasicGameState {	// zugehoeriger entityManager
 	
 	private final int distance = 100;
     private final int start_Position = 180;
-    
-    MainMenuState( int sid ) {
-       stateID = sid;
-       entityManager = StateBasedEntityManager.getInstance();
-    }
     
     /**
      * Wird vor dem (erstmaligen) Starten dieses State's ausgefuehrt
@@ -54,12 +46,12 @@ public class MainMenuState extends BasicGameState {
     	
     	// Erstelle das Ausloese-Event und die zugehoerige Action
     	ANDEvent mainEvents = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
-    	Action new_Game_Action = new ChangeStateInitAction(Launch.GAMEPLAY_STATE);
+    	Action new_Game_Action = new ChangeStateInitAction(global.GAMEPLAY_STATE);
     	mainEvents.addAction(new_Game_Action);
     	new_Game_Entity.addComponent(mainEvents);
     	
     	// Fuege die Entity zum StateBasedEntityManager hinzu
-    	entityManager.addEntity(this.stateID, new_Game_Entity);
+    	global.entityManager.addEntity(global.MAINMENU_STATE, new_Game_Entity);
     	
     	/* Beenden-Entitaet */
     	Entity quit_Entity = new Entity("Beenden");
@@ -76,7 +68,7 @@ public class MainMenuState extends BasicGameState {
     	quit_Entity.addComponent(mainEvents_q);
     	
     	// Fuege die Entity zum StateBasedEntityManager hinzu
-    	entityManager.addEntity(this.stateID, quit_Entity);
+    	global.entityManager.addEntity(global.MAINMENU_STATE, quit_Entity);
     	
     }
 
@@ -86,7 +78,7 @@ public class MainMenuState extends BasicGameState {
     @Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
-		entityManager.updateEntities(container, game, delta);
+		global.entityManager.updateEntities(container, game, delta);
 	}
     
     /**
@@ -95,7 +87,7 @@ public class MainMenuState extends BasicGameState {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, 
 												Graphics g) throws SlickException {
-		entityManager.renderEntities(container, game, g);
+		global.entityManager.renderEntities(container, game, g);
 		
 		int counter = 0;
 		
@@ -105,7 +97,7 @@ public class MainMenuState extends BasicGameState {
 
 	@Override
 	public int getID() {
-		return stateID;
+		return global.MAINMENU_STATE;
 	}
 	
 }
