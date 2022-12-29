@@ -23,7 +23,7 @@ public class Dice {
     private ImageRenderComponent imgComponent; //zwischenspeicher des ImageRenderComponent um dies in updateEntity() zu überschreiben
 
     /**
-     * @param value der initialisierungs Wert des Würfels.
+     * @param value           der initialisierungs Wert des Würfels.
      * @param displayPosition die Koordinaten auf dem Monitor.
      * @throws SlickException falls das zum Würfel gehörige Bild nicht gefunden wurde.
      */
@@ -36,6 +36,7 @@ public class Dice {
 
     /**
      * Funktion die die AUgenzahl des Würfels wiedergibt.
+     *
      * @return Augenzahl des Würfels.
      */
     public int getValue() {
@@ -44,12 +45,14 @@ public class Dice {
 
     /**
      * Funktion die einen Würfelwurf simuliert.
+     *
      * @return Augenzahl des würfels.
      * @throws SlickException falls das zum Würfel gehörige Bild nicht gefunden wurde.
      */
     public int throwDice() throws SlickException {
         Random rand = new Random();
-        int diceThrow = rand.nextInt(1,7);
+        int diceThrow = rand.nextInt(7);
+        while (diceThrow == 0) diceThrow = rand.nextInt(7);
         this.value = diceThrow;
 
         updateEntity();
@@ -58,6 +61,7 @@ public class Dice {
 
     /**
      * Initialisiert die Entity für den Würfel.
+     *
      * @throws SlickException falls das zum Würfel gehörige Bild nicht gefunden wurde.
      */
     private void addEntity() throws SlickException {
@@ -76,6 +80,7 @@ public class Dice {
 
     /**
      * Funktion die nach jedem Würfelwurf die Entity mit dem Bild der neuen Augenzahl aktualisiert.
+     *
      * @throws SlickException falls das zum Würfel gehörige Bild nicht gefunden wurde.
      */
     private void updateEntity() throws SlickException {
@@ -88,6 +93,7 @@ public class Dice {
 
     /**
      * Funktion die das zur Augenzahl gehörige Bild herrausfindet.
+     *
      * @param value Augenzahl des Würfels.
      * @return Pfad zum Bild.
      */
