@@ -1,5 +1,8 @@
 package model.game;
 
+import model.boardLogic.objects.Figure;
+import org.newdawn.slick.SlickException;
+
 public class GameLogic {
     /*
       - Color ist dran
@@ -11,4 +14,17 @@ public class GameLogic {
       - Feld Klicken um dahin zu bewegen
       - (Glücksrad)
       */
+
+    /**
+     * Start the Game
+     */
+    public static void start() {
+
+        // Create Player
+        Player one = new Player(0);
+        Player two = new Player(1);
+        Player three = new Player(2);
+        Player four = new Player(3);
+
+    }
 }

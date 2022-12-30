@@ -1,6 +1,7 @@
 package ui;
 
 import eea.engine.event.basicevents.*;
+import model.game.GameLogic;
 import model.game.SetupGame;
 import model.global;
 import org.newdawn.slick.*;
@@ -48,6 +49,8 @@ public class GameplayState extends BasicGameState {
 
         //initialisiert das Spielbrett und die Figuren
         SetupGame.setup();
+
+        GameLogic.start();
 
     }
 

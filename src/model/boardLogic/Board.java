@@ -14,6 +14,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 
 import java.awt.Toolkit;
+import java.util.List;
 
 /**
  * Klasse welches das Spielbrett und die darin vorhande Logik implementiert.
@@ -242,4 +243,14 @@ public class Board {
     private int accessGameTemplate(float x, float y) {
         return boardTemplate[(int) y][(int) x];
     }
+
+    /**
+     * Get the home fields from the board for a specific player
+     * @param id player id
+     * @return List of all home fields
+     */
+    public List<BoardField> getHomeFields(int id){
+        return homes.getFieldsFromId(id);
+    }
+
 }
