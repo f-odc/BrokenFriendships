@@ -25,6 +25,6 @@ public class global {
     public static final int GAMEPLAY_STATE = 1;
 
     //Größe der Felder
-    public static final float HOME_AND_START_FIELD_SIZE = 0.2f;
-    public static final float STANDARD_AND_BASE_FIELD_SIZE = 0.15f;
+    public static final float HOME_AND_START_FIELD_SIZE = 0.16f;
+    public static final float STANDARD_AND_BASE_FIELD_SIZE = 0.14f;
 }

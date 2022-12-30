@@ -39,4 +39,19 @@ public class FieldCluster {
                         color == Color.RED ? red.stream().filter(ele -> ele.equals(boardPosition)).findAny() :
                                 yellow.stream().filter(ele -> ele.equals(boardPosition)).findAny();
     }
+
+    /**
+     * Get player fields
+     * @param id player id
+     * @return List of BoardFields
+     */
+    public List<BoardField> getFieldsFromId(int id){
+        switch (id){
+            case 0: return red;
+            case 1: return yellow;
+            case 2: return blue;
+            case 3: return green;
+            default: throw new RuntimeException("Invalid ID");
+        }
+    }
 }

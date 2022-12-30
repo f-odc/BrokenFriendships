@@ -1,3 +1,8 @@
 package model.boardLogic.objects;
 
-public interface IGameObject {}
+import eea.engine.entity.Entity;
+
+public interface IGameObject {
+
+    public Entity getEntity();
+}
