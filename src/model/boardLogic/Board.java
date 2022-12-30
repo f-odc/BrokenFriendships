@@ -186,11 +186,11 @@ public class Board {
      * @return der Pfad zum Bild
      */
     private String getImg(Color color) {
-        return color == Color.RED ? "assets/redField.png" :
-                color == Color.BLUE ? "assets/blueField.png" :
-                        color == Color.YELLOW ? "assets/yellowField.png" :
-                                color == Color.GREEN ? "assets/greenField.png" :
-                                        "assets/standardField.png";
+        return color == Color.RED ? "assets/field/redField.png" :
+                color == Color.BLUE ? "assets/field/blueField.png" :
+                        color == Color.YELLOW ? "assets/field/yellowField.png" :
+                                color == Color.GREEN ? "assets/field/greenField.png" :
+                                        "assets/field/standardField.png";
 
     }
 

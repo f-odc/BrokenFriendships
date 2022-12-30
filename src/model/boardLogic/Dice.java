@@ -98,11 +98,11 @@ public class Dice {
      * @return Pfad zum Bild.
      */
     private String getImg(int value) {
-        return value == 1 ? "assets/diceOne.png" :
-                value == 2 ? "assets/diceTwo.png" :
-                        value == 3 ? "assets/diceThree.png" :
-                                value == 4 ? "assets/diceFour.png" :
-                                        value == 5 ? "assets/diceFive.png" :
-                                                "assets/diceSix.png";
+        return value == 1 ? "assets/dice/diceOne.png" :
+                value == 2 ? "assets/dice/diceTwo.png" :
+                        value == 3 ? "assets/dice/diceThree.png" :
+                                value == 4 ? "assets/dice/diceFour.png" :
+                                        value == 5 ? "assets/dice/diceFive.png" :
+                                                "assets/dice/diceSix.png";
     }
 }
