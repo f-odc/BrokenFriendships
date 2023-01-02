@@ -3,7 +3,6 @@ package model.boardLogic.objects;
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
 import model.boardLogic.fields.BoardField;
-import eea.engine.event.Event;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
@@ -53,7 +52,6 @@ public class Figure implements IGameObject {
         return entity;
     }
 
-<<<<<<< src/model/boardLogic/objects/Figure.java
     /**
      * Move figure to start field if start field is empty or occupied with from different player
      * @return true -> if move to start is successful, else false
@@ -69,7 +67,7 @@ public class Figure implements IGameObject {
      * @param to new field
      */
     public boolean moveFromTo(BoardField from, BoardField to){
-        if (to.isOccupied() && to.getCurrentObject().getOwner() == playerID){
+        if (to.isOccupied() && to.getCurrentObject().getOwnerID() == playerID){
             return false;
         }
         // from delete object
@@ -85,11 +83,13 @@ public class Figure implements IGameObject {
         return id;
     }
 
-    public void activate(){
+    public boolean activate(){
         // TODO: what to do if clicked
         if(!moveToStart()){
             reset();
+            return false;
         }
+        return true;
     }
 
     /**
@@ -99,15 +99,8 @@ public class Figure implements IGameObject {
         moveFromTo(currentField, homeField);
     }
 
-    public int getOwner(){
+    public int getOwnerID(){
         return playerID;
     }
 
-
-=======
-    public int getPlayerID() {
-        return this.playerID;
-    }
-
->>>>>>> src/model/boardLogic/objects/Figure.java
 }

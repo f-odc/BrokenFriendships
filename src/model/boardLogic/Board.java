@@ -6,10 +6,10 @@ import eea.engine.event.ANDEvent;
 import eea.engine.event.basicevents.MouseClickedEvent;
 import eea.engine.event.basicevents.MouseEnteredEvent;
 import model.actions.BoardAction;
-import model.actions.LogAction;
 import model.actions.FieldSelectedAction;
 import model.enums.Color;
 import model.boardLogic.fields.BoardField;
+import model.enums.Field;
 import model.global;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -110,30 +110,34 @@ public class Board {
                 if (type == -1) continue;
 
                 Entity currentEntity = createEntity(i, j, type, color);
-
-                BoardField boardtmp = new BoardField(currentEntity);
-                //Hinzufügen von Action
-                //TODO change to actual action
-                if (i != 10 || j != 2 /*Würfel Position*/) {
-                    ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
-                    clickEvent.addAction(new BoardAction(boardtmp));
-                    boardtmp.getBaseEntity().addComponent(clickEvent);
-                }
-
+                BoardField boardtmp;
                 switch (type) {
                     case -3 -> {
                         //Ziel Feld
+                        boardtmp = new BoardField(currentEntity, Field.BASE);
                         bases.add(boardtmp, color);
                     }
                     case -2 -> {
                         //Home Feld
+                        boardtmp = new BoardField(currentEntity, Field.HOME);
                         homes.add(boardtmp, color);
                     }
                     default -> {
                         //Startfeld und Standardfeld
+                        boardtmp = new BoardField(currentEntity, Field.STANDARD);
                         gameFields[type] = boardtmp;
                     }
                 }
+
+                //Hinzufügen von Action
+                //TODO change to actual action
+                if (i != 10 || j != 2 /*Würfel Position*/) {
+                    ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
+                    clickEvent.addAction(new FieldSelectedAction(boardtmp));
+                    boardtmp.getBaseEntity().addComponent(clickEvent);
+                }
+
+
             }
         }
     }

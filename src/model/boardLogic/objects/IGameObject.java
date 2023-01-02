@@ -1,16 +1,16 @@
 package model.boardLogic.objects;
 
 import eea.engine.entity.Entity;
-import model.boardLogic.fields.BoardField;
 
 public interface IGameObject {
 
-    public Entity getEntity();
+    Entity getEntity();
 
-    public void activate();
+    boolean activate();
 
-    public int getOwner();
+    int getOwnerID();
 
-    public void reset();
+    void reset();
+
 
 }

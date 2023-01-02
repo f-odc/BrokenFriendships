@@ -2,6 +2,7 @@ package model.boardLogic.fields;
 
 import eea.engine.entity.Entity;
 import model.boardLogic.objects.IGameObject;
+import model.enums.Field;
 import model.global;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -11,11 +12,17 @@ public class BoardField {
 
     private Vector2f position;
 
+    private Field type;
+
+    private float scale;
+
     private IGameObject displayedObject;
 
-    public BoardField(Entity baseEntity) {
+    public BoardField(Entity baseEntity, Field type) {
         this.baseEntity = baseEntity;
+        this.scale = baseEntity.getScale();
         this.position = baseEntity.getPosition();
+        this.type = type;
     }
 
     public Vector2f getPosition() {
@@ -24,6 +31,10 @@ public class BoardField {
 
     public Entity getBaseEntity() {
         return baseEntity;
+    }
+
+    public Field getType(){
+        return type;
     }
 
     public boolean isOccupied() {
@@ -59,5 +70,14 @@ public class BoardField {
      */
     public void resetCurrentField(){
         displayedObject = null;
+    }
+
+    public void highlight(){
+        //TODO change way of highlighting
+        baseEntity.setScale(0.3f);
+    }
+
+    public void deHighlight(){
+        baseEntity.setScale(scale);
     }
 }
