@@ -44,6 +44,7 @@ public class BoardField {
      * @param gameObject Figure/Object
      */
     public void setGameObject(IGameObject gameObject){
+        // TODO: Change? -> delete from previous, set to current, add board field on figure
         Entity figure = gameObject.getEntity();
         // set Position
         figure.setPosition(getPosition());
@@ -51,6 +52,12 @@ public class BoardField {
         this.displayedObject = gameObject;
         // add entity
         global.entityManager.addEntity(global.GAMEPLAY_STATE, figure);
+    }
 
+    /**
+     * reset the current displayed object
+     */
+    public void resetCurrentField(){
+        displayedObject = null;
     }
 }

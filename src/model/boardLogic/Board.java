@@ -5,6 +5,8 @@ import eea.engine.entity.Entity;
 import eea.engine.event.ANDEvent;
 import eea.engine.event.basicevents.MouseClickedEvent;
 import eea.engine.event.basicevents.MouseEnteredEvent;
+import model.actions.BoardAction;
+import model.actions.LogAction;
 import model.actions.FieldSelectedAction;
 import model.enums.Color;
 import model.boardLogic.fields.BoardField;
@@ -109,18 +111,27 @@ public class Board {
 
                 Entity currentEntity = createEntity(i, j, type, color);
 
+                BoardField boardtmp = new BoardField(currentEntity);
+                //Hinzufügen von Action
+                //TODO change to actual action
+                if (i != 10 || j != 2 /*Würfel Position*/) {
+                    ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
+                    clickEvent.addAction(new BoardAction(boardtmp));
+                    boardtmp.getBaseEntity().addComponent(clickEvent);
+                }
+
                 switch (type) {
                     case -3 -> {
                         //Ziel Feld
-                        bases.add(new BoardField(currentEntity), color);
+                        bases.add(boardtmp, color);
                     }
                     case -2 -> {
                         //Home Feld
-                        homes.add(new BoardField(currentEntity), color);
+                        homes.add(boardtmp, color);
                     }
                     default -> {
                         //Startfeld und Standardfeld
-                        gameFields[type] = new BoardField(currentEntity);
+                        gameFields[type] = boardtmp;
                     }
                 }
             }
@@ -153,18 +164,6 @@ public class Board {
                     type == -2 ? global.HOME_AND_START_FIELD_SIZE :
                             (type == 0 || type == 10 || type == 20 || type == 30) ? global.HOME_AND_START_FIELD_SIZE :
                                     global.STANDARD_AND_BASE_FIELD_SIZE);
-        }
-
-        //Hinzufügen von Action
-        //TODO change to actual action
-        if (i != 10 || j != 2 /*Würfel Position*/) {
-            //TODO change
-            int turn = color == Color.RED ? 0 :
-                    color == Color.YELLOW ? 1 :
-                            color == Color.BLUE ? 2 : 3;
-            ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
-            clickEvent.addAction(new FieldSelectedAction(new Vector2f(i, j), turn));
-            fieldEntity.addComponent(clickEvent);
         }
 
         global.entityManager.addEntity(global.GAMEPLAY_STATE, fieldEntity);
@@ -272,5 +271,34 @@ public class Board {
     public List<BoardField> getHomeFields(int id) {
         return homes.getFieldsFromId(id);
     }
+
+    /**
+     * Get the current board field on specific index
+     * @param index board field number
+     * @return BoardField of the specific index
+     */
+    public BoardField getPlayField(int index){
+        if (index >= 0 && index < gameFields.length){
+            return gameFields[index];
+        }
+        throw new RuntimeException("Index out of Bounds - getPlayField");
+    }
+
+    /**
+     * Get all base fields from a player
+     * @param id player id
+     * @return List of the base fields
+     */
+    public List<BoardField> getBaseFields(int id){
+        switch (id){
+            case 0: return bases.red;
+            case 1: return bases.yellow;
+            case 2: return bases.blue;
+            case 3: return bases.green;
+            default: throw new RuntimeException("Wrong ID");
+        }
+    }
+
+
 
 }
