@@ -26,5 +26,7 @@ public class GameLogic {
         Player three = new Player(2);
         Player four = new Player(3);
 
+        //one.getFigure(0).moveToStart(one.getStartField());
+
     }
 }
