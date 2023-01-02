@@ -1,7 +1,6 @@
 package model.game;
 
-import model.boardLogic.objects.Figure;
-import org.newdawn.slick.SlickException;
+import model.global;
 
 public class GameLogic {
     /*
@@ -15,16 +14,37 @@ public class GameLogic {
       - (Glücksrad)
       */
 
+    private static boolean isWon;
+
     /**
      * Start the Game
      */
     public static void start() {
+        setup();
 
+        while(!isWon){
+            turn();
+        }
+    }
+
+    private static void setup() {
         // Create Player
-        Player one = new Player(0);
-        Player two = new Player(1);
-        Player three = new Player(2);
-        Player four = new Player(3);
+        for (int i = 0; i < 4; i++) {
+            new Player(i);
+        }
 
+        isWon = false;
+
+        //set first players turn
+        global.turn = 0;
+        global.BOARD.getDice().setPosition(global.turn);
+    }
+
+    public static void turn() {
+
+    }
+
+    public static void nextTurn() {
+        global.turn = (global.turn + 1) % 4;
     }
 }

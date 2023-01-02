@@ -9,6 +9,7 @@ import model.actions.LogAction;
 import model.enums.Color;
 import model.boardLogic.fields.BoardField;
 import model.global;
+import org.lwjgl.Sys;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
@@ -40,6 +41,7 @@ public class Board {
     private int xOffset;
     private int xStep;
     private int yStep;
+    private Vector2f[] dicePositions;
     private Dice dice;
     private FieldCluster bases;  //Zielfelder
     private FieldCluster homes;  //Hausfelder
@@ -51,6 +53,9 @@ public class Board {
 
         //initialisiere die Felder des Spielbrettes
         initBoardFields();
+
+        //initialisiere den Würfel
+        initDice();
 
     }
 
@@ -78,6 +83,7 @@ public class Board {
         //Initialisieren von den Haus- und Zielfeldern
         this.bases = new FieldCluster();
         this.homes = new FieldCluster();
+        this.dicePositions = new Vector2f[4];
 
         //initialisieren der Entities für jedes Feld
         //durchläuft das boardTemplate um zu erkennen welche Felder hinzugefügt werden
@@ -89,11 +95,11 @@ public class Board {
                         (type == 0 || type == 10 || type == 20 || type == 30) ? getFieldColor(new Vector2f(i, j)) :    //Startfelder
                                 Color.NONE; //Standardfelder
 
-                //Würfel initialisieren
-                //TODO change position of code
-                if (i == 10 && j == 2) {
-                    Vector2f position = getMidPoint(i, j);
-                    this.dice = new Dice(1, position);
+                //initialisierung der Würfel felder
+                if ((i == 1 && j == 2) || (i == 9 && j == 2) || (i == 9 && j == 8) || (i == 1 && j == 8)) {
+                    dicePositions[(i == 1 && j == 2) ? 0 :
+                            (i == 9 && j == 2) ? 1 :
+                                    (i == 9 && j == 8) ? 2 : 3] = getMidPoint(i, j);
                 }
 
                 //continue, wenn kein Feld an diesen Koorinaten existiert
@@ -119,11 +125,16 @@ public class Board {
         }
     }
 
+    private void initDice() throws SlickException {
+        this.dice = new Dice(1, this.dicePositions);
+    }
+
     /**
      * Funktion um eine Entity für ein Feld zu erstellen.
-     * @param i x-Index
-     * @param j y-Index
-     * @param type Art des Feldes aus dem Template.
+     *
+     * @param i     x-Index
+     * @param j     y-Index
+     * @param type  Art des Feldes aus dem Template.
      * @param color Farbe des Feldes.
      * @return Entity für das Feld
      * @throws SlickException wenn Das Bild des Fledes nicht vorhanden ist
@@ -156,6 +167,7 @@ public class Board {
 
     /**
      * Funktion um dem Mittleren Punkt eines Feldes auszurechnen.
+     *
      * @param i x-Index
      * @param j y-Index
      * @return Vector2f mit den x und y Koorindaten des mittleren Punktes.
@@ -246,10 +258,11 @@ public class Board {
 
     /**
      * Get the home fields from the board for a specific player
+     *
      * @param id player id
      * @return List of all home fields
      */
-    public List<BoardField> getHomeFields(int id){
+    public List<BoardField> getHomeFields(int id) {
         return homes.getFieldsFromId(id);
     }
 

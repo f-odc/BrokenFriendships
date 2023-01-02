@@ -6,7 +6,9 @@ import eea.engine.event.ANDEvent;
 import eea.engine.event.basicevents.MouseClickedEvent;
 import eea.engine.event.basicevents.MouseEnteredEvent;
 import model.actions.DiceAction;
+import model.game.GameLogic;
 import model.global;
+import org.lwjgl.Sys;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
@@ -17,7 +19,7 @@ public class Dice {
 
     private int value;  //Augenzahl des Würfels
 
-    private Vector2f displayPosition;  //Position auf dem Monitor
+    private Vector2f[] displayPosition;  //Position auf dem Monitor
 
 
     private ImageRenderComponent imgComponent; //zwischenspeicher des ImageRenderComponent um dies in updateEntity() zu überschreiben
@@ -27,9 +29,14 @@ public class Dice {
      * @param displayPosition die Koordinaten auf dem Monitor.
      * @throws SlickException falls das zum Würfel gehörige Bild nicht gefunden wurde.
      */
-    Dice(int value, Vector2f displayPosition) throws SlickException {
+    Dice(int value, Vector2f[] displayPosition) throws SlickException {
         this.value = value;
         this.displayPosition = displayPosition;
+        System.out.println("size: " + displayPosition.length);
+        for (Vector2f vec : displayPosition) {
+            System.out.println("X: " + vec.getX());
+            System.out.println("Y: " + vec.getY());
+        }
 
         addEntity();
     }
@@ -66,7 +73,7 @@ public class Dice {
      */
     private void addEntity() throws SlickException {
         Entity dice = new Entity("dice");
-        dice.setPosition(new Vector2f(displayPosition.getX(), displayPosition.getY()));
+        dice.setPosition(new Vector2f(displayPosition[0].getX(), displayPosition[0].getY()));
         ImageRenderComponent comp = new ImageRenderComponent(new Image(getImg(this.value)));
         this.imgComponent = comp;
         dice.addComponent(comp);
@@ -104,5 +111,16 @@ public class Dice {
                                 value == 4 ? "assets/dice/diceFour.png" :
                                         value == 5 ? "assets/dice/diceFive.png" :
                                                 "assets/dice/diceSix.png";
+    }
+
+    /**
+     * Funktion um die Position des Würfels zu tauschen, wenn eine andere Farbe dran ist.
+     *
+     * @param playerID welche Farbe dran ist
+     */
+    public void setPosition(int playerID) {
+        Vector2f pos = displayPosition[playerID];
+        Entity dice = global.entityManager.getEntity(global.GAMEPLAY_STATE, "dice");
+        dice.setPosition(pos);
     }
 }
