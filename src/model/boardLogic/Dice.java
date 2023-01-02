@@ -7,6 +7,7 @@ import eea.engine.event.basicevents.MouseClickedEvent;
 import eea.engine.event.basicevents.MouseEnteredEvent;
 import model.actions.DiceAction;
 import model.game.GameLogic;
+import model.game.Turn;
 import model.global;
 import org.lwjgl.Sys;
 import org.newdawn.slick.Image;

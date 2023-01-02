@@ -3,6 +3,7 @@ package model;
 import eea.engine.entity.StateBasedEntityManager;
 import model.boardLogic.Board;
 import model.boardLogic.objects.IGameObject;
+import model.game.Turn;
 
 /**
  * Class to store any global variables
@@ -30,4 +31,6 @@ public class global {
 
     //the players turn
     public static int turn;
+
+    public static Turn phase;
 }

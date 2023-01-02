@@ -2,10 +2,9 @@ package model.boardLogic.objects;
 
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
+import eea.engine.event.Event;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-
-import java.util.List;
 
 public class Figure implements IGameObject {
 
@@ -14,7 +13,7 @@ public class Figure implements IGameObject {
     private String color;
     private int id;
 
-    public Figure(int playerID, int figureID, String color){
+    public Figure(int playerID, int figureID, String color) {
         this.id = figureID;
         this.playerID = id;
         this.color = color;
@@ -25,11 +24,11 @@ public class Figure implements IGameObject {
      * create the figure entity and add the entity list
      * id, scale, image
      */
-    public void initEntity(){
+    public void initEntity() {
 
         Entity fieldEntity = new Entity("player:" + this.playerID + "-figure:" + this.id);
         try {
-            fieldEntity.addComponent(new ImageRenderComponent(new Image("assets/figures/"+ color +".png")));
+            fieldEntity.addComponent(new ImageRenderComponent(new Image("assets/figures/" + color + ".png")));
         } catch (SlickException e) {
             throw new RuntimeException(e);
         }
@@ -40,10 +39,15 @@ public class Figure implements IGameObject {
 
     /**
      * get figure entity
+     *
      * @return figure entity
      */
-    public Entity getEntity(){
+    public Entity getEntity() {
         return entity;
+    }
+
+    public int getPlayerID() {
+        return this.playerID;
     }
 
 }

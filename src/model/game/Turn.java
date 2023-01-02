@@ -1,0 +1,5 @@
+package model.game;
+
+public enum Turn {
+    DICE_PHASE, SELECT_FIGURE_PHASE, SELECT_MOVEMENT_PHASE, LUCKY_WHEEL_PHASE
+}

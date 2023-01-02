@@ -50,7 +50,7 @@ public class GameplayState extends BasicGameState {
         //initialisiert das Spielbrett und die Figuren
         SetupGame.setup();
 
-        GameLogic.start();
+        GameLogic.setup();
 
     }
 

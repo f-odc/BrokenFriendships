@@ -5,11 +5,10 @@ import eea.engine.entity.Entity;
 import eea.engine.event.ANDEvent;
 import eea.engine.event.basicevents.MouseClickedEvent;
 import eea.engine.event.basicevents.MouseEnteredEvent;
-import model.actions.LogAction;
+import model.actions.FieldSelectedAction;
 import model.enums.Color;
 import model.boardLogic.fields.BoardField;
 import model.global;
-import org.lwjgl.Sys;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
@@ -85,6 +84,9 @@ public class Board {
         this.homes = new FieldCluster();
         this.dicePositions = new Vector2f[4];
 
+
+        //initialisieren des spielen buttons
+
         //initialisieren der Entities für jedes Feld
         //durchläuft das boardTemplate um zu erkennen welche Felder hinzugefügt werden
         for (int j = 0; j < global.NUM_OF_FIELDS; j++) {    //Y-Richtung
@@ -156,8 +158,12 @@ public class Board {
         //Hinzufügen von Action
         //TODO change to actual action
         if (i != 10 || j != 2 /*Würfel Position*/) {
+            //TODO change
+            int turn = color == Color.RED ? 0 :
+                    color == Color.YELLOW ? 1 :
+                            color == Color.BLUE ? 2 : 3;
             ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
-            clickEvent.addAction(new LogAction(new Vector2f(i, j), color));
+            clickEvent.addAction(new FieldSelectedAction(new Vector2f(i, j), turn));
             fieldEntity.addComponent(clickEvent);
         }
 
@@ -175,6 +181,7 @@ public class Board {
     private Vector2f getMidPoint(int i, int j) {
         Vector2f start = new Vector2f(i * xStep + xOffset, j * yStep);
         Vector2f end = new Vector2f((i + 1) * xStep + xOffset, (j + 1) * yStep);
+        System.out.println("getMidPoint: " + i + "," + j + " xStep:" + xStep);
         return new Vector2f((start.getX() + end.getX()) / 2, (start.getY() + end.getY()) / 2);
     }
 
@@ -228,11 +235,11 @@ public class Board {
         switch (fieldType) {
             case -3 -> {
                 System.out.println("Zielfeld");
-                return bases.get(color, point).isPresent() ? bases.get(color, point).get() : null;
+                return bases.get(color, getMidPoint((int) point.getX(), (int) point.getY())).get();
             }
             case -2 -> {
-                System.out.println("Hausfeld");
-                return homes.get(color, point).isPresent() ? homes.get(color, point).get() : null;
+                System.out.println("Hausfeld " + point.getX() + "," + point.getY());
+                return homes.get(color, getMidPoint((int) point.getX(), (int) point.getY())).get();
             }
             case -1 -> {
                 System.out.println("kein Feld");
