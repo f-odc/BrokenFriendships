@@ -3,6 +3,7 @@ package model.boardLogic.objects;
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
 import model.boardLogic.fields.BoardField;
+import eea.engine.event.Event;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
@@ -30,11 +31,11 @@ public class Figure implements IGameObject {
      * create the figure entity and add the entity list
      * id, scale, image
      */
-    public void initEntity(){
+    public void initEntity() {
 
         Entity fieldEntity = new Entity("player:" + this.playerID + "-figure:" + this.id);
         try {
-            fieldEntity.addComponent(new ImageRenderComponent(new Image("assets/figures/"+ color +".png")));
+            fieldEntity.addComponent(new ImageRenderComponent(new Image("assets/figures/" + color + ".png")));
         } catch (SlickException e) {
             throw new RuntimeException(e);
         }
@@ -45,12 +46,14 @@ public class Figure implements IGameObject {
 
     /**
      * get figure entity
+     *
      * @return figure entity
      */
-    public Entity getEntity(){
+    public Entity getEntity() {
         return entity;
     }
 
+<<<<<<< src/model/boardLogic/objects/Figure.java
     /**
      * Move figure to start field if start field is empty or occupied with from different player
      * @return true -> if move to start is successful, else false
@@ -101,4 +104,10 @@ public class Figure implements IGameObject {
     }
 
 
+=======
+    public int getPlayerID() {
+        return this.playerID;
+    }
+
+>>>>>>> src/model/boardLogic/objects/Figure.java
 }

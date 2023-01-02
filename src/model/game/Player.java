@@ -25,7 +25,7 @@ public class Player {
 
     private String color;
 
-    public Player(int id){
+    public Player(int id) {
         this.id = id;
         setColor();
 
@@ -44,13 +44,22 @@ public class Player {
     /**
      * Set color of player depending on the id
      */
-    private void setColor(){
-        switch(this.id){
-            case 0: color = "red"; return;
-            case 1: color = "yellow"; return;
-            case 2: color = "blue"; return;
-            case 3: color = "green"; return;
-            default: throw new RuntimeException("Wrong ID in Player Creation!");
+    private void setColor() {
+        switch (this.id) {
+            case 0:
+                color = "red";
+                return;
+            case 1:
+                color = "yellow";
+                return;
+            case 2:
+                color = "blue";
+                return;
+            case 3:
+                color = "green";
+                return;
+            default:
+                throw new RuntimeException("Wrong ID in Player Creation!");
         }
     }
 
@@ -75,8 +84,8 @@ public class Player {
     /**
      * Place player figures on home fields on board
      */
-    private void setFigures(){
-        for(int i=0;i<4;i++){
+    private void setFigures() {
+        for (int i = 0; i < 4; i++) {
             homeFields.get(i).setGameObject(figures.get(i));
         }
     }

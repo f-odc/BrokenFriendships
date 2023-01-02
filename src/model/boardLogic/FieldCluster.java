@@ -34,24 +34,33 @@ public class FieldCluster {
      * @return Optional<ColoredField> das gewünschte Feld
      */
     public Optional<BoardField> get(Color color, Vector2f boardPosition) {
-        return color == Color.BLUE ? blue.stream().filter(ele -> ele.getPosition().equals(boardPosition)).findAny() :
-                color == Color.GREEN ? green.stream().filter(ele -> ele.equals(boardPosition)).findAny() :
-                        color == Color.RED ? red.stream().filter(ele -> ele.equals(boardPosition)).findAny() :
-                                yellow.stream().filter(ele -> ele.equals(boardPosition)).findAny();
+        float x = boardPosition.getX();
+        float y = boardPosition.getY();
+        System.out.println("get color: " + color + " position: " + x + "," + y);
+        return color == Color.BLUE ? blue.stream().filter(ele -> ele.getPosition().getX() == x && ele.getPosition().getY() == y).findAny() :
+                color == Color.GREEN ? green.stream().filter(ele -> ele.getPosition().getX() == x && ele.getPosition().getY() == y).findAny() :
+                        color == Color.RED ? red.stream().filter(ele -> ele.getPosition().getX() == x && ele.getPosition().getY() == y).findAny() :
+                                yellow.stream().filter(ele -> ele.getPosition().getX() == x && ele.getPosition().getY() == y).findAny();
     }
 
     /**
      * Get player fields
+     *
      * @param id player id
      * @return List of BoardFields
      */
-    public List<BoardField> getFieldsFromId(int id){
-        switch (id){
-            case 0: return red;
-            case 1: return yellow;
-            case 2: return blue;
-            case 3: return green;
-            default: throw new RuntimeException("Invalid ID");
+    public List<BoardField> getFieldsFromId(int id) {
+        switch (id) {
+            case 0:
+                return red;
+            case 1:
+                return yellow;
+            case 2:
+                return blue;
+            case 3:
+                return green;
+            default:
+                throw new RuntimeException("Invalid ID");
         }
     }
 }
