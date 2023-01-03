@@ -3,6 +3,7 @@ package model;
 import eea.engine.entity.StateBasedEntityManager;
 import model.boardLogic.Board;
 import model.boardLogic.objects.IGameObject;
+import model.game.Player;
 import model.game.Turn;
 
 /**
@@ -33,4 +34,6 @@ public class global {
     public static int turn;
 
     public static Turn phase;
+
+    public static Player[] players = new Player[4];
 }

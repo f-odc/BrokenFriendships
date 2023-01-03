@@ -124,7 +124,9 @@ public class Board {
                     }
                     default -> {
                         //Startfeld und Standardfeld
-                        boardtmp = new BoardField(currentEntity, Field.STANDARD);
+                        if (type == 0 || type == 10 || type == 20 || type == 30)
+                            boardtmp = new BoardField(currentEntity, Field.START);
+                        else boardtmp = new BoardField(currentEntity, Field.STANDARD);
                         gameFields[type] = boardtmp;
                     }
                 }
@@ -184,7 +186,6 @@ public class Board {
     private Vector2f getMidPoint(int i, int j) {
         Vector2f start = new Vector2f(i * xStep + xOffset, j * yStep);
         Vector2f end = new Vector2f((i + 1) * xStep + xOffset, (j + 1) * yStep);
-        System.out.println("getMidPoint: " + i + "," + j + " xStep:" + xStep);
         return new Vector2f((start.getX() + end.getX()) / 2, (start.getY() + end.getY()) / 2);
     }
 
@@ -276,33 +277,50 @@ public class Board {
         return homes.getFieldsFromId(id);
     }
 
+    public int getGameFieldsIndex(Vector2f pos) {
+        for (int i = 0; i < gameFields.length; i++) {
+            if (gameFields[i].getPosition().getX() == pos.getX() &&
+                    gameFields[i].getPosition().getY() == pos.getY()) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     /**
      * Get the current board field on specific index
+     *
      * @param index board field number
      * @return BoardField of the specific index
      */
-    public BoardField getPlayField(int index){
-        if (index >= 0 && index < gameFields.length){
-            return gameFields[index];
+    public BoardField getPlayField(int index) {
+        if (index >= 0) {
+            if (index > gameFields.length) return gameFields[index % gameFields.length];
+            else return gameFields[index];
         }
         throw new RuntimeException("Index out of Bounds - getPlayField");
     }
 
     /**
      * Get all base fields from a player
+     *
      * @param id player id
      * @return List of the base fields
      */
-    public List<BoardField> getBaseFields(int id){
-        switch (id){
-            case 0: return bases.red;
-            case 1: return bases.yellow;
-            case 2: return bases.blue;
-            case 3: return bases.green;
-            default: throw new RuntimeException("Wrong ID");
+    public List<BoardField> getBaseFields(int id) {
+        switch (id) {
+            case 0:
+                return bases.red;
+            case 1:
+                return bases.yellow;
+            case 2:
+                return bases.blue;
+            case 3:
+                return bases.green;
+            default:
+                throw new RuntimeException("Wrong ID");
         }
     }
-
 
 
 }

@@ -1,5 +1,5 @@
 package model.enums;
 
 public enum Field {
-    BASE, HOME, STANDARD
+    BASE, HOME, START, STANDARD
 }

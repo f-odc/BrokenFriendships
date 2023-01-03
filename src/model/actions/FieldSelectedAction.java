@@ -22,8 +22,8 @@ public class FieldSelectedAction implements Action {
 
     @Override
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int i, Component component) {
-        System.out.println("Color: "  + " |X: " + field.getPosition().getX() + " |Y: " + field.getPosition().getY());
-        if(field.isOccupied())System.out.println( field.getCurrentObject().getOwnerID());
+        //System.out.println("Color: "  + " |X: " + field.getPosition().getX() + " |Y: " + field.getPosition().getY());
+        //if(field.isOccupied())System.out.println( field.getCurrentObject().getOwnerID());
         GameLogic.executePhase(field);
     }
 }

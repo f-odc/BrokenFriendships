@@ -1,6 +1,7 @@
 package model.boardLogic.fields;
 
 import eea.engine.entity.Entity;
+import model.boardLogic.objects.Figure;
 import model.boardLogic.objects.IGameObject;
 import model.enums.Field;
 import model.global;
@@ -33,7 +34,7 @@ public class BoardField {
         return baseEntity;
     }
 
-    public Field getType(){
+    public Field getType() {
         return type;
     }
 
@@ -44,17 +45,19 @@ public class BoardField {
 
     /**
      * Get object currently occupying the field
+     *
      * @return GameObject
      */
-    public IGameObject getCurrentObject(){
+    public IGameObject getCurrentObject() {
         return displayedObject;
     }
 
     /**
      * Set game object on top of board field
+     *
      * @param gameObject Figure/Object
      */
-    public void setGameObject(IGameObject gameObject){
+    public void setGameObject(IGameObject gameObject) {
         // TODO: Change? -> delete from previous, set to current, add board field on figure
         Entity figure = gameObject.getEntity();
         // set Position
@@ -67,17 +70,33 @@ public class BoardField {
 
     /**
      * reset the current displayed object
+     *
+     * @return the IGameObject being reset
      */
-    public void resetCurrentField(){
+    public IGameObject resetCurrentField() {
+        IGameObject tmp = displayedObject;
         displayedObject = null;
+        return tmp;
     }
 
-    public void highlight(){
+    public void highlight() {
         //TODO change way of highlighting
         baseEntity.setScale(0.3f);
     }
 
-    public void deHighlight(){
+    public void deHighlight() {
         baseEntity.setScale(scale);
+    }
+
+    public boolean equals(BoardField other) {
+        return getPosition().getX() == other.getPosition().getX() &&
+                getPosition().getY() == other.getPosition().getY();
+    }
+
+    public Figure getCurrentFigure(){
+        if(displayedObject instanceof Figure){
+            return (Figure) displayedObject;
+        }
+        return null;
     }
 }

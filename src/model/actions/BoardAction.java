@@ -20,7 +20,7 @@ public class BoardAction implements Action {
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int i, Component component) {
         System.out.println(boardField.getCurrentObject());
         if (boardField.isOccupied()){
-            System.out.println("Do Action!");
+            //System.out.println("Do Action!");
             boardField.getCurrentObject().activate();
         }
     }
