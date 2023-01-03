@@ -294,11 +294,10 @@ public class Board {
      * @return BoardField of the specific index
      */
     public BoardField getPlayField(int index) {
-        if (index >= 0) {
-            if (index > gameFields.length) return gameFields[index % gameFields.length];
-            else return gameFields[index];
-        }
-        throw new RuntimeException("Index out of Bounds - getPlayField");
+        int tmpIndex = index < 0 ? -1 * index : index;
+        if (tmpIndex >= gameFields.length) return gameFields[tmpIndex % gameFields.length];
+        else return gameFields[tmpIndex];
+        //throw new RuntimeException("Index out of Bounds - getPlayField");
     }
 
     /**

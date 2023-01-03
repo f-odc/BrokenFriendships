@@ -3,7 +3,7 @@ package model.boardLogic.objects;
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
 import model.boardLogic.fields.BoardField;
-import model.global;
+import model.game.GameLogic;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
@@ -59,6 +59,7 @@ public class Figure implements IGameObject {
      * @return true -> if move to start is successful, else false
      */
     public boolean moveToStart() {
+        //TODO delete
         // move
         return moveFromTo(currentField, startField);
     }
@@ -70,8 +71,27 @@ public class Figure implements IGameObject {
      * @param to   new field
      */
     public boolean moveFromTo(BoardField from, BoardField to) {
-        //figure of same player on to field
+        //case: own figure on "to" field
         if (to.isOccupied() && to.getCurrentObject().getOwnerID() == playerID) {
+            System.out.println("same Figure");
+            return false;
+        }
+        //case: other figure on "to" field
+        if(to.isOccupied()){
+            System.out.println("reset " + to.getCurrentObject().getOwnerID() + "," + playerID);
+            IGameObject tmp = to.resetCurrentField();
+            tmp.reset();
+        }
+        // from delete object
+        from.resetCurrentField();
+        // to add object
+        to.setGameObject(this);
+        // set currentField
+        currentField = to;
+        return true;
+
+        //figure of same player on to field
+        /*if (to.isOccupied() && to.getCurrentObject().getOwnerID() == playerID) {
             System.out.println("same Figure");
             return false;
         }
@@ -92,7 +112,7 @@ public class Figure implements IGameObject {
         to.setGameObject(this);
         // set currentField
         currentField = to;
-        return true;
+        return true;*/
     }
 
     public int getFigureID() {
@@ -101,8 +121,14 @@ public class Figure implements IGameObject {
 
     public boolean activate() {
         // TODO: what to do if clicked
+        BoardField targetField = GameLogic.getMovableField();
+        if (targetField != null){
+            System.out.println("Figure movable field: " + targetField.getPosition().getX() + "," + targetField.getPosition().getY());
+            return moveFromTo(currentField, targetField);
+        }
+        return false;
         //move from home to start field
-        if (currentField.getPosition().getX() == homeField.getPosition().getX() &&
+        /*if (currentField.getPosition().getX() == homeField.getPosition().getX() &&
                 currentField.getPosition().getY() == homeField.getPosition().getY()) {
             if (!moveToStart()) {
                 //return figure to home if it fails
@@ -110,14 +136,15 @@ public class Figure implements IGameObject {
                 return false;
             }
         }
-        //move from game field to another game field
-        else {
+        //move into base if possible
+        //if not move from game field to another game field
+        else if (!canEnterBase()) {
             int from = global.BOARD.getGameFieldsIndex(currentField.getPosition());
             BoardField to = global.BOARD.getPlayField(from + global.BOARD.getDice().getValue());
             //return false and do nothing if it fails
             return moveFromTo(currentField, to);
         }
-        return true;
+        return true;*/
     }
 
     /**
@@ -129,10 +156,6 @@ public class Figure implements IGameObject {
 
     public int getOwnerID() {
         return playerID;
-    }
-
-    public BoardField getCurrentField() {
-        return currentField;
     }
 
     public BoardField getHomeField() {

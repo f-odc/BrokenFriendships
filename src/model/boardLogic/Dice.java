@@ -60,7 +60,7 @@ public class Dice {
     public int throwDice() throws SlickException {
         Random rand = new Random();
         int diceThrow = rand.nextInt(7);
-        while (diceThrow == 0) diceThrow = rand.nextInt(7);
+        while (diceThrow < 5) diceThrow = rand.nextInt(7);
         this.value = diceThrow;
 
         updateEntity();
