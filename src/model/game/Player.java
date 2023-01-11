@@ -30,7 +30,11 @@ public class Player {
         setColor();
 
         this.startPoint = id * 10;
-        this.endPoint = this.startPoint - 1;
+        // attention if startpoint = 0
+        // 40 = length of all board fields
+        // prevent negative endpoint
+        this.endPoint = (this.startPoint - 1 + 40) % 40;
+
 
         getFields();
 
@@ -106,6 +110,10 @@ public class Player {
     public BoardField setStartField(){
         startField = global.BOARD.getPlayField(startPoint);
         return startField;
+    }
+
+    public int getEndPoint(){
+        return endPoint;
     }
 
 }

@@ -113,6 +113,10 @@ public class GameLogic {
                 return null;
             return currentFigure.getStartField();
         }
+        // case: figure in base
+        else if (selectedField.getType() == Field.BASE){
+            return moveInBase();
+        }
         //case: normal move
         else {
             //check if the base can be entered
@@ -132,29 +136,73 @@ public class GameLogic {
     }
 
     /**
+     * movement inside the base fields
+     * @return BoardField which can be reached inside the base
+     */
+    private static BoardField moveInBase(){
+        System.out.println("Start Move in Base");
+        int dice = global.BOARD.getDice().getValue();
+
+        // TODO: change -> get current field in base
+        int index = 0;
+        for (BoardField field : global.BOARD.getBaseFields(global.turn)){
+            if(selectedField.equals(field)) break; else index++;
+        }
+        // TODO: change -> workaround for blue and green
+        if(global.turn == 2 || global.turn == 3){
+            index = (3 + 3 * index) % 4;
+        }
+        int newIndex = dice + index;
+        // enough space in base?
+        if(newIndex < 4){
+            System.out.println("Enough space");
+            // TODO: change -> workaround for blue and green
+            if(global.turn == 2 || global.turn == 3){
+                newIndex = (3 + 3 * newIndex) % 4;
+            }
+            System.out.println("BaseIndex: " + index + " NewIndex: " + newIndex);
+            // return board field if not occupied
+            BoardField currentBaseField = global.BOARD.getBaseFields(global.turn).get(newIndex);
+            if(currentBaseField.isOccupied()){
+                System.out.println("base field is occupied");
+            }else {
+                System.out.println("into base move possible");
+                return currentBaseField;
+            }
+        }
+        return null;
+    }
+
+    /**
      * function checking if the figure on the selected field can enter the base
      * @return Boardfield from base if it is possible, else null
      */
     private static BoardField canEnterBase() {
         int selectedIndex = global.BOARD.getGameFieldsIndex(selectedField.getPosition());
-        BoardField endField = global.BOARD.getPlayField(global.BOARD.getGameFieldsIndex(selectedField.getCurrentFigure().getStartField().getPosition()) - 1);
-        int endIndex = global.BOARD.getGameFieldsIndex(endField.getPosition());
+        // get endpoint of player
+        int endIndex = global.players[selectedField.getCurrentFigure().getOwnerID()].getEndPoint();
         int moveIndex = selectedIndex + global.BOARD.getDice().getValue();
 
-        System.out.println("going to check for: selectedIndex: " + selectedIndex + " endIndex" + endIndex + " moveIndex" + moveIndex);
+        System.out.println("going to check for: selectedIndex: " + selectedIndex + " endIndex" + endIndex + " moveIndex" + moveIndex + "newMoveIndex:" + moveIndex%40);
 
-        //move would go beyond start point
-        //TODO change, does not work properly
-        if (selectedIndex > 0 && selectedIndex < endIndex && moveIndex > endIndex) {
-            BoardField baseField = global.BOARD.getBaseFields(global.turn).get(4 - (global.BOARD.getDice().getValue() - (endIndex - selectedIndex)));
-            //the base field is empty
-            if (!baseField.isOccupied()) {
-                System.out.println("into base move possible");
-                return baseField;
+        if (selectedIndex <= endIndex && moveIndex > endIndex && moveIndex <= endIndex+4){
+            // possible
+            // check if occupied
+            // -1 else no 0 -> need of index not of id
+            int index = moveIndex - endIndex - 1;
+            // TODO: change to better workaround
+            // wrong base field allocation for blue and green
+            if(global.turn == 2 || global.turn == 3){
+                index = (3 + 3 * index) % 4;
             }
-            System.out.println("base field is occupied");
+            BoardField currentBaseField = global.BOARD.getBaseFields(global.turn).get(index);
+            if(currentBaseField.isOccupied()){
+                System.out.println("base field is occupied");
+            }else {
+                System.out.println("into base move possible");
+                return currentBaseField;
+            }
         }
-        System.out.println("would not go beyond start point, selectedIndex: " + selectedIndex + " endIndex" + endIndex + " moveIndex" + moveIndex);
         return null;
     }
 
