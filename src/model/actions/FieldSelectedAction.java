@@ -3,12 +3,8 @@ package model.actions;
 import eea.engine.action.Action;
 import eea.engine.component.Component;
 import model.boardLogic.fields.BoardField;
-import model.boardLogic.objects.Figure;
 import model.game.GameLogic;
-import model.game.Turn;
-import model.global;
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class FieldSelectedAction implements Action {

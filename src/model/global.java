@@ -4,7 +4,7 @@ import eea.engine.entity.StateBasedEntityManager;
 import model.boardLogic.Board;
 import model.boardLogic.objects.IGameObject;
 import model.game.Player;
-import model.game.Turn;
+import model.enums.Phase;
 
 /**
  * Class to store any global variables
@@ -33,7 +33,9 @@ public class global {
     //the players turn
     public static int turn;
 
-    public static Turn phase;
+    //phase of the current turn
+    public static Phase phase;
 
+    //the four playing players
     public static Player[] players = new Player[4];
 }

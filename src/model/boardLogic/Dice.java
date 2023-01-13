@@ -6,10 +6,7 @@ import eea.engine.event.ANDEvent;
 import eea.engine.event.basicevents.MouseClickedEvent;
 import eea.engine.event.basicevents.MouseEnteredEvent;
 import model.actions.DiceAction;
-import model.game.GameLogic;
-import model.game.Turn;
 import model.global;
-import org.lwjgl.Sys;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
@@ -60,7 +57,7 @@ public class Dice {
     public int throwDice() throws SlickException {
         Random rand = new Random();
         int diceThrow = rand.nextInt(7);
-        while (diceThrow < 5) diceThrow = rand.nextInt(7);
+        while (diceThrow == 0) diceThrow = rand.nextInt(7);
         this.value = diceThrow;
 
         updateEntity();

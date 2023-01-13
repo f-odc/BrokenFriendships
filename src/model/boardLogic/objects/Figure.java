@@ -4,8 +4,12 @@ import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
 import model.boardLogic.fields.BoardField;
 import model.game.GameLogic;
+import model.game.MoveLogic;
+import model.global;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+
+import java.awt.*;
 
 public class Figure implements IGameObject {
 
@@ -54,17 +58,6 @@ public class Figure implements IGameObject {
     }
 
     /**
-     * Move figure to start field if start field is empty or occupied with from different player
-     *
-     * @return true -> if move to start is successful, else false
-     */
-    public boolean moveToStart() {
-        //TODO delete
-        // move
-        return moveFromTo(currentField, startField);
-    }
-
-    /**
      * Move figure to new field, delete object from old field and add to new one
      *
      * @param from current field
@@ -77,7 +70,7 @@ public class Figure implements IGameObject {
             return false;
         }
         //case: other figure on "to" field
-        if(to.isOccupied()){
+        if (to.isOccupied()) {
             System.out.println("reset " + to.getCurrentObject().getOwnerID() + "," + playerID);
             IGameObject tmp = to.resetCurrentField();
             tmp.reset();
@@ -89,30 +82,6 @@ public class Figure implements IGameObject {
         // set currentField
         currentField = to;
         return true;
-
-        //figure of same player on to field
-        /*if (to.isOccupied() && to.getCurrentObject().getOwnerID() == playerID) {
-            System.out.println("same Figure");
-            return false;
-        }
-        //other object on to field
-        else if (to.isOccupied()) {
-            System.out.println("reset " + to.getCurrentObject().getOwnerID() + "," + playerID);
-            IGameObject tmp = to.resetCurrentField();
-            tmp.reset();
-            from.resetCurrentField();
-        }
-        //standard move with no hindrances
-        else {
-            System.out.println("standard move");
-            // from delete object
-            from.resetCurrentField();
-        }
-        // to add object
-        to.setGameObject(this);
-        // set currentField
-        currentField = to;
-        return true;*/
     }
 
     public int getFigureID() {
@@ -121,30 +90,12 @@ public class Figure implements IGameObject {
 
     public boolean activate() {
         // TODO: what to do if clicked
-        BoardField targetField = GameLogic.getMovableField();
-        if (targetField != null){
+        BoardField targetField = MoveLogic.getMovableField();
+        if (targetField != null) {
             System.out.println("Figure movable field: " + targetField.getPosition().getX() + "," + targetField.getPosition().getY());
             return moveFromTo(currentField, targetField);
         }
         return false;
-        //move from home to start field
-        /*if (currentField.getPosition().getX() == homeField.getPosition().getX() &&
-                currentField.getPosition().getY() == homeField.getPosition().getY()) {
-            if (!moveToStart()) {
-                //return figure to home if it fails
-                reset();
-                return false;
-            }
-        }
-        //move into base if possible
-        //if not move from game field to another game field
-        else if (!canEnterBase()) {
-            int from = global.BOARD.getGameFieldsIndex(currentField.getPosition());
-            BoardField to = global.BOARD.getPlayField(from + global.BOARD.getDice().getValue());
-            //return false and do nothing if it fails
-            return moveFromTo(currentField, to);
-        }
-        return true;*/
     }
 
     /**
@@ -166,4 +117,21 @@ public class Figure implements IGameObject {
         return startField;
     }
 
+    public boolean isOnBaseField() {
+        boolean isOnBaseField = false;
+        for (int i = 0; i < 4; i++) {
+            if (global.players[playerID].getBaseField(i).equals(currentField))
+                isOnBaseField = true;
+        }
+        return isOnBaseField;
+    }
+
+    public boolean isOnHomeField() {
+        boolean isOnHomeField = false;
+        for (int i = 0; i < 4; i++) {
+            if (global.players[playerID].getHomeField(i).equals(currentField))
+                isOnHomeField = true;
+        }
+        return isOnHomeField;
+    }
 }
