@@ -148,6 +148,10 @@ public class GameLogic {
                     //reset values if move is possible
                     emptyMovableFields();
                     MoveLogic.deselectField();
+                    if(global.BOARD.getDice().getValue() == 6){
+                        global.phase = Phase.DICE_PHASE;
+                        return;
+                    }
                     nextTurn();
                     return;
                 }
