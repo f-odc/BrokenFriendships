@@ -44,13 +44,13 @@ public class GameLogic {
      */
     public static void nextTurn() {
         //win condition
-        /*for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             BoardField figureField = global.players[global.turn].getFigure(i).getCurrentField();
             if (!global.BOARD.getBaseFields(global.turn).contains(figureField)) {
                 global.phase = Phase.END_OF_GAME;
                 break;
             }
-        }*/
+        }
         getOutOfBaseTries = 0;
         global.turn = (global.turn + 1) % 4;
         global.BOARD.getDice().setPosition(global.turn);

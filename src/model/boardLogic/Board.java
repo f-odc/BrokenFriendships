@@ -5,7 +5,6 @@ import eea.engine.entity.Entity;
 import eea.engine.event.ANDEvent;
 import eea.engine.event.basicevents.MouseClickedEvent;
 import eea.engine.event.basicevents.MouseEnteredEvent;
-import model.actions.BoardAction;
 import model.actions.FieldSelectedAction;
 import model.enums.Color;
 import model.boardLogic.fields.BoardField;
@@ -138,10 +137,10 @@ public class Board {
                     clickEvent.addAction(new FieldSelectedAction(boardtmp));
                     boardtmp.getBaseEntity().addComponent(clickEvent);
                 }
-
-
             }
         }
+        //turn around the order of the green and blue bases, as they are read in an incorrect order
+        bases.initCorrectOrder();
     }
 
     private void initDice() throws SlickException {

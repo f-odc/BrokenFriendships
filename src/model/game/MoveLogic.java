@@ -82,18 +82,10 @@ public class MoveLogic {
             if (selectedField.equals(field)) break;
             else index++;
         }
-        // TODO: change -> workaround for blue and green
-        if (global.turn == 2 || global.turn == 3) {
-            index = (3 + 3 * index) % 4;
-        }
         int newIndex = dice + index;
         // enough space in base?
         if (newIndex < 4) {
             System.out.println("Enough space");
-            // TODO: change -> workaround for blue and green
-            if (global.turn == 2 || global.turn == 3) {
-                newIndex = (3 + 3 * newIndex) % 4;
-            }
             System.out.println("BaseIndex: " + index + " NewIndex: " + newIndex);
             // return board field if not occupied
             BoardField currentBaseField = global.BOARD.getBaseFields(global.turn).get(newIndex);
@@ -125,11 +117,6 @@ public class MoveLogic {
             // check if occupied
             // -1 else no 0 -> need of index not of id
             int index = moveIndex - endIndex - 1;
-            // TODO: change to better workaround
-            // wrong base field allocation for blue and green
-            if (global.turn == 2 || global.turn == 3) {
-                index = (3 + 3 * index) % 4;
-            }
             BoardField currentBaseField = global.BOARD.getBaseFields(global.turn).get(index);
             if (currentBaseField.isOccupied()) {
                 System.out.println("base field is occupied");

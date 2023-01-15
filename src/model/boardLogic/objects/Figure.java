@@ -117,6 +117,10 @@ public class Figure implements IGameObject {
         return startField;
     }
 
+    public BoardField getCurrentField() {
+        return currentField;
+    }
+
     public boolean isOnBaseField() {
         boolean isOnBaseField = false;
         for (int i = 0; i < 4; i++) {

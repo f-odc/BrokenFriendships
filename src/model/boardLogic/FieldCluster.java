@@ -5,6 +5,7 @@ import model.boardLogic.fields.BoardField;
 import org.newdawn.slick.geom.Vector2f;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,14 @@ public class FieldCluster {
         else if (color == Color.GREEN && green.size() <= 4) green.add(field);
         else if (color == Color.RED && red.size() <= 4) red.add(field);
         else if (color == Color.YELLOW && yellow.size() <= 4) yellow.add(field);
+    }
+
+    /**
+     * reverses the order of the blue and green fields
+     */
+    public void initCorrectOrder(){
+        Collections.reverse(blue);
+        Collections.reverse(green);
     }
 
     /**
