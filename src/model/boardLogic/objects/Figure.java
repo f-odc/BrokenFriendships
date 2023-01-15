@@ -90,7 +90,7 @@ public class Figure implements IGameObject {
 
     public boolean activate() {
         // TODO: what to do if clicked
-        BoardField targetField = MoveLogic.getMovableField();
+        BoardField targetField = MoveLogic.getMovableField(MoveLogic.getSelectedField());
         if (targetField != null) {
             System.out.println("Figure movable field: " + targetField.getPosition().getX() + "," + targetField.getPosition().getY());
             return moveFromTo(currentField, targetField);

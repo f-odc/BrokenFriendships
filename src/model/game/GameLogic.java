@@ -44,13 +44,19 @@ public class GameLogic {
      */
     public static void nextTurn() {
         //win condition
+        boolean win = true;
         for (int i = 0; i < 4; i++) {
             BoardField figureField = global.players[global.turn].getFigure(i).getCurrentField();
             if (!global.BOARD.getBaseFields(global.turn).contains(figureField)) {
-                global.phase = Phase.END_OF_GAME;
+                win = false;
                 break;
             }
         }
+        if(win){
+            global.phase = Phase.END_OF_GAME;
+            return;
+        }
+
         getOutOfBaseTries = 0;
         global.turn = (global.turn + 1) % 4;
         global.BOARD.getDice().setPosition(global.turn);
@@ -63,9 +69,9 @@ public class GameLogic {
      * @return true if the movement was executed successfully
      */
     public static boolean enterMovementPhase() {
-        movableField = MoveLogic.getMovableField();
+        movableField = MoveLogic.getMovableField(MoveLogic.getSelectedField());
         boolean isMovementPossible = movableField != null;
-        if (isMovementPossible){
+        if (isMovementPossible) {
             //show field to which movement is possible
             //TODO change way of highlighting
             movableField.getBaseEntity().setScale(0.5f);
@@ -88,8 +94,14 @@ public class GameLogic {
                 //check if all figures are in base or home
                 for (int i = 0; i < 4; i++) {
                     Figure figure = currentPlayer.getFigure(i);
-                    if (!figure.isOnHomeField() && !figure.isOnBaseField()) {
+                    System.out.println("Check if movable:::");
+                    System.out.println("is on homefield " + figure.isOnHomeField());
+                    System.out.println("is on Basefield " + figure.isOnBaseField());
+                    System.out.println("is movable: " + MoveLogic.getMovableField(figure.getCurrentField()));
+                    if (MoveLogic.getMovableField(figure.getCurrentField()) != null) {
+                        System.out.println("allinHomeorBase: " + allInHomeOrBase);
                         allInHomeOrBase = false;
+                        break;
                     }
                 }
                 //case: all figures in home/base, no 6 and still has tries to get out
@@ -98,7 +110,7 @@ public class GameLogic {
                     return;
                 }
                 //case: out of tries to get a figure out of the home and no 6
-                if (getOutOfBaseTries == 2 && global.BOARD.getDice().getValue() != 6) {
+                if (allInHomeOrBase && global.BOARD.getDice().getValue() != 6 && getOutOfBaseTries == 2 ) {
                     nextTurn();
                     return;
                 }

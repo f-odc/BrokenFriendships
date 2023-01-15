@@ -27,36 +27,40 @@ public class MoveLogic {
         selectedField = null;
     }
 
+    public static BoardField getSelectedField() {
+        return selectedField;
+    }
+
     /**
      * function which checks which field the figure on the selected field can be moved to
      *
      * @return Boardfield if there is one to move to, else null
      */
-    public static BoardField getMovableField() {
+    public static BoardField getMovableField(BoardField field) {
         int dice = global.BOARD.getDice().getValue();
-        Figure currentFigure = selectedField.getCurrentFigure();
+        Figure currentFigure = field.getCurrentFigure();
 
         //case: home field
-        if (selectedField.equals(currentFigure.getHomeField())) {
+        if (field.equals(currentFigure.getHomeField())) {
             //case: start field is occupied by own figure
             if ((currentFigure.getStartField().isOccupied() &&
-                    currentFigure.getStartField().getCurrentObject().getOwnerID() == selectedField.getCurrentObject().getOwnerID()) ||
+                    currentFigure.getStartField().getCurrentObject().getOwnerID() == field.getCurrentObject().getOwnerID()) ||
                     global.BOARD.getDice().getValue() != 6)
                 return null;
             return currentFigure.getStartField();
         }
         // case: figure in base
-        else if (selectedField.getType() == Field.BASE) {
-            return moveInBase();
+        else if (field.getType() == Field.BASE) {
+            return moveInBase(field);
         }
         //case: normal move
         else {
             //check if the base can be entered
-            BoardField tmp = canEnterBase();
+            BoardField tmp = canEnterBase(field);
             //case: cannot enter base
             if (tmp == null) {
                 System.out.println("normal move");
-                BoardField to = global.BOARD.getPlayField(global.BOARD.getGameFieldsIndex(selectedField.getPosition()) + dice);
+                BoardField to = global.BOARD.getPlayField(global.BOARD.getGameFieldsIndex(field.getPosition()) + dice);
                 //case: target field is occupied but not from own figure
                 if ((to.isOccupied() && to.getCurrentObject().getOwnerID() != global.turn) ||
                         !to.isOccupied()) {
@@ -72,14 +76,14 @@ public class MoveLogic {
      *
      * @return BoardField which can be reached inside the base
      */
-    static BoardField moveInBase() {
+    static BoardField moveInBase(BoardField field) {
         System.out.println("Start Move in Base");
         int dice = global.BOARD.getDice().getValue();
 
         // TODO: change -> get current field in base
         int index = 0;
-        for (BoardField field : global.BOARD.getBaseFields(global.turn)) {
-            if (selectedField.equals(field)) break;
+        for (BoardField baseField : global.BOARD.getBaseFields(global.turn)) {
+            if (field.equals(baseField)) break;
             else index++;
         }
         int newIndex = dice + index;
@@ -104,10 +108,10 @@ public class MoveLogic {
      *
      * @return Boardfield from base if it is possible, else null
      */
-    static BoardField canEnterBase() {
-        int selectedIndex = global.BOARD.getGameFieldsIndex(selectedField.getPosition());
+    static BoardField canEnterBase(BoardField field) {
+        int selectedIndex = global.BOARD.getGameFieldsIndex(field.getPosition());
         // get endpoint of player
-        int endIndex = global.players[selectedField.getCurrentFigure().getOwnerID()].getEndPoint();
+        int endIndex = global.players[field.getCurrentFigure().getOwnerID()].getEndPoint();
         int moveIndex = selectedIndex + global.BOARD.getDice().getValue();
 
         System.out.println("going to check for: selectedIndex: " + selectedIndex + " endIndex" + endIndex + " moveIndex" + moveIndex + "newMoveIndex:" + moveIndex % 40);
