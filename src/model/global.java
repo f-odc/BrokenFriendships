@@ -29,8 +29,12 @@ public class global {
     //Größe der Felder
     public static final float HOME_AND_START_FIELD_SIZE = 0.16f;
     public static final float STANDARD_AND_BASE_FIELD_SIZE = 0.14f;
+    public static final float FIGURE_SIZE = 0.1f;
 
-    //the players turn
+    //which player is currently active
+    public static int activePlayer;
+
+    //game turn
     public static int turn;
 
     //phase of the current turn

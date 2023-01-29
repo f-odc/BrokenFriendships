@@ -7,23 +7,20 @@ import model.enums.Field;
 import model.global;
 import org.newdawn.slick.geom.Vector2f;
 
-public class BoardField implements IField{
+public class QuestionmarkField implements IField{
 
     private Entity baseEntity;
 
     private Vector2f position;
 
-    private Field type;
-
     private float scale;
 
     private IGameObject displayedObject;
 
-    public BoardField(Entity baseEntity, Field type) {
+    public QuestionmarkField(Entity baseEntity) {
         this.baseEntity = baseEntity;
         this.scale = baseEntity.getScale();
         this.position = baseEntity.getPosition();
-        this.type = type;
     }
 
     public Vector2f getPosition() {
@@ -35,11 +32,10 @@ public class BoardField implements IField{
     }
 
     public Field getType() {
-        return type;
+        return Field.QUESTIONMARK;
     }
 
     public boolean isOccupied() {
-        //TODO
         return displayedObject != null;
     }
 
@@ -58,7 +54,6 @@ public class BoardField implements IField{
      * @param gameObject Figure/Object
      */
     public void setGameObject(IGameObject gameObject) {
-        // TODO: Change? -> delete from previous, set to current, add board field on figure
         Entity figure = gameObject.getEntity();
         // set Position
         figure.setPosition(getPosition());

@@ -1,20 +1,22 @@
 package model.game;
 
 import model.boardLogic.fields.BoardField;
+import model.boardLogic.fields.IField;
+import model.boardLogic.fields.QuestionmarkField;
 import model.boardLogic.objects.Figure;
 import model.enums.Field;
 import model.global;
 
 public class MoveLogic {
 
-    static BoardField selectedField;
+    static IField selectedField;
 
     /**
      * function to highlight a selected field
      *
      * @param field the selected field
      */
-    public static void selectField(BoardField field) {
+    public static void selectField(IField field) {
         selectedField = field;
         field.highlight();
     }
@@ -27,7 +29,7 @@ public class MoveLogic {
         selectedField = null;
     }
 
-    public static BoardField getSelectedField() {
+    public static IField getSelectedField() {
         return selectedField;
     }
 
@@ -36,7 +38,7 @@ public class MoveLogic {
      *
      * @return Boardfield if there is one to move to, else null
      */
-    public static BoardField getMovableField(BoardField field) {
+    public static IField getMovableField(IField field) {
         int dice = global.BOARD.getDice().getValue();
         Figure currentFigure = field.getCurrentFigure();
 
@@ -56,13 +58,13 @@ public class MoveLogic {
         //case: normal move
         else {
             //check if the base can be entered
-            BoardField tmp = canEnterBase(field);
+            IField tmp = canEnterBase(field);
             //case: cannot enter base
             if (tmp == null) {
                 System.out.println("normal move");
-                BoardField to = global.BOARD.getPlayField(global.BOARD.getGameFieldsIndex(field.getPosition()) + dice);
+                IField to = global.BOARD.getPlayField(global.BOARD.getGameFieldsIndex(field.getPosition()) + dice);
                 //case: target field is occupied but not from own figure
-                if ((to.isOccupied() && to.getCurrentObject().getOwnerID() != global.turn) ||
+                if ((to.isOccupied() && to.getCurrentObject().getOwnerID() != global.activePlayer) ||
                         !to.isOccupied()) {
                     tmp = to;
                 }
@@ -76,13 +78,13 @@ public class MoveLogic {
      *
      * @return BoardField which can be reached inside the base
      */
-    static BoardField moveInBase(BoardField field) {
+    static IField moveInBase(IField field) {
         System.out.println("Start Move in Base");
         int dice = global.BOARD.getDice().getValue();
 
         // TODO: change -> get current field in base
         int index = 0;
-        for (BoardField baseField : global.BOARD.getBaseFields(global.turn)) {
+        for (BoardField baseField : global.BOARD.getBaseFields(global.activePlayer)) {
             if (field.equals(baseField)) break;
             else index++;
         }
@@ -92,7 +94,7 @@ public class MoveLogic {
             System.out.println("Enough space");
             System.out.println("BaseIndex: " + index + " NewIndex: " + newIndex);
             // return board field if not occupied
-            BoardField currentBaseField = global.BOARD.getBaseFields(global.turn).get(newIndex);
+            BoardField currentBaseField = global.BOARD.getBaseFields(global.activePlayer).get(newIndex);
             if (currentBaseField.isOccupied()) {
                 System.out.println("base field is occupied");
             } else {
@@ -108,20 +110,20 @@ public class MoveLogic {
      *
      * @return Boardfield from base if it is possible, else null
      */
-    static BoardField canEnterBase(BoardField field) {
+    static IField canEnterBase(IField field) {
         int selectedIndex = global.BOARD.getGameFieldsIndex(field.getPosition());
         // get endpoint of player
         int endIndex = global.players[field.getCurrentFigure().getOwnerID()].getEndPoint();
         int moveIndex = selectedIndex + global.BOARD.getDice().getValue();
 
-        System.out.println("going to check for: selectedIndex: " + selectedIndex + " endIndex" + endIndex + " moveIndex" + moveIndex + "newMoveIndex:" + moveIndex % 40);
+        System.out.println("going to check for: selectedIndex: " + selectedIndex + " endIndex: " + endIndex + " moveIndex: " + moveIndex + " newMoveIndex: " + moveIndex % 40);
 
         if (selectedIndex <= endIndex && moveIndex > endIndex && moveIndex <= endIndex + 4) {
             // possible
             // check if occupied
             // -1 else no 0 -> need of index not of id
             int index = moveIndex - endIndex - 1;
-            BoardField currentBaseField = global.BOARD.getBaseFields(global.turn).get(index);
+            BoardField currentBaseField = global.BOARD.getBaseFields(global.activePlayer).get(index);
             if (currentBaseField.isOccupied()) {
                 System.out.println("base field is occupied");
             } else {

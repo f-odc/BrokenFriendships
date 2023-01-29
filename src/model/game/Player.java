@@ -1,6 +1,7 @@
 package model.game;
 
 import model.boardLogic.fields.BoardField;
+import model.boardLogic.fields.IField;
 import model.boardLogic.objects.Figure;
 import model.global;
 
@@ -18,7 +19,7 @@ public class Player {
 
     private List<BoardField> baseFields;
 
-    private BoardField startField;
+    private IField startField;
 
     private int startPoint;
 
@@ -110,7 +111,7 @@ public class Player {
      *
      * @return BoardField used as start field for the player
      */
-    public BoardField setStartField() {
+    public IField setStartField() {
         startField = global.BOARD.getPlayField(startPoint);
         return startField;
     }

@@ -3,25 +3,23 @@ package model.boardLogic.objects;
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
 import model.boardLogic.fields.BoardField;
-import model.game.GameLogic;
+import model.boardLogic.fields.IField;
 import model.game.MoveLogic;
 import model.global;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import java.awt.*;
-
 public class Figure implements IGameObject {
 
     private Entity entity;
-    private BoardField startField;
-    private BoardField homeField;
-    private BoardField currentField;
+    private IField startField;
+    private IField homeField;
+    private IField currentField;
     private int playerID;
     private String color;
     private int id;
 
-    public Figure(int playerID, int figureID, String color, BoardField startField, BoardField homeField) {
+    public Figure(int playerID, int figureID, String color, IField startField, IField homeField) {
         this.id = figureID;
         this.playerID = playerID;
         this.color = color;
@@ -36,14 +34,13 @@ public class Figure implements IGameObject {
      * id, scale, image
      */
     public void initEntity() {
-
         Entity fieldEntity = new Entity("player:" + this.playerID + "-figure:" + this.id);
         try {
             fieldEntity.addComponent(new ImageRenderComponent(new Image("assets/figures/" + color + ".png")));
         } catch (SlickException e) {
             throw new RuntimeException(e);
         }
-        fieldEntity.setScale(0.1f);
+        fieldEntity.setScale(global.FIGURE_SIZE);
         // add to list
         entity = fieldEntity;
     }
@@ -63,20 +60,19 @@ public class Figure implements IGameObject {
      * @param from current field
      * @param to   new field
      */
-    public boolean moveFromTo(BoardField from, BoardField to) {
+    public boolean moveFromTo(IField from, IField to) {
         //case: own figure on "to" field
         if (to.isOccupied() && to.getCurrentObject().getOwnerID() == playerID) {
-            System.out.println("same Figure");
             return false;
         }
         //case: other figure on "to" field
         if (to.isOccupied()) {
-            System.out.println("reset " + to.getCurrentObject().getOwnerID() + "," + playerID);
-            IGameObject tmp = to.resetCurrentField();
+            IGameObject tmp = to.resetCurrentObject();
             tmp.reset();
         }
+        System.out.println("Figure: normal move");
         // from delete object
-        from.resetCurrentField();
+        from.resetCurrentObject();
         // to add object
         to.setGameObject(this);
         // set currentField
@@ -90,9 +86,8 @@ public class Figure implements IGameObject {
 
     public boolean activate() {
         // TODO: what to do if clicked
-        BoardField targetField = MoveLogic.getMovableField(MoveLogic.getSelectedField());
+        IField targetField = MoveLogic.getMovableField(MoveLogic.getSelectedField());
         if (targetField != null) {
-            System.out.println("Figure movable field: " + targetField.getPosition().getX() + "," + targetField.getPosition().getY());
             return moveFromTo(currentField, targetField);
         }
         return false;
@@ -105,19 +100,28 @@ public class Figure implements IGameObject {
         moveFromTo(currentField, homeField);
     }
 
+    /**
+     * only used to reset currentField in case of change from qField to standardField
+     * @param field new current field
+     */
+    @Override
+    public void setCurrentField(IField field) {
+        this.currentField = field;
+    }
+
     public int getOwnerID() {
         return playerID;
     }
 
-    public BoardField getHomeField() {
+    public IField getHomeField() {
         return homeField;
     }
 
-    public BoardField getStartField() {
+    public IField getStartField() {
         return startField;
     }
 
-    public BoardField getCurrentField() {
+    public IField getCurrentField() {
         return currentField;
     }
 

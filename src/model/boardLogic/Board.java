@@ -6,6 +6,7 @@ import eea.engine.event.ANDEvent;
 import eea.engine.event.basicevents.MouseClickedEvent;
 import eea.engine.event.basicevents.MouseEnteredEvent;
 import model.actions.FieldSelectedAction;
+import model.boardLogic.fields.IField;
 import model.enums.Color;
 import model.boardLogic.fields.BoardField;
 import model.enums.Field;
@@ -45,7 +46,7 @@ public class Board {
     private Dice dice;
     private FieldCluster bases;  //Zielfelder
     private FieldCluster homes;  //Hausfelder
-    private BoardField[] gameFields = new BoardField[40]; //Standard- und Startfelder
+    private IField[] gameFields = new IField[40]; //Standard- und Startfelder
 
     public Board() throws SlickException {
         //initialisiere die Feld größe und Offset des Spielbrettes
@@ -232,23 +233,19 @@ public class Board {
      * @param point Brettkoordinaten des Feldes.
      * @return Das gewünschte Feld oder null wenn dort kein Feld ist.
      */
-    public BoardField getField(Vector2f point) {
+    public IField getField(Vector2f point) {
         int fieldType = accessGameTemplate(point.getX(), point.getY());
         Color color = getFieldColor(point);
         switch (fieldType) {
             case -3 -> {
-                System.out.println("Zielfeld");
                 return bases.get(color, getMidPoint((int) point.getX(), (int) point.getY())).get();
             }
             case -2 -> {
-                System.out.println("Hausfeld " + point.getX() + "," + point.getY());
                 return homes.get(color, getMidPoint((int) point.getX(), (int) point.getY())).get();
             }
             case -1 -> {
-                System.out.println("kein Feld");
             }
             default -> {
-                System.out.println("Standardfeld mit nummer: " + fieldType);
                 return gameFields[fieldType];
             }
         }
@@ -292,11 +289,15 @@ public class Board {
      * @param index board field number
      * @return BoardField of the specific index
      */
-    public BoardField getPlayField(int index) {
+    public IField getPlayField(int index) {
         int tmpIndex = index < 0 ? -1 * index : index;
         if (tmpIndex >= gameFields.length) return gameFields[tmpIndex % gameFields.length];
         else return gameFields[tmpIndex];
         //throw new RuntimeException("Index out of Bounds - getPlayField");
+    }
+
+    public void setPlayField(int index, IField field){
+        gameFields[index] = field;
     }
 
     /**

@@ -1,6 +1,6 @@
 package model.game;
 
-import model.boardLogic.fields.BoardField;
+import model.boardLogic.fields.IField;
 import model.boardLogic.objects.Figure;
 import model.enums.Field;
 import model.enums.Phase;
@@ -19,7 +19,7 @@ public class GameLogic {
       - (Glücksrad)
       */
 
-    private static BoardField movableField;
+    private static IField movableField;
 
     private static int getOutOfBaseTries = 0;
 
@@ -34,33 +34,39 @@ public class GameLogic {
         }
 
         //set first players turn
+        global.activePlayer = 0;
         global.turn = 0;
         global.phase = Phase.DICE_PHASE;
-        global.BOARD.getDice().setPosition(global.turn);
+        global.BOARD.getDice().setPosition(global.activePlayer);
     }
 
     /**
      * function controlling the logic of going into the next turn and choosing the next player
      */
-    public static void nextTurn() {
+    public static void nextPlayer() {
         //win condition
         boolean win = true;
         for (int i = 0; i < 4; i++) {
-            BoardField figureField = global.players[global.turn].getFigure(i).getCurrentField();
-            if (!global.BOARD.getBaseFields(global.turn).contains(figureField)) {
+            IField figureField = global.players[global.activePlayer].getFigure(i).getCurrentField();
+            if (!global.BOARD.getBaseFields(global.activePlayer).contains(figureField)) {
                 win = false;
                 break;
             }
         }
-        if(win){
+        if (win) {
             global.phase = Phase.END_OF_GAME;
             return;
         }
 
         getOutOfBaseTries = 0;
-        global.turn = (global.turn + 1) % 4;
-        global.BOARD.getDice().setPosition(global.turn);
+        global.activePlayer = (global.activePlayer + 1) % 4;
+        global.BOARD.getDice().setPosition(global.activePlayer);
         global.phase = Phase.DICE_PHASE;
+        if (global.activePlayer == 0)
+            global.turn++;
+        //qFields are spawned in once every 2 turns starting on turn 1
+        if ((global.turn == 1 || global.turn % 2 == 0) && global.turn != 0 && global.activePlayer == 0)
+            BoardLogic.placeQuestionmarkField();
     }
 
     /**
@@ -90,16 +96,11 @@ public class GameLogic {
                 global.BOARD.getDice().throwDice();
 
                 boolean allInHomeOrBase = true;
-                Player currentPlayer = global.players[global.turn];
+                Player currentPlayer = global.players[global.activePlayer];
                 //check if all figures are in base or home
                 for (int i = 0; i < 4; i++) {
                     Figure figure = currentPlayer.getFigure(i);
-                    System.out.println("Check if movable:::");
-                    System.out.println("is on homefield " + figure.isOnHomeField());
-                    System.out.println("is on Basefield " + figure.isOnBaseField());
-                    System.out.println("is movable: " + MoveLogic.getMovableField(figure.getCurrentField()));
                     if (MoveLogic.getMovableField(figure.getCurrentField()) != null) {
-                        System.out.println("allinHomeorBase: " + allInHomeOrBase);
                         allInHomeOrBase = false;
                         break;
                     }
@@ -110,8 +111,8 @@ public class GameLogic {
                     return;
                 }
                 //case: out of tries to get a figure out of the home and no 6
-                if (allInHomeOrBase && global.BOARD.getDice().getValue() != 6 && getOutOfBaseTries == 2 ) {
-                    nextTurn();
+                if (allInHomeOrBase && global.BOARD.getDice().getValue() != 6 && getOutOfBaseTries == 2) {
+                    nextPlayer();
                     return;
                 }
                 //case normal move or all figures in base/home and a 6
@@ -128,10 +129,10 @@ public class GameLogic {
      *
      * @param field the selected field
      */
-    public static void executePhase(BoardField field) {
+    public static void executePhase(IField field) {
         //selection phase
         if (global.phase == Phase.SELECT_FIGURE_PHASE && field.getCurrentObject() != null) {
-            if (global.turn == field.getCurrentObject().getOwnerID()) {
+            if (global.activePlayer == field.getCurrentObject().getOwnerID()) {
                 MoveLogic.selectField(field);
                 if (!enterMovementPhase())
                     MoveLogic.deselectField();
@@ -148,11 +149,12 @@ public class GameLogic {
                     //reset values if move is possible
                     emptyMovableFields();
                     MoveLogic.deselectField();
-                    if(global.BOARD.getDice().getValue() == 6){
+                    BoardLogic.removeQuestionmarkField(field.getPosition());
+                    if (global.BOARD.getDice().getValue() == 6) {
                         global.phase = Phase.DICE_PHASE;
                         return;
                     }
-                    nextTurn();
+                    nextPlayer();
                     return;
                 }
             }
