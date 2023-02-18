@@ -1,7 +1,6 @@
-package model.boardLogic;
+package model.board.fields;
 
 import model.enums.Color;
-import model.boardLogic.fields.BoardField;
 import org.newdawn.slick.geom.Vector2f;
 
 import java.util.ArrayList;
@@ -9,11 +8,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class FieldCluster {
-    protected List<BoardField> red = new ArrayList<>();
-    protected List<BoardField> blue = new ArrayList<>();
-    protected List<BoardField> green = new ArrayList<>();
-    protected List<BoardField> yellow = new ArrayList<>();
+public class PlayerColorFields {
+    public List<BoardField> red = new ArrayList<>();
+    public List<BoardField> blue = new ArrayList<>();
+    public List<BoardField> green = new ArrayList<>();
+    public List<BoardField> yellow = new ArrayList<>();
 
     /**
      * Funktion um ein ColoredField zu einer der Listen hinzuzufügen.

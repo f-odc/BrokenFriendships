@@ -1,20 +1,21 @@
-package model.boardLogic;
+package model.board;
 
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
 import eea.engine.event.ANDEvent;
 import eea.engine.event.basicevents.MouseClickedEvent;
 import eea.engine.event.basicevents.MouseEnteredEvent;
-import model.actions.FieldSelectedAction;
-import model.boardLogic.fields.IField;
+import model.actions.BoardFieldAction;
+import model.board.fields.PlayerColorFields;
+import model.board.fields.IField;
+import model.board.objects.Dice;
 import model.enums.Color;
-import model.boardLogic.fields.BoardField;
+import model.board.fields.BoardField;
 import model.enums.Field;
 import model.global;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
-
 import java.awt.Toolkit;
 import java.util.List;
 
@@ -44,8 +45,8 @@ public class Board {
     private int yStep;
     private Vector2f[] dicePositions;
     private Dice dice;
-    private FieldCluster bases;  //Zielfelder
-    private FieldCluster homes;  //Hausfelder
+    private PlayerColorFields bases;  //Zielfelder
+    private PlayerColorFields homes;  //Hausfelder
     private IField[] gameFields = new IField[40]; //Standard- und Startfelder
 
     public Board() throws SlickException {
@@ -57,7 +58,6 @@ public class Board {
 
         //initialisiere den Würfel
         initDice();
-
     }
 
     /**
@@ -82,8 +82,8 @@ public class Board {
     private void initBoardFields() throws SlickException {
         //TODO change startfields
         //Initialisieren von den Haus- und Zielfeldern
-        this.bases = new FieldCluster();
-        this.homes = new FieldCluster();
+        this.bases = new PlayerColorFields();
+        this.homes = new PlayerColorFields();
         this.dicePositions = new Vector2f[4];
 
 
@@ -135,7 +135,7 @@ public class Board {
                 //TODO change to actual action
                 if (i != 10 || j != 2 /*Würfel Position*/) {
                     ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
-                    clickEvent.addAction(new FieldSelectedAction(boardtmp));
+                    clickEvent.addAction(new BoardFieldAction(boardtmp));
                     boardtmp.getBaseEntity().addComponent(clickEvent);
                 }
             }
@@ -144,8 +144,8 @@ public class Board {
         bases.initCorrectOrder();
     }
 
-    private void initDice() throws SlickException {
-        this.dice = new Dice(1, this.dicePositions);
+    private void initDice(){
+        this.dice = new Dice(this.dicePositions);
     }
 
     /**

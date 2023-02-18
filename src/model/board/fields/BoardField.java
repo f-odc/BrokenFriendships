@@ -1,8 +1,8 @@
-package model.boardLogic.fields;
+package model.board.fields;
 
 import eea.engine.entity.Entity;
-import model.boardLogic.objects.Figure;
-import model.boardLogic.objects.IGameObject;
+import model.board.objects.Figure;
+import model.board.objects.IGameObject;
 import model.enums.Field;
 import model.global;
 import org.newdawn.slick.geom.Vector2f;
@@ -93,6 +93,10 @@ public class BoardField implements IField{
                 getPosition().getY() == other.getPosition().getY();
     }
 
+    /**
+     * Checks if the object on the field is a figure
+     * @return Figure if figure is contained, else null
+     */
     public Figure getCurrentFigure(){
         if(displayedObject instanceof Figure){
             return (Figure) displayedObject;

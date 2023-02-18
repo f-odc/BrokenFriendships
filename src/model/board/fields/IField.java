@@ -1,8 +1,8 @@
-package model.boardLogic.fields;
+package model.board.fields;
 
 import eea.engine.entity.Entity;
-import model.boardLogic.objects.Figure;
-import model.boardLogic.objects.IGameObject;
+import model.board.objects.Figure;
+import model.board.objects.IGameObject;
 import model.enums.Field;
 import org.newdawn.slick.geom.Vector2f;
 

@@ -1,12 +1,13 @@
 package ui;
 
 import eea.engine.event.basicevents.*;
-import model.game.GameLogic;
-import model.game.SetupGame;
+import model.enums.Phase;
+import model.game.GameManager;
 import model.global;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import eea.engine.action.basicactions.ChangeStateAction;
@@ -37,7 +38,7 @@ public class GameplayState extends BasicGameState {
      */
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
-        // setzen des Hintergrunds
+        // Setzen des Hintergrunds
         container.getGraphics().setBackground(Color.black);
 
         // Bei Drücken der ESC-Taste zurueck ins Hauptmenue wechseln
@@ -47,10 +48,10 @@ public class GameplayState extends BasicGameState {
         esc_Listener.addComponent(esc_pressed);
         entityManager.addEntity(global.GAMEPLAY_STATE, esc_Listener);
 
-        //initialisiert das Spielbrett und die Figuren
-        SetupGame.setup();
-
-        GameLogic.setup();
+        // Initialisiert alle Spielobjekte
+        GameManager.setup();
+        // Startet das Spiel
+        GameManager.start();
 
     }
 
@@ -70,6 +71,10 @@ public class GameplayState extends BasicGameState {
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         // StatedBasedEntityManager soll alle Entities rendern
         entityManager.renderEntities(container, game, g);
+
+        // render dice animation on right player dice field
+        Vector2f dicePos = global.BOARD.getDice().getCurrentPosition();
+        global.diceAnimation.draw(dicePos.x-48/2, dicePos.y-48/2, 48, 48);
     }
 
 }

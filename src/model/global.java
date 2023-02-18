@@ -1,10 +1,12 @@
 package model;
 
 import eea.engine.entity.StateBasedEntityManager;
-import model.boardLogic.Board;
-import model.boardLogic.objects.IGameObject;
-import model.game.Player;
+import model.board.Board;
+import model.board.objects.IGameObject;
+import model.player.Player;
 import model.enums.Phase;
+import org.newdawn.slick.Animation;
+import org.newdawn.slick.geom.Vector2f;
 
 /**
  * Class to store any global variables
@@ -42,4 +44,7 @@ public class global {
 
     //the four playing players
     public static Player[] players = new Player[4];
+
+    // dice animation
+    public static Animation diceAnimation = new Animation();
 }
