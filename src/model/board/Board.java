@@ -86,8 +86,12 @@ public class Board {
         this.homes = new PlayerColorFields();
         this.dicePositions = new Vector2f[4];
 
+        // create highlight entity
+        Entity highlightEntity = new Entity("highlightFieldEntity");
+        highlightEntity.addComponent(new ImageRenderComponent(new Image("assets/field/highlightField.png")));
+        highlightEntity.setVisible(false);
+        global.entityManager.addEntity(global.GAMEPLAY_STATE,highlightEntity);
 
-        //initialisieren des spielen buttons
 
         //initialisieren der Entities für jedes Feld
         //durchläuft das boardTemplate um zu erkennen welche Felder hinzugefügt werden
@@ -114,19 +118,19 @@ public class Board {
                 switch (type) {
                     case -3 -> {
                         //Ziel Feld
-                        boardtmp = new BoardField(currentEntity, Field.BASE);
+                        boardtmp = new BoardField(currentEntity, Field.BASE, highlightEntity);
                         bases.add(boardtmp, color);
                     }
                     case -2 -> {
                         //Home Feld
-                        boardtmp = new BoardField(currentEntity, Field.HOME);
+                        boardtmp = new BoardField(currentEntity, Field.HOME, highlightEntity);
                         homes.add(boardtmp, color);
                     }
                     default -> {
                         //Startfeld und Standardfeld
                         if (type == 0 || type == 10 || type == 20 || type == 30)
-                            boardtmp = new BoardField(currentEntity, Field.START);
-                        else boardtmp = new BoardField(currentEntity, Field.STANDARD);
+                            boardtmp = new BoardField(currentEntity, Field.START, highlightEntity);
+                        else boardtmp = new BoardField(currentEntity, Field.STANDARD, highlightEntity);
                         gameFields[type] = boardtmp;
                     }
                 }

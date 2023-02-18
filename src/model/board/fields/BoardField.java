@@ -19,8 +19,11 @@ public class BoardField implements IField{
 
     private IGameObject displayedObject;
 
-    public BoardField(Entity baseEntity, Field type) {
+    private Entity highlightEntity;
+
+    public BoardField(Entity baseEntity, Field type, Entity highlightEntity) {
         this.baseEntity = baseEntity;
+        this.highlightEntity = highlightEntity;
         this.scale = baseEntity.getScale();
         this.position = baseEntity.getPosition();
         this.type = type;
@@ -77,12 +80,14 @@ public class BoardField implements IField{
     }
 
     public void highlight() {
-        //TODO change way of highlighting
-        baseEntity.setScale(0.3f);
+        // adjust highlight entity and make it visible
+        highlightEntity.setPosition(baseEntity.getPosition());
+        highlightEntity.setScale(baseEntity.getScale() + 0.02f);
+        highlightEntity.setVisible(true);
     }
 
     public void deHighlight() {
-        baseEntity.setScale(scale);
+        highlightEntity.setVisible(false);
     }
 
     public boolean equals(BoardField other) {
