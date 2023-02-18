@@ -4,10 +4,12 @@ import model.board.fields.IField;
 import model.board.objects.Dice;
 import model.board.objects.Figure;
 import model.board.objects.IGameObject;
+import model.board.objects.Mystery;
 import model.enums.Phase;
-import model.game.BoardLogic;
 import model.global;
 import model.player.Player;
+
+import java.util.Random;
 
 public class GameLogic {
 
@@ -20,6 +22,10 @@ public class GameLogic {
     private static boolean isNextPlayer = false;
 
     private static Dice dice = global.BOARD.getDice();
+
+    static int numOfMysteryFields = 0; // current number of mystery fields
+
+    static final int MAX_MYSTERY_FIELDS = 12; // max number of mystery fields
 
 
     /**
@@ -45,13 +51,36 @@ public class GameLogic {
         // set phase to dice
         global.phase = Phase.DICE_PHASE;
 
-        // TODO: change qmarks properties
+        // increase turn
         if (global.activePlayer == 0)
             global.turn++;
-        //qFields are spawned in once every 2 turns starting on turn 1
-        if ((global.turn == 1 || global.turn % 2 == 0) && global.turn != 0 && global.activePlayer == 0)
-            BoardLogic.placeQuestionmarkField();
+        // spawn new mystery item in once every 2 turns starting on turn 1
+        if ((global.turn == 1 || global.turn % 2 == 0) && global.turn != 0 && global.activePlayer == 0) {
+            spawnMystery();
+        }
     }
+
+    /**
+     * Spawn new mystery item on valid random field
+     */
+    private static void spawnMystery(){
+        // spawn if not max number is reached
+        if (numOfMysteryFields <= MAX_MYSTERY_FIELDS){
+            int numOfPlayfields = (global.NUM_OF_FIELDS -1)*4;
+            IField randomField;
+            do{
+                // get a random play field
+                int randomFieldIndex = new Random().nextInt(numOfPlayfields);
+                randomField = global.BOARD.getPlayField(randomFieldIndex);
+            }while(randomField.isOccupied() || randomField.isPlayerStartField()); // if random field occupied or start field, redo:
+
+            // init mystery item
+            IGameObject object = new Mystery(numOfMysteryFields, global.activePlayer, randomField);
+            // display mystery on selected field
+            randomField.setGameObject(object);
+        }
+    }
+
 
     /**
      * Dice is clicked during DICE_PHASE

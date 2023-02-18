@@ -24,7 +24,5 @@ public class BoardFieldAction implements Action {
         }else if (global.phase == Phase.SELECT_MOVEMENT_PHASE){
             GameLogic.executeSelectMovementPhase(field);
         }
-        // movement phase
-        //GameLogic.executePhase(field);
     }
 }

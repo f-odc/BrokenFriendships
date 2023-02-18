@@ -43,8 +43,7 @@ public class Figure implements IGameObject {
         entity = fieldEntity;
     }
 
-    /** {@inheritDoc}
-     */
+    @Override
     public boolean moveTo(IField targetField){
         // check if target field is valid
         if (targetField.getCurrentFigure() != null && targetField.getCurrentFigure().getOwnerID() == global.activePlayer){
@@ -66,27 +65,22 @@ public class Figure implements IGameObject {
         return true;
     }
 
-    /** {@inheritDoc}
-     */
-    public boolean activate() {
+    @Override
+    public void activate() {
         reset();
-        return false;
     }
 
-    /** {@inheritDoc}
-     */
+    @Override
     public void reset() {
         moveTo(homeField);
     }
 
-    /** {@inheritDoc}
-     */
+    @Override
     public void setCurrentField(IField field) {
         this.currentField = field;
     }
 
-    /** {@inheritDoc}
-     */
+    @Override
     public int getOwnerID() {
         return playerID;
     }
@@ -107,8 +101,7 @@ public class Figure implements IGameObject {
         return currentField;
     }
 
-    /** {@inheritDoc}
-     */
+    @Override
     public Entity getEntity() {
         return entity;
     }

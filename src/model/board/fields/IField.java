@@ -19,4 +19,5 @@ public interface IField {
     void deHighlight();
     boolean equals(BoardField other);
     Figure getCurrentFigure();
+    boolean isPlayerStartField();
 }

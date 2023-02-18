@@ -16,7 +16,7 @@ public interface IGameObject {
      * Is performed if other figure moves to the same field as the game object
      * @return
      */
-    boolean activate();
+    void activate();
 
     /**
      * Dismiss game object from play fields

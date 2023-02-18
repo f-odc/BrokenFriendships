@@ -39,7 +39,6 @@ public class BoardField implements IField{
     }
 
     public boolean isOccupied() {
-        //TODO
         return displayedObject != null;
     }
 
@@ -53,19 +52,17 @@ public class BoardField implements IField{
     }
 
     /**
-     * Set game object on top of board field
-     *
+     * Set the game object on top of board field
      * @param gameObject Figure/Object
      */
     public void setGameObject(IGameObject gameObject) {
-        // TODO: Change? -> delete from previous, set to current, add board field on figure
-        Entity figure = gameObject.getEntity();
+        Entity entity = gameObject.getEntity();
         // set Position
-        figure.setPosition(getPosition());
+        entity.setPosition(getPosition());
         // set game object to current displayed object
         this.displayedObject = gameObject;
         // add entity
-        global.entityManager.addEntity(global.GAMEPLAY_STATE, figure);
+        global.entityManager.addEntity(global.GAMEPLAY_STATE, entity);
     }
 
     /**
@@ -102,5 +99,13 @@ public class BoardField implements IField{
             return (Figure) displayedObject;
         }
         return null;
+    }
+
+    /**
+     * Checks if field is a start field from a player
+     * @return true if start field, else false
+     */
+    public boolean isPlayerStartField(){
+        return type == Field.START;
     }
 }
