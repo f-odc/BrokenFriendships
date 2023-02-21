@@ -3,9 +3,15 @@ package model.board.objects;
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
 import model.board.fields.IField;
+import model.enums.Phase;
+import model.game.logic.GameLogic;
 import model.global;
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Mystery implements IGameObject{
 
@@ -42,9 +48,57 @@ public class Mystery implements IGameObject{
     }
 
     @Override
-    public void activate() {
-        // TODO: start new phase
+    public void activate(IGameObject sourceGameObject) {
+        System.out.println("Activate Mystery");
+        global.phase = Phase.MYSTERY_SELECTION_PHASE;
+
+        // random select mystery
+        int mysteryNr = new Random().nextInt(8);
+
+        // animate mystery selection
+        animateMystery(mysteryNr);
+
+        // wait till animation is over:
+        int animationDuration = 0;
+        for (int frameDuration : global.mysteryAnimation.getDurations()){
+            animationDuration += frameDuration;
+        }
+
+        // after delay execute new phase
+        Timer timer = new Timer();
+        TimerTask test = new TimerTask() {
+            @Override
+            public void run() {
+                // animation is finished
+                // execute special execution phase
+                GameLogic.executeInitSpecialsPhase(mysteryNr, sourceGameObject);
+            }
+        };
+        timer.schedule(test, animationDuration);
+
+        // dismiss mystery from field
         reset();
+    }
+
+    /**
+     * Animate mystery selection
+     * @param specialNr number of selected special
+     */
+    private void animateMystery(int specialNr){
+
+        // create new animation
+        global.mysteryAnimation = new Animation();
+        global.mysteryAnimation.setLooping(false);
+        try {
+            // mystery selection animation
+            for (int i = 1; i < 12; i++) {
+                global.mysteryAnimation.addFrame(new Image(global.specialsMap.get(i % 8).get(1)), 150 * i / 2);
+            }
+            // set last frame the selected mystery
+            global.mysteryAnimation.addFrame(new Image(global.specialsMap.get(specialNr).get(1)), 2000);
+        } catch(Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -58,6 +112,11 @@ public class Mystery implements IGameObject{
     }
 
     @Override
+    public boolean requiresFieldInteraction() {
+        return true ;
+    }
+
+    @Override
     public int getOwnerID() {
         return ownerID;
     }
@@ -65,6 +124,11 @@ public class Mystery implements IGameObject{
     @Override
     public void setCurrentField(IField field) {
         this.currentField = field;
+    }
+
+    @Override
+    public IField getCurrentField() {
+        return currentField;
     }
 
     @Override

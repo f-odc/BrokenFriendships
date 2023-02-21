@@ -20,7 +20,7 @@ public class Dice {
 
     private Vector2f[] displayPosition;  //Position auf dem Monitor
 
-    private Image[] diceImages = new Image[7];
+    private Image[] diceImages = new Image[6];
 
     private ImageRenderComponent imgComponent; //zwischenspeicher des ImageRenderComponent um dies in updateEntity() zu überschreiben
 

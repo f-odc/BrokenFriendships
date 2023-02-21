@@ -14,14 +14,20 @@ public interface IGameObject {
 
     /**
      * Is performed if other figure moves to the same field as the game object
-     * @return
+     * @param sourceGameObject game object which activates the current object
      */
-    void activate();
+    void activate(IGameObject sourceGameObject);
 
     /**
      * Dismiss game object from play fields
      */
     void reset();
+
+    /**
+     * Checks if the object is required to be placed on board files to be activated
+     * @return true if object is required to be placed on a board field, else false
+     */
+    boolean requiresFieldInteraction();
 
     /**
      * Get the owner of the game object
@@ -34,6 +40,12 @@ public interface IGameObject {
      * @param field current field of game object
      */
     void setCurrentField(IField field);
+
+    /**
+     * Get the current field
+     * @return IField which holds the game object
+     */
+    IField getCurrentField();
 
     /**
      * Get entity of game object

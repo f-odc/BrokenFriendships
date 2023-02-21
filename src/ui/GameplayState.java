@@ -14,6 +14,8 @@ import eea.engine.action.basicactions.ChangeStateAction;
 import eea.engine.entity.Entity;
 import eea.engine.entity.StateBasedEntityManager;
 
+import java.awt.*;
+
 /**
  * @author Timo Bähr
  * <p>
@@ -75,6 +77,11 @@ public class GameplayState extends BasicGameState {
         // render dice animation on right player dice field
         Vector2f dicePos = global.BOARD.getDice().getCurrentPosition();
         global.diceAnimation.draw(dicePos.x-48/2, dicePos.y-48/2, 48, 48);
+        // render mystery selection
+        int offset = 4;
+        int sizeAnimation = 100;
+        Vector2f mysteryAnimationPos = new Vector2f(Toolkit.getDefaultToolkit().getScreenSize().width/2,Toolkit.getDefaultToolkit().getScreenSize().height/2);
+        global.mysteryAnimation.draw(mysteryAnimationPos.x-sizeAnimation/2-offset, mysteryAnimationPos.y-sizeAnimation/2-offset, sizeAnimation, sizeAnimation);
     }
 
 }

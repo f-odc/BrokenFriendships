@@ -6,7 +6,13 @@ import model.board.objects.IGameObject;
 import model.player.Player;
 import model.enums.Phase;
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Vector2f;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * Class to store any global variables
@@ -17,9 +23,6 @@ public class global {
 
     //Spielbrett
     static public Board BOARD;
-
-    //Objekte auf dem Spielbrett
-    static public IGameObject[] GAME_OBJECTS;
 
     //zum hinzufügen und löschen von Entities
     static public StateBasedEntityManager entityManager;
@@ -47,4 +50,8 @@ public class global {
 
     // dice animation
     public static Animation diceAnimation = new Animation();
+    // mystery animation
+    public static Animation mysteryAnimation = new Animation();
+    // mystery objects, name and image
+    public static ArrayList<List<String>> specialsMap = new ArrayList<List<String>>();
 }

@@ -23,6 +23,8 @@ public class BoardFieldAction implements Action {
             GameLogic.executeSelectFigurePhase(field);
         }else if (global.phase == Phase.SELECT_MOVEMENT_PHASE){
             GameLogic.executeSelectMovementPhase(field);
+        }else if (global.phase == Phase.MYSTERY_SELECTION_PHASE){
+            GameLogic.executeSpecialsPlacement(field);
         }
     }
 }

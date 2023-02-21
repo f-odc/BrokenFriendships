@@ -52,7 +52,7 @@ public class Figure implements IGameObject {
         // check if target field is occupied
         if (targetField.isOccupied()){
             // activate the current object on the field
-            targetField.getCurrentObject().activate();
+            targetField.getCurrentObject().activate(currentField.getCurrentObject());
             // remove the occupying object from board
             targetField.resetCurrentObject();
         }
@@ -66,13 +66,18 @@ public class Figure implements IGameObject {
     }
 
     @Override
-    public void activate() {
+    public void activate(IGameObject sourceGameObject) {
         reset();
     }
 
     @Override
     public void reset() {
         moveTo(homeField);
+    }
+
+    @Override
+    public boolean requiresFieldInteraction() {
+        return true;
     }
 
     @Override

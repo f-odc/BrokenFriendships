@@ -8,7 +8,7 @@ import model.board.objects.Mystery;
 import model.enums.Phase;
 import model.global;
 import model.player.Player;
-
+import org.newdawn.slick.Animation;
 import java.util.Random;
 
 public class GameLogic {
@@ -32,6 +32,8 @@ public class GameLogic {
      * function controlling the logic of going into the next turn and choosing the next player
      */
     public static void nextPlayer() {
+        // check if player can throw again
+
         // check if player has won
         if (global.players[global.activePlayer].hasWon()) {
             global.phase = Phase.END_OF_GAME;
@@ -58,6 +60,9 @@ public class GameLogic {
         if ((global.turn == 1 || global.turn % 2 == 0) && global.turn != 0 && global.activePlayer == 0) {
             spawnMystery();
         }
+
+        // reset/hide animation
+        global.mysteryAnimation = new Animation();
     }
 
     /**
@@ -165,13 +170,57 @@ public class GameLogic {
                 global.phase = Phase.DICE_PHASE;
                 return;
             }
-            nextPlayer();
+            // TODO: change
+            // check if no other phase is currently running
+            if (global.phase == Phase.SELECT_MOVEMENT_PHASE) {
+                nextPlayer();
+            }
             return;
         }
         // if clicked another field
         // return to selection phase and reset values if move is not possible
         movableField.deHighlight();
         global.phase = Phase.SELECT_FIGURE_PHASE;
+    }
+
+    public static void executeInitSpecialsPhase(int mysteryNr, IGameObject sourceGameObject){
+        System.out.println("Execute Init Specials Phase");
+
+        // create new game object depending on mysteryNr
+        String className = global.specialsMap.get(mysteryNr).get(0);
+        IGameObject specialsObject;
+        try {
+            specialsObject = (IGameObject) Class.forName(className).newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(specialsObject);
+
+
+
+        // if no field interaction is needed -> perform action and go to next player
+        if (!specialsObject.requiresFieldInteraction()) {
+            // perform special action
+            specialsObject.activate(sourceGameObject);
+            // next player
+            nextPlayer();
+        }else {
+            // highlight and store fields depending on special
+        }
+
+    }
+
+    public static void executeSpecialsPlacement(IField targetField){
+        // check if clicked field can be a special field
+
+        // check if field is game field and not occupied
+
+        System.out.println("Place Specials Phase");
+
+        // move gameobject to targetfield
+
+        // nextPlayer
+        nextPlayer();
     }
 
 }
