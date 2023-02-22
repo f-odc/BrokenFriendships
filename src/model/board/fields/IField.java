@@ -16,7 +16,7 @@ public interface IField {
     void setGameObject(IGameObject gameObject);
     IGameObject resetCurrentObject();
     void highlight();
-    void deHighlight();
+    void unHighlight();
     boolean equals(BoardField other);
     Figure getCurrentFigure();
     boolean isPlayerStartField();

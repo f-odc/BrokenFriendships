@@ -86,13 +86,6 @@ public class Board {
         this.homes = new PlayerColorFields();
         this.dicePositions = new Vector2f[4];
 
-        // create highlight entity
-        Entity highlightEntity = new Entity("highlightFieldEntity");
-        highlightEntity.addComponent(new ImageRenderComponent(new Image("assets/field/highlightField.png")));
-        highlightEntity.setVisible(false);
-        global.entityManager.addEntity(global.GAMEPLAY_STATE,highlightEntity);
-
-
         //initialisieren der Entities für jedes Feld
         //durchläuft das boardTemplate um zu erkennen welche Felder hinzugefügt werden
         for (int j = 0; j < global.NUM_OF_FIELDS; j++) {    //Y-Richtung
@@ -118,19 +111,19 @@ public class Board {
                 switch (type) {
                     case -3 -> {
                         //Ziel Feld
-                        boardtmp = new BoardField(currentEntity, Field.BASE, highlightEntity);
+                        boardtmp = new BoardField(currentEntity, Field.BASE);
                         bases.add(boardtmp, color);
                     }
                     case -2 -> {
                         //Home Feld
-                        boardtmp = new BoardField(currentEntity, Field.HOME, highlightEntity);
+                        boardtmp = new BoardField(currentEntity, Field.HOME);
                         homes.add(boardtmp, color);
                     }
                     default -> {
                         //Startfeld und Standardfeld
                         if (type == 0 || type == 10 || type == 20 || type == 30)
-                            boardtmp = new BoardField(currentEntity, Field.START, highlightEntity);
-                        else boardtmp = new BoardField(currentEntity, Field.STANDARD, highlightEntity);
+                            boardtmp = new BoardField(currentEntity, Field.START);
+                        else boardtmp = new BoardField(currentEntity, Field.STANDARD);
                         gameFields[type] = boardtmp;
                     }
                 }
@@ -176,7 +169,7 @@ public class Board {
                                     global.STANDARD_AND_BASE_FIELD_SIZE);
         }
 
-        global.entityManager.addEntity(global.GAMEPLAY_STATE, fieldEntity);
+        //global.entityManager.addEntity(global.GAMEPLAY_STATE, fieldEntity);
         return fieldEntity;
     }
 

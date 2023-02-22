@@ -4,7 +4,6 @@ import model.board.BoardManager;
 import model.enums.Phase;
 import model.global;
 import model.player.PlayerManager;
-import org.newdawn.slick.Image;
 
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class GameManager {
     public static void start() {
         //set first players turn
         global.activePlayer = 0;
-        global.turn = 0;
+        global.rounds = 0;
         global.phase = Phase.DICE_PHASE;
         global.BOARD.getDice().setPosition(global.activePlayer);
     }

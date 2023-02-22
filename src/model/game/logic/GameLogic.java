@@ -5,17 +5,21 @@ import model.board.objects.Dice;
 import model.board.objects.Figure;
 import model.board.objects.IGameObject;
 import model.board.objects.Mystery;
+import model.board.objects.specials.*;
 import model.enums.Phase;
 import model.global;
 import model.player.Player;
 import org.newdawn.slick.Animation;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class GameLogic {
 
-    private static IField movableField;
+    private static ArrayList<IField> movableFields;
 
     private static IGameObject selectedGameObject;
+
+    private static IGameObject activeSpecial = null;
 
     private static int getOutOfBaseTries = 0;
 
@@ -32,7 +36,7 @@ public class GameLogic {
      * function controlling the logic of going into the next turn and choosing the next player
      */
     public static void nextPlayer() {
-        // check if player can throw again
+        nextTurn();
 
         // check if player has won
         if (global.players[global.activePlayer].hasWon()) {
@@ -42,27 +46,37 @@ public class GameLogic {
         }
         // reset isNextPlayer flag
         isNextPlayer = false;
-        // reset dice animation
-        dice.resetAnimation();
         // reset tries
         getOutOfBaseTries = 0;
         // increase active player num
         global.activePlayer = (global.activePlayer + 1) % 4;
         // set position of dice to new player
         dice.setPosition(global.activePlayer);
-        // set phase to dice
-        global.phase = Phase.DICE_PHASE;
 
         // increase turn
         if (global.activePlayer == 0)
-            global.turn++;
+            global.rounds++;
         // spawn new mystery item in once every 2 turns starting on turn 1
-        if ((global.turn == 1 || global.turn % 2 == 0) && global.turn != 0 && global.activePlayer == 0) {
+        if ((global.rounds == 1 || global.rounds % 2 == 0) && global.rounds != 0 && global.activePlayer == 0) {
             spawnMystery();
         }
+    }
 
-        // reset/hide animation
-        global.mysteryAnimation = new Animation();
+    /**
+     * Resets values to allow a new dice throw to begin
+     */
+    private static void nextTurn(){
+
+        // reset/hide animation if animation is over
+        if (global.phase == Phase.SELECT_MOVEMENT_PHASE){
+            global.mysteryAnimation = new Animation();
+        }
+        // reset dice animation
+        dice.resetAnimation();
+        // set phase to dice
+        global.phase = Phase.DICE_PHASE;
+        // reset active special
+        activeSpecial = null;
     }
 
     /**
@@ -132,24 +146,57 @@ public class GameLogic {
     }
 
     /**
-     * Board fields is clicked during SELECT_FIGURE_PHASE
+     * Board field is clicked during SELECT_FIGURE_PHASE
      * Check if figure on the field and calculate all movable fields
-     * @param field
+     * @param field clicked board field
      */
     public static void executeSelectFigurePhase(IField field){
+        // empty movable fields
+        movableFields = new ArrayList<IField>();
         // check figure is contained on field on the current player is owner
         Figure figure = field.getCurrentFigure();
+        // use only own figure
         if (figure != null && figure.getOwnerID() == global.activePlayer){
             // store selected figure
             selectedGameObject = figure;
             // check which fields can be reached
-            movableField = MoveLogic.getMovableField(field);
-            if (movableField != null){
+            IField possibleField = MoveLogic.getMovableField(field);
+            if (possibleField != null){
+                // store movable field
+                movableFields.add(possibleField);
                 // highlight field
-                movableField.highlight();
+                highlightMovableFields();
                 // change to next phase
                 global.phase = Phase.SELECT_MOVEMENT_PHASE;
-            } // else, do nothing
+            }
+        }
+    }
+
+    /**
+     * Board field is clicked during MYSTERY_SELECTION_PHASE
+     * Calculate possible fields to place active special
+     * @param field clicked board field
+     */
+    public static void executeMysterySelectionPhase(IField field){
+        // empty movable fields
+        movableFields = new ArrayList<IField>();
+        // check figure is contained on field on the current player is owner
+        Figure figure = field.getCurrentFigure();
+        // check if special active
+        if(activeSpecial != null){
+            // MoveFourSpecial
+            if (activeSpecial instanceof MoveFourSpecial){
+                // check if clicked field contains a figure
+                if (figure == null){
+                    return;
+                }
+                selectedGameObject = figure;
+                // movement fields +/- 4
+                movableFields.add(MoveLogic.getMovableField(field, -4));
+                movableFields.add(MoveLogic.getMovableField(field, 4));
+                highlightMovableFields();
+                global.phase = Phase.SELECT_MOVEMENT_PHASE;
+            }
         }
     }
 
@@ -159,35 +206,45 @@ public class GameLogic {
      * @param field clicked field
      */
     public static void executeSelectMovementPhase(IField field){
+        System.out.println("Execute Select Movement Phase");
         // check if clicked field is reachable
-        if (movableField.equals(field)) {
+        if (movableFields.contains(field)) {
             // move figure to field
             selectedGameObject.moveTo(field);
-            movableField.deHighlight();
+            unHighlightMovableFields();
 
             // check if dice throw = 6 -> throw one more
             if (dice.getValue() == 6) {
-                global.phase = Phase.DICE_PHASE;
+                nextTurn();
                 return;
             }
-            // TODO: change
             // check if no other phase is currently running
-            if (global.phase == Phase.SELECT_MOVEMENT_PHASE) {
+            if (global.phase == Phase.SELECT_MOVEMENT_PHASE)
                 nextPlayer();
-            }
             return;
         }
         // if clicked another field
         // return to selection phase and reset values if move is not possible
-        movableField.deHighlight();
-        global.phase = Phase.SELECT_FIGURE_PHASE;
+        unHighlightMovableFields();
+        // check which phase is next
+        if (activeSpecial != null){
+            global.phase = Phase.MYSTERY_SELECTION_PHASE;
+        }else {
+            global.phase = Phase.SELECT_FIGURE_PHASE;
+        }
     }
 
-    public static void executeInitSpecialsPhase(int mysteryNr, IGameObject sourceGameObject){
+    /**
+     * Performed after the mystery animation is finished during the MYSTERY_SELECTION_PHASE
+     * Init the elected special
+     * @param specialNr indicate the number of the selected special
+     * @param sourceGameObject figure which activate the mystery selection
+     */
+    public static void executeInitSpecialsPhase(int specialNr, IGameObject sourceGameObject){
         System.out.println("Execute Init Specials Phase");
 
         // create new game object depending on mysteryNr
-        String className = global.specialsMap.get(mysteryNr).get(0);
+        String className = global.specialsMap.get(specialNr).get(0);
         IGameObject specialsObject;
         try {
             specialsObject = (IGameObject) Class.forName(className).newInstance();
@@ -195,8 +252,6 @@ public class GameLogic {
             throw new RuntimeException(e);
         }
         System.out.println(specialsObject);
-
-
 
         // if no field interaction is needed -> perform action and go to next player
         if (!specialsObject.requiresFieldInteraction()) {
@@ -206,21 +261,42 @@ public class GameLogic {
             nextPlayer();
         }else {
             // highlight and store fields depending on special
+            if (specialsObject instanceof BedSpecial || specialsObject instanceof BombSpecial){
+                // no highlighting
+            }
+            if (specialsObject instanceof MoveFourSpecial){
+                activeSpecial = specialsObject;
+                global.phase = Phase.MYSTERY_SELECTION_PHASE;
+            }
+            if (specialsObject instanceof SwitchSpecial){
+                // highlight all figures
+            }
+            if (specialsObject instanceof MoveOutSpecial){
+                // highlight all figures in base
+            }
         }
-
     }
 
-    public static void executeSpecialsPlacement(IField targetField){
-        // check if clicked field can be a special field
+    /**
+     * Highlight all movable fields
+     */
+    private static void highlightMovableFields(){
+        for (IField field : movableFields){
+            if (field != null){
+                field.highlight();
+            }
+        }
+    }
 
-        // check if field is game field and not occupied
-
-        System.out.println("Place Specials Phase");
-
-        // move gameobject to targetfield
-
-        // nextPlayer
-        nextPlayer();
+    /**
+     * Unhighlight all movable fields
+     */
+    private static void unHighlightMovableFields(){
+        for (IField field : movableFields){
+            if (field != null){
+                field.unHighlight();
+            }
+        }
     }
 
 }

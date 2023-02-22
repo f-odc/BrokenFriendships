@@ -15,6 +15,7 @@ public class MoveOutSpecial implements IGameObject {
 
     @Override
     public void activate(IGameObject sourceGameObject) {
+        System.out.println("Activate Move Out");
     }
 
     @Override

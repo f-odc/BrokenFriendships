@@ -66,7 +66,7 @@ public class Mystery implements IGameObject{
 
         // after delay execute new phase
         Timer timer = new Timer();
-        TimerTask test = new TimerTask() {
+        TimerTask startNewPhaseAfterAnimation = new TimerTask() {
             @Override
             public void run() {
                 // animation is finished
@@ -74,7 +74,7 @@ public class Mystery implements IGameObject{
                 GameLogic.executeInitSpecialsPhase(mysteryNr, sourceGameObject);
             }
         };
-        timer.schedule(test, animationDuration);
+        timer.schedule(startNewPhaseAfterAnimation, animationDuration);
 
         // dismiss mystery from field
         reset();

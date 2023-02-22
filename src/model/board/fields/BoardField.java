@@ -1,10 +1,13 @@
 package model.board.fields;
 
+import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
 import model.board.objects.Figure;
 import model.board.objects.IGameObject;
 import model.enums.Field;
 import model.global;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 
 public class BoardField implements IField{
@@ -21,12 +24,25 @@ public class BoardField implements IField{
 
     private Entity highlightEntity;
 
-    public BoardField(Entity baseEntity, Field type, Entity highlightEntity) {
+    public BoardField(Entity baseEntity, Field type) {
         this.baseEntity = baseEntity;
-        this.highlightEntity = highlightEntity;
         this.scale = baseEntity.getScale();
         this.position = baseEntity.getPosition();
         this.type = type;
+
+        // create highlight entity
+        Entity highlightEntity = new Entity("highlightFieldEntity" + position);
+        try {
+            highlightEntity.addComponent(new ImageRenderComponent(new Image("assets/field/highlightField.png")));
+        } catch (SlickException e) {
+            throw new RuntimeException(e);
+        }
+        highlightEntity.setVisible(false);
+        this.highlightEntity = highlightEntity;
+
+        // add board and highlight entity
+        global.entityManager.addEntity(global.GAMEPLAY_STATE,highlightEntity);
+        global.entityManager.addEntity(global.GAMEPLAY_STATE,baseEntity);
     }
 
     public Vector2f getPosition() {
@@ -86,7 +102,7 @@ public class BoardField implements IField{
         highlightEntity.setVisible(true);
     }
 
-    public void deHighlight() {
+    public void unHighlight() {
         highlightEntity.setVisible(false);
     }
 

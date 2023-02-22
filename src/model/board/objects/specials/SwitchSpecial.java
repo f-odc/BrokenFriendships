@@ -13,7 +13,7 @@ public class SwitchSpecial implements IGameObject {
 
     @Override
     public void activate(IGameObject sourceGameObject) {
-
+        System.out.println("Activate Switch");
     }
 
     @Override

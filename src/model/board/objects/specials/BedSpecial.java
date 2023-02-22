@@ -13,7 +13,7 @@ public class BedSpecial implements IGameObject {
 
     @Override
     public void activate(IGameObject sourceGameObject) {
-
+        System.out.println("Activate Bed");
     }
 
     @Override

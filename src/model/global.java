@@ -2,16 +2,11 @@ package model;
 
 import eea.engine.entity.StateBasedEntityManager;
 import model.board.Board;
-import model.board.objects.IGameObject;
 import model.player.Player;
 import model.enums.Phase;
 import org.newdawn.slick.Animation;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.geom.Vector2f;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -39,8 +34,8 @@ public class global {
     //which player is currently active
     public static int activePlayer;
 
-    //game turn
-    public static int turn;
+    // game rounds
+    public static int rounds;
 
     //phase of the current turn
     public static Phase phase;
