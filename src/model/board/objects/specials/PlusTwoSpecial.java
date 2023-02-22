@@ -18,10 +18,12 @@ public class PlusTwoSpecial implements IGameObject {
 
     @Override
     public void activate(IGameObject sourceGameObject) {
-        IField movableField = MoveLogic.getMovableField(sourceGameObject.getCurrentField(), 2);
+        // TODO: change
+        /*IField movableField = MoveLogic.getMovableField(sourceGameObject.getCurrentField(), 2);
         if (movableField != null){
             sourceGameObject.moveTo(movableField);
         }
+         */
     }
 
     @Override

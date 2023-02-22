@@ -5,6 +5,8 @@ import model.board.fields.IField;
 import model.board.objects.Figure;
 import model.enums.Field;
 import model.global;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class MoveLogic {
@@ -15,7 +17,8 @@ public class MoveLogic {
      * @param step optional parameter, indicate the number of steps the figure can move, default/not specified = dice value
      * @return Boardfield if there is one field to move to, else null
      */
-    public static IField getMovableField(IField field, int ... step) {
+    public static ArrayList<IField> getMovableField(IField field, int ... step) {
+        ArrayList<IField> movableFields = new ArrayList<>();
         // get dice throw value
         int stepValue = global.BOARD.getDice().getValue();
         // check if optional parameter is used
@@ -31,26 +34,31 @@ public class MoveLogic {
             IField startField = currentFigure.getStartField();
             if (stepValue != 6 || (startField.getCurrentFigure() != null && startField.getCurrentFigure().getOwnerID() == currentFigure.getOwnerID()))
                 return null;
-            return startField;
+            movableFields.add(startField);
+            return movableFields;
         }
         // case: figure in base
         else if (field.getType() == Field.BASE) {
-            return moveInsideBase(field, stepValue);
+            IField possibleBaseMove = moveInsideBase(field, stepValue);
+            if (possibleBaseMove != null){
+                movableFields.add(possibleBaseMove);
+            }
+            return movableFields;
         }
-        // default case: normal field
+        // default case: figure on normal field
         else {
             // check if the base can be entered
             IField movableField = canEnterBase(field, stepValue);
-            //case: cannot enter base
-            if (movableField == null) {
-                // calculate reachable field of game fields
-                IField boardField = global.BOARD.getPlayField(((global.BOARD.getGameFieldsIndex(field.getPosition()) + stepValue) + 40) % 40);
-                // check if target field is not occupied with own figure
-                if (boardField.getCurrentFigure() == null || (boardField.getCurrentFigure().getOwnerID() != currentFigure.getOwnerID())) {
-                    movableField = boardField;
-                }
+            if (movableField != null){
+                movableFields.add(movableField);
             }
-            return movableField;
+            // calculate reachable field of game fields
+            IField boardField = global.BOARD.getPlayField(((global.BOARD.getGameFieldsIndex(field.getPosition()) + stepValue) + 40) % 40);
+            // check if target field is not occupied with own figure
+            if (boardField.getCurrentFigure() == null || (boardField.getCurrentFigure().getOwnerID() != currentFigure.getOwnerID())) {
+                movableFields.add(boardField);
+            }
+            return movableFields;
         }
     }
 

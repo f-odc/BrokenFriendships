@@ -6,10 +6,13 @@ import model.board.objects.Figure;
 import model.board.objects.IGameObject;
 import model.board.objects.Mystery;
 import model.board.objects.specials.*;
+import model.enums.Field;
 import model.enums.Phase;
 import model.global;
 import model.player.Player;
 import org.newdawn.slick.Animation;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -160,11 +163,9 @@ public class GameLogic {
             // store selected figure
             selectedGameObject = figure;
             // check which fields can be reached
-            IField possibleField = MoveLogic.getMovableField(field);
-            if (possibleField != null){
-                // store movable field
-                movableFields.add(possibleField);
-                // highlight field
+            movableFields = MoveLogic.getMovableField(field);
+            if (movableFields != null){
+                // highlight fields
                 highlightMovableFields();
                 // change to next phase
                 global.phase = Phase.SELECT_MOVEMENT_PHASE;
@@ -180,20 +181,19 @@ public class GameLogic {
     public static void executeMysterySelectionPhase(IField field){
         // empty movable fields
         movableFields = new ArrayList<IField>();
-        // check figure is contained on field on the current player is owner
+        // check if clicked field is suited
         Figure figure = field.getCurrentFigure();
+        if (figure == null || field.getType() == Field.BASE || field.getType() == Field.HOME){
+            return;
+        }
         // check if special active
         if(activeSpecial != null){
             // MoveFourSpecial
             if (activeSpecial instanceof MoveFourSpecial){
-                // check if clicked field contains a figure
-                if (figure == null){
-                    return;
-                }
                 selectedGameObject = figure;
                 // movement fields +/- 4
-                movableFields.add(MoveLogic.getMovableField(field, -4));
-                movableFields.add(MoveLogic.getMovableField(field, 4));
+                movableFields.addAll(MoveLogic.getMovableField(field, -4));
+                movableFields.addAll(MoveLogic.getMovableField(field, 4));
                 highlightMovableFields();
                 global.phase = Phase.SELECT_MOVEMENT_PHASE;
             }
