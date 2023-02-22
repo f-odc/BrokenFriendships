@@ -31,7 +31,7 @@ public class Mystery implements IGameObject{
      * Init mystery entity
      */
     public void initEntity() {
-        Entity newEntity = new Entity("player:" + this.ownerID + "-mystery:" + this.id);
+        Entity newEntity = new Entity("player:" + this.ownerID + "-mystery:" + this.id + "-hashcode:" + this.hashCode());
         try {
             newEntity.addComponent(new ImageRenderComponent(new Image("assets/objects/questionmark.png")));
         } catch (SlickException e) {

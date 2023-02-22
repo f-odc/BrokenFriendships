@@ -11,14 +11,12 @@ import model.enums.Phase;
 import model.global;
 import model.player.Player;
 import org.newdawn.slick.Animation;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class GameLogic {
 
-    private static ArrayList<IField> movableFields;
+    private static ArrayList<IField> movableFields = new ArrayList<>();
 
     private static IGameObject selectedGameObject;
 
@@ -88,17 +86,14 @@ public class GameLogic {
     private static void spawnMystery(){
         // spawn if not max number is reached
         if (numOfMysteryFields <= MAX_MYSTERY_FIELDS){
-            int numOfPlayfields = (global.NUM_OF_FIELDS -1)*4;
-            IField randomField;
-            do{
-                // get a random play field
-                int randomFieldIndex = new Random().nextInt(numOfPlayfields);
-                randomField = global.BOARD.getPlayField(randomFieldIndex);
-            }while(randomField.isOccupied() || randomField.isPlayerStartField()); // if random field occupied or start field, redo:
+            ArrayList<IField> emptyGameFields = global.BOARD.getEmptyGameFields();
+            // get a random play field
+            int randomFieldIndex = new Random().nextInt(emptyGameFields.size());
+            IField randomField = emptyGameFields.get(randomFieldIndex);
 
-            // init mystery item
+            // init and display mystery item
             IGameObject object = new Mystery(numOfMysteryFields, global.activePlayer, randomField);
-            // display mystery on selected field
+            // set mystery on selected field
             randomField.setGameObject(object);
         }
     }
@@ -164,7 +159,7 @@ public class GameLogic {
             selectedGameObject = figure;
             // check which fields can be reached
             movableFields = MoveLogic.getMovableField(field);
-            if (movableFields != null){
+            if (!movableFields.isEmpty()){
                 // highlight fields
                 highlightMovableFields();
                 // change to next phase
@@ -206,7 +201,6 @@ public class GameLogic {
      * @param field clicked field
      */
     public static void executeSelectMovementPhase(IField field){
-        System.out.println("Execute Select Movement Phase");
         // check if clicked field is reachable
         if (movableFields.contains(field)) {
             // move figure to field
@@ -219,17 +213,26 @@ public class GameLogic {
                 return;
             }
             // check if no other phase is currently running
-            if (global.phase == Phase.SELECT_MOVEMENT_PHASE)
+            if (global.phase == Phase.SELECT_MOVEMENT_PHASE){
+                global.mysteryAnimation = new Animation();
                 nextPlayer();
+            }
+
             return;
         }
         // if clicked another field
+
+        // bed and bomb special do not allow other behavior
+        if (activeSpecial instanceof BedSpecial || activeSpecial instanceof BombSpecial){
+            return;
+        }
         // return to selection phase and reset values if move is not possible
         unHighlightMovableFields();
         // check which phase is next
         if (activeSpecial != null){
             global.phase = Phase.MYSTERY_SELECTION_PHASE;
         }else {
+            // for move four
             global.phase = Phase.SELECT_FIGURE_PHASE;
         }
     }
@@ -257,15 +260,26 @@ public class GameLogic {
         if (!specialsObject.requiresFieldInteraction()) {
             // perform special action
             specialsObject.activate(sourceGameObject);
+            // hide mystery selection
+            global.mysteryAnimation = new Animation();
             // next player
             nextPlayer();
         }else {
+            // save active special object
+            activeSpecial = specialsObject;
             // highlight and store fields depending on special
             if (specialsObject instanceof BedSpecial || specialsObject instanceof BombSpecial){
-                // no highlighting
+                // save currentObject
+                selectedGameObject = specialsObject;
+                // set phase
+                global.phase = Phase.SELECT_MOVEMENT_PHASE;
+                // get movable fields
+                movableFields = global.BOARD.getEmptyGameFields();
+                // TODO: highlighting?
+                highlightMovableFields();
+                return;
             }
             if (specialsObject instanceof MoveFourSpecial){
-                activeSpecial = specialsObject;
                 global.phase = Phase.MYSTERY_SELECTION_PHASE;
             }
             if (specialsObject instanceof SwitchSpecial){

@@ -5,7 +5,6 @@ import model.board.fields.IField;
 import model.board.objects.Figure;
 import model.enums.Field;
 import model.global;
-
 import java.util.ArrayList;
 import java.util.List;
 

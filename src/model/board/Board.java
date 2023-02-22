@@ -17,6 +17,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 import java.awt.Toolkit;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -316,6 +317,20 @@ public class Board {
             default:
                 throw new RuntimeException("Wrong ID");
         }
+    }
+
+    /**
+     * Get all play fields which are not occupied by a game object and are no start fields
+     * @return ArrayList<IField> with empty game fields
+     */
+    public ArrayList<IField> getEmptyGameFields(){
+        ArrayList<IField> emptyFields = new ArrayList<>();
+        for (IField field : gameFields){
+            if (!field.isOccupied() && !field.isPlayerStartField()){
+                emptyFields.add(field);
+            }
+        }
+        return emptyFields;
     }
 
 }
