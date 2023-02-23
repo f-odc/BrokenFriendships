@@ -3,6 +3,7 @@ package model.board.objects;
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
 import model.board.fields.IField;
+import model.board.objects.specials.BombSpecial;
 import model.global;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -60,12 +61,15 @@ public class Figure implements IGameObject {
             // remove the occupying object from board
             targetField.resetCurrentObject();
         }
-        // set figure to target field
-        targetField.setGameObject(this);
-        // reset current field
-        currentField.resetCurrentObject();
-        // set current field
-        setCurrentField(targetField);
+        // check if current field is not already changed due to game object activate
+        if(currentField == currentStoredField){
+            // set figure to target field
+            targetField.setGameObject(this);
+            // reset current field
+            currentField.resetCurrentObject();
+            // set current field
+            setCurrentField(targetField);
+        }
 
         // check if switch with target figure possible
         if (targetFig != null && switchFlag){
