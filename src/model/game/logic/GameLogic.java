@@ -231,7 +231,7 @@ public class GameLogic {
         // if clicked another field
 
         // bed and bomb special do not allow other behavior
-        if (activeSpecial instanceof BedSpecial || activeSpecial instanceof BombSpecial){
+        if (activeSpecial instanceof BedSpecial || activeSpecial instanceof BombSpecial || activeSpecial instanceof PlusToThreeSpecial){
             return;
         }
         // return to selection phase and reset values if move is not possible
