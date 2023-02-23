@@ -1,0 +1,5 @@
+package model.enums;
+
+public enum Phase {
+    DICE_PHASE, SELECT_FIGURE_PHASE, SELECT_MOVEMENT_PHASE, MYSTERY_SELECTION_PHASE, END_OF_GAME
+}
