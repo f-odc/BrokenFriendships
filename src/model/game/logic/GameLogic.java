@@ -293,6 +293,19 @@ public class GameLogic {
             if (specialsObject instanceof SwitchSpecial){
                 global.phase = Phase.MYSTERY_SELECTION_PHASE;
             }
+            if (specialsObject instanceof PlusToThreeSpecial){
+                // empty movable fields
+                movableFields = new ArrayList<IField>();
+                // get movable fields +1 / +2 / +3
+                movableFields.addAll(MoveLogic.getMovableField(sourceGameObject.getCurrentField(), 1));
+                movableFields.addAll(MoveLogic.getMovableField(sourceGameObject.getCurrentField(), 2));
+                movableFields.addAll(MoveLogic.getMovableField(sourceGameObject.getCurrentField(), 3));
+                // highlight fields
+                highlightMovableFields();
+                // set phase
+                global.phase = Phase.SELECT_MOVEMENT_PHASE;
+                return;
+            }
         }
     }
 
