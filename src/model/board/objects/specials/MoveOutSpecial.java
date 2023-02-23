@@ -8,8 +8,9 @@ import model.global;
 
 public class MoveOutSpecial implements IGameObject {
 
+
     @Override
-    public boolean moveTo(IField targetField) {
+    public boolean moveTo(IField targetField, boolean switchFlag) {
         return false;
     }
 

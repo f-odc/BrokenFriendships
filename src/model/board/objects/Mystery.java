@@ -43,7 +43,7 @@ public class Mystery implements IGameObject{
         this.entity = newEntity;
     }
     @Override
-    public boolean moveTo(IField targetField) {
+    public boolean moveTo(IField targetField, boolean switchFlag) {
         return false;
     }
 

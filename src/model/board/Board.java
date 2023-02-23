@@ -17,7 +17,9 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 import java.awt.Toolkit;
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -331,6 +333,24 @@ public class Board {
             }
         }
         return emptyFields;
+    }
+
+    /**
+     * Get all play fields which are occupied from figures
+     * @param exceptions array of fields which should be excluded from the list, can be empty
+     * @return ArrayList<IField> with from figure occupied game fields
+     */
+    public ArrayList<IField> getOccupiedFields(IField ... exceptions){
+        ArrayList<IField> exceptionFields = new ArrayList<>(Arrays.asList(exceptions));
+        System.out.println(exceptionFields);
+
+        ArrayList<IField> occupiedFields = new ArrayList<>();
+        for (IField field : gameFields){
+            if (field.getCurrentFigure() != null && !exceptionFields.contains(field)){
+                occupiedFields.add(field);
+            }
+        }
+        return occupiedFields;
     }
 
 }

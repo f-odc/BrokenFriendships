@@ -30,7 +30,7 @@ public class BombSpecial implements IGameObject {
     }
 
     @Override
-    public boolean moveTo(IField targetField) {
+    public boolean moveTo(IField targetField, boolean switchFlag) {
         // display entity
         initEntity();
 

@@ -32,7 +32,7 @@ public class MoveLogic {
             // case: check if no 6 is thrown and start field is occupied by own figure
             IField startField = currentFigure.getStartField();
             if (stepValue != 6 || (startField.getCurrentFigure() != null && startField.getCurrentFigure().getOwnerID() == currentFigure.getOwnerID()))
-                return null;
+                return movableFields;
             movableFields.add(startField);
             return movableFields;
         }

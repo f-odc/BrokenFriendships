@@ -157,7 +157,7 @@ public class Player {
     public boolean couldMove(int step){
         for (Figure fig : figures){
             // move one step to check if movement is possible
-            if (MoveLogic.getMovableField(fig.getCurrentField(),step) != null){
+            if (!MoveLogic.getMovableField(fig.getCurrentField(),step).isEmpty()){
                 return true;
             }
         }

@@ -192,6 +192,14 @@ public class GameLogic {
                 highlightMovableFields();
                 global.phase = Phase.SELECT_MOVEMENT_PHASE;
             }
+            // SwitchSpecial
+            if (activeSpecial instanceof SwitchSpecial){
+                selectedGameObject = figure;
+                // movable fields all figures
+                movableFields.addAll(global.BOARD.getOccupiedFields(field));
+                highlightMovableFields();
+                global.phase = Phase.SELECT_MOVEMENT_PHASE;
+            }
         }
     }
 
@@ -204,7 +212,7 @@ public class GameLogic {
         // check if clicked field is reachable
         if (movableFields.contains(field)) {
             // move figure to field
-            selectedGameObject.moveTo(field);
+            selectedGameObject.moveTo(field, activeSpecial instanceof SwitchSpecial);
             unHighlightMovableFields();
 
             // check if dice throw = 6 -> throw one more
@@ -283,7 +291,7 @@ public class GameLogic {
                 global.phase = Phase.MYSTERY_SELECTION_PHASE;
             }
             if (specialsObject instanceof SwitchSpecial){
-                // highlight all figures
+                global.phase = Phase.MYSTERY_SELECTION_PHASE;
             }
             if (specialsObject instanceof MoveOutSpecial){
                 // highlight all figures in base

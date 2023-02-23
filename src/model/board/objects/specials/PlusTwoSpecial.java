@@ -11,8 +11,9 @@ public class PlusTwoSpecial implements IGameObject {
 
     private IField currentField;
 
+
     @Override
-    public boolean moveTo(IField targetField) {
+    public boolean moveTo(IField targetField, boolean switchFlag) {
         return false;
     }
 

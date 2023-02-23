@@ -33,7 +33,7 @@ public class BedSpecial implements IGameObject {
     }
 
     @Override
-    public boolean moveTo(IField targetField) {
+    public boolean moveTo(IField targetField, boolean switchFlag) {
         // display entity
         initEntity();
 
@@ -51,9 +51,10 @@ public class BedSpecial implements IGameObject {
     @Override
     public void activate(IGameObject sourceGameObject) {
         System.out.println("Activate Bed");
-        // TODO: perform action
+        // TODO: perform action but only after one round
         // TODO: test removement
         global.entityManager.removeEntity(global.GAMEPLAY_STATE, this.entity);
+        // TODO: do not reset only after one round
         reset();
     }
 

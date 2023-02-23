@@ -44,11 +44,15 @@ public class Figure implements IGameObject {
     }
 
     @Override
-    public boolean moveTo(IField targetField){
+    public boolean moveTo(IField targetField, boolean switchFlag){
         // check if target field is valid
         if (targetField.getCurrentFigure() != null && targetField.getCurrentFigure().getOwnerID() == global.activePlayer){
             return false;
         }
+        // store old fields
+        Figure targetFig = targetField.getCurrentFigure();
+        IField currentStoredField = currentField;
+
         // check if target field is occupied
         if (targetField.isOccupied()){
             // activate the current object on the field
@@ -56,12 +60,18 @@ public class Figure implements IGameObject {
             // remove the occupying object from board
             targetField.resetCurrentObject();
         }
-        // reset start field
-        currentField.resetCurrentObject();
         // set figure to target field
         targetField.setGameObject(this);
+        // reset current field
+        currentField.resetCurrentObject();
         // set current field
         setCurrentField(targetField);
+
+        // check if switch with target figure possible
+        if (targetFig != null && switchFlag){
+            System.out.println("Switch");
+            targetFig.moveTo(currentStoredField, false);
+        }
         return true;
     }
 
@@ -72,7 +82,7 @@ public class Figure implements IGameObject {
 
     @Override
     public void reset() {
-        moveTo(homeField);
+        moveTo(homeField, false);
     }
 
     @Override
@@ -82,8 +92,7 @@ public class Figure implements IGameObject {
 
     @Override
     public void setCurrentField(IField field) {
-        this.currentField = field;
-    }
+        this.currentField = field;    }
 
     @Override
     public int getOwnerID() {

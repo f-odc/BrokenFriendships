@@ -8,9 +8,10 @@ public interface IGameObject {
     /**
      * Move the game object to a desired field, if target field contains game object, activate object
      * @param targetField the field, to which the object has to be moved
+     * @param switchFlag indicate if the target object should be switched or be destroyed
      * @return true if movement was possible, else false
      */
-    boolean moveTo(IField targetField);
+    boolean moveTo(IField targetField, boolean switchFlag);
 
     /**
      * Is performed if other figure moves to the same field as the game object

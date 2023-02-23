@@ -6,8 +6,9 @@ import model.board.objects.IGameObject;
 
 public class MoveFourSpecial implements IGameObject {
 
+
     @Override
-    public boolean moveTo(IField targetField) {
+    public boolean moveTo(IField targetField, boolean switchFlag) {
         return false;
     }
 
