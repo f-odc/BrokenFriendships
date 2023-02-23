@@ -129,4 +129,10 @@ public class BoardField implements IField{
     public boolean isPlayerStartField(){
         return type == Field.START;
     }
+
+    /**
+     * Checks if field is a home field from a player
+     * @return true if home field, else false
+     */
+    public boolean isHomeField(){ return type == Field.HOME;}
 }

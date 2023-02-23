@@ -164,4 +164,22 @@ public class Player {
         return false;
     }
 
+    /**
+     * Move a figure out of start if possible
+     */
+    public void moveOut(){
+        // if start field is occupied from own figure -> cannot move out
+        if (startField.getCurrentFigure() != null && startField.getCurrentFigure().getOwnerID() == id){
+            return;
+        }
+        // else start field is free
+        for (Figure fig : figures){
+            if (fig.getCurrentField().isHomeField()){
+                // move to start field
+                fig.moveTo(startField, false);
+                return;
+            }
+        }
+    }
+
 }

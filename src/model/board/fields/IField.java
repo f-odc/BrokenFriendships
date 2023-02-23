@@ -20,4 +20,5 @@ public interface IField {
     boolean equals(BoardField other);
     Figure getCurrentFigure();
     boolean isPlayerStartField();
+    boolean isHomeField();
 }

@@ -293,9 +293,6 @@ public class GameLogic {
             if (specialsObject instanceof SwitchSpecial){
                 global.phase = Phase.MYSTERY_SELECTION_PHASE;
             }
-            if (specialsObject instanceof MoveOutSpecial){
-                // highlight all figures in base
-            }
         }
     }
 

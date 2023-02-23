@@ -17,6 +17,8 @@ public class MoveOutSpecial implements IGameObject {
     @Override
     public void activate(IGameObject sourceGameObject) {
         System.out.println("Activate Move Out");
+        // move a figure out of the start fields
+        global.players[sourceGameObject.getOwnerID()].moveOut();
     }
 
     @Override
@@ -26,7 +28,7 @@ public class MoveOutSpecial implements IGameObject {
 
     @Override
     public boolean requiresFieldInteraction() {
-        return true;
+        return false;
     }
 
     @Override
