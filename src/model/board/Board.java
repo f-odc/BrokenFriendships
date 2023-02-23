@@ -1,19 +1,25 @@
-package model.boardLogic;
+package model.board;
 
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
 import eea.engine.event.ANDEvent;
 import eea.engine.event.basicevents.MouseClickedEvent;
 import eea.engine.event.basicevents.MouseEnteredEvent;
-import model.actions.LogAction;
+import model.actions.BoardFieldAction;
+import model.board.fields.PlayerColorFields;
+import model.board.fields.IField;
+import model.board.objects.Dice;
 import model.enums.Color;
-import model.boardLogic.fields.BoardField;
+import model.board.fields.BoardField;
+import model.enums.Field;
 import model.global;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
-
 import java.awt.Toolkit;
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -40,10 +46,11 @@ public class Board {
     private int xOffset;
     private int xStep;
     private int yStep;
+    private Vector2f[] dicePositions;
     private Dice dice;
-    private FieldCluster bases;  //Zielfelder
-    private FieldCluster homes;  //Hausfelder
-    private BoardField[] gameFields = new BoardField[40]; //Standard- und Startfelder
+    private PlayerColorFields bases;  //Zielfelder
+    private PlayerColorFields homes;  //Hausfelder
+    private IField[] gameFields = new IField[40]; //Standard- und Startfelder
 
     public Board() throws SlickException {
         //initialisiere die Feld größe und Offset des Spielbrettes
@@ -52,6 +59,8 @@ public class Board {
         //initialisiere die Felder des Spielbrettes
         initBoardFields();
 
+        //initialisiere den Würfel
+        initDice();
     }
 
     /**
@@ -76,8 +85,9 @@ public class Board {
     private void initBoardFields() throws SlickException {
         //TODO change startfields
         //Initialisieren von den Haus- und Zielfeldern
-        this.bases = new FieldCluster();
-        this.homes = new FieldCluster();
+        this.bases = new PlayerColorFields();
+        this.homes = new PlayerColorFields();
+        this.dicePositions = new Vector2f[4];
 
         //initialisieren der Entities für jedes Feld
         //durchläuft das boardTemplate um zu erkennen welche Felder hinzugefügt werden
@@ -89,41 +99,61 @@ public class Board {
                         (type == 0 || type == 10 || type == 20 || type == 30) ? getFieldColor(new Vector2f(i, j)) :    //Startfelder
                                 Color.NONE; //Standardfelder
 
-                //Würfel initialisieren
-                //TODO change position of code
-                if (i == 10 && j == 2) {
-                    Vector2f position = getMidPoint(i, j);
-                    this.dice = new Dice(1, position);
+                //initialisierung der Würfel felder
+                if ((i == 1 && j == 2) || (i == 9 && j == 2) || (i == 9 && j == 8) || (i == 1 && j == 8)) {
+                    dicePositions[(i == 1 && j == 2) ? 0 :
+                            (i == 9 && j == 2) ? 1 :
+                                    (i == 9 && j == 8) ? 2 : 3] = getMidPoint(i, j);
                 }
 
                 //continue, wenn kein Feld an diesen Koorinaten existiert
                 if (type == -1) continue;
 
                 Entity currentEntity = createEntity(i, j, type, color);
-
+                BoardField boardtmp;
                 switch (type) {
                     case -3 -> {
                         //Ziel Feld
-                        bases.add(new BoardField(currentEntity), color);
+                        boardtmp = new BoardField(currentEntity, Field.BASE);
+                        bases.add(boardtmp, color);
                     }
                     case -2 -> {
                         //Home Feld
-                        homes.add(new BoardField(currentEntity), color);
+                        boardtmp = new BoardField(currentEntity, Field.HOME);
+                        homes.add(boardtmp, color);
                     }
                     default -> {
                         //Startfeld und Standardfeld
-                        gameFields[type] = new BoardField(currentEntity);
+                        if (type == 0 || type == 10 || type == 20 || type == 30)
+                            boardtmp = new BoardField(currentEntity, Field.START);
+                        else boardtmp = new BoardField(currentEntity, Field.STANDARD);
+                        gameFields[type] = boardtmp;
                     }
+                }
+
+                //Hinzufügen von Action
+                //TODO change to actual action
+                if (i != 10 || j != 2 /*Würfel Position*/) {
+                    ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
+                    clickEvent.addAction(new BoardFieldAction(boardtmp));
+                    boardtmp.getBaseEntity().addComponent(clickEvent);
                 }
             }
         }
+        //turn around the order of the green and blue bases, as they are read in an incorrect order
+        bases.initCorrectOrder();
+    }
+
+    private void initDice(){
+        this.dice = new Dice(this.dicePositions);
     }
 
     /**
      * Funktion um eine Entity für ein Feld zu erstellen.
-     * @param i x-Index
-     * @param j y-Index
-     * @param type Art des Feldes aus dem Template.
+     *
+     * @param i     x-Index
+     * @param j     y-Index
+     * @param type  Art des Feldes aus dem Template.
      * @param color Farbe des Feldes.
      * @return Entity für das Feld
      * @throws SlickException wenn Das Bild des Fledes nicht vorhanden ist
@@ -142,20 +172,13 @@ public class Board {
                                     global.STANDARD_AND_BASE_FIELD_SIZE);
         }
 
-        //Hinzufügen von Action
-        //TODO change to actual action
-        if (i != 10 || j != 2 /*Würfel Position*/) {
-            ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
-            clickEvent.addAction(new LogAction(new Vector2f(i, j), color));
-            fieldEntity.addComponent(clickEvent);
-        }
-
-        global.entityManager.addEntity(global.GAMEPLAY_STATE, fieldEntity);
+        //global.entityManager.addEntity(global.GAMEPLAY_STATE, fieldEntity);
         return fieldEntity;
     }
 
     /**
      * Funktion um dem Mittleren Punkt eines Feldes auszurechnen.
+     *
      * @param i x-Index
      * @param j y-Index
      * @return Vector2f mit den x und y Koorindaten des mittleren Punktes.
@@ -210,23 +233,19 @@ public class Board {
      * @param point Brettkoordinaten des Feldes.
      * @return Das gewünschte Feld oder null wenn dort kein Feld ist.
      */
-    public BoardField getField(Vector2f point) {
+    public IField getField(Vector2f point) {
         int fieldType = accessGameTemplate(point.getX(), point.getY());
         Color color = getFieldColor(point);
         switch (fieldType) {
             case -3 -> {
-                System.out.println("Zielfeld");
-                return bases.get(color, point).isPresent() ? bases.get(color, point).get() : null;
+                return bases.get(color, getMidPoint((int) point.getX(), (int) point.getY())).get();
             }
             case -2 -> {
-                System.out.println("Hausfeld");
-                return homes.get(color, point).isPresent() ? homes.get(color, point).get() : null;
+                return homes.get(color, getMidPoint((int) point.getX(), (int) point.getY())).get();
             }
             case -1 -> {
-                System.out.println("kein Feld");
             }
             default -> {
-                System.out.println("Standardfeld mit nummer: " + fieldType);
                 return gameFields[fieldType];
             }
         }
@@ -246,11 +265,92 @@ public class Board {
 
     /**
      * Get the home fields from the board for a specific player
+     *
      * @param id player id
      * @return List of all home fields
      */
-    public List<BoardField> getHomeFields(int id){
+    public List<BoardField> getHomeFields(int id) {
         return homes.getFieldsFromId(id);
+    }
+
+    public int getGameFieldsIndex(Vector2f pos) {
+        for (int i = 0; i < gameFields.length; i++) {
+            if (gameFields[i].getPosition().getX() == pos.getX() &&
+                    gameFields[i].getPosition().getY() == pos.getY()) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Get the current board field on specific index
+     *
+     * @param index board field number
+     * @return BoardField of the specific index
+     */
+    public IField getPlayField(int index) {
+        int tmpIndex = index < 0 ? -1 * index : index;
+        if (tmpIndex >= gameFields.length) return gameFields[tmpIndex % gameFields.length];
+        else return gameFields[tmpIndex];
+        //throw new RuntimeException("Index out of Bounds - getPlayField");
+    }
+
+    public void setPlayField(int index, IField field){
+        gameFields[index] = field;
+    }
+
+    /**
+     * Get all base fields from a player
+     *
+     * @param id player id
+     * @return List of the base fields
+     */
+    public List<BoardField> getBaseFields(int id) {
+        switch (id) {
+            case 0:
+                return bases.red;
+            case 1:
+                return bases.yellow;
+            case 2:
+                return bases.blue;
+            case 3:
+                return bases.green;
+            default:
+                throw new RuntimeException("Wrong ID");
+        }
+    }
+
+    /**
+     * Get all play fields which are not occupied by a game object and are no start fields
+     * @return ArrayList<IField> with empty game fields
+     */
+    public ArrayList<IField> getEmptyGameFields(){
+        ArrayList<IField> emptyFields = new ArrayList<>();
+        for (IField field : gameFields){
+            if (!field.isOccupied() && !field.isPlayerStartField()){
+                emptyFields.add(field);
+            }
+        }
+        return emptyFields;
+    }
+
+    /**
+     * Get all play fields which are occupied from figures
+     * @param exceptions array of fields which should be excluded from the list, can be empty
+     * @return ArrayList<IField> with from figure occupied game fields
+     */
+    public ArrayList<IField> getOccupiedFields(IField ... exceptions){
+        ArrayList<IField> exceptionFields = new ArrayList<>(Arrays.asList(exceptions));
+        System.out.println(exceptionFields);
+
+        ArrayList<IField> occupiedFields = new ArrayList<>();
+        for (IField field : gameFields){
+            if (field.getCurrentFigure() != null && !exceptionFields.contains(field)){
+                occupiedFields.add(field);
+            }
+        }
+        return occupiedFields;
     }
 
 }

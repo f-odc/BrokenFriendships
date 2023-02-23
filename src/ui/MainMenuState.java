@@ -26,7 +26,9 @@ public class MainMenuState extends BasicGameState {	// zugehoeriger entityManage
 	
 	private final int distance = 100;
     private final int start_Position = 180;
-    
+
+	private Animation test;
+
     /**
      * Wird vor dem (erstmaligen) Starten dieses State's ausgefuehrt
      */
@@ -34,6 +36,7 @@ public class MainMenuState extends BasicGameState {	// zugehoeriger entityManage
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
     	// setzen des Hintergrunds
 		container.getGraphics().setBackground(Color.white);
+
     	
     	/* Neues Spiel starten-Entitaet */
     	String new_Game = "Neues Spiel starten";

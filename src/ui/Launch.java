@@ -28,7 +28,7 @@ public class Launch extends StateBasedGame {
     	// Setze den library Pfad abhaengig vom Betriebssystem
     	if (System.getProperty("os.name").toLowerCase().contains("windows")) {
     		System.setProperty("org.lwjgl.librarypath",System.getProperty("user.dir") + "/native/windows");
-	} else if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+	    } else if (System.getProperty("os.name").toLowerCase().contains("mac")) {
     		System.setProperty("org.lwjgl.librarypath",System.getProperty("user.dir") + "/native/macosx");
     	} else {
     		System.setProperty("org.lwjgl.librarypath",System.getProperty("user.dir") + "/native/" +System.getProperty("os.name").toLowerCase());
@@ -40,7 +40,7 @@ public class Launch extends StateBasedGame {
         AppGameContainer app = new AppGameContainer(new Launch());
  
         // Lege die Einstellungen des Fensters fest und starte das Fenster
-        app.setDisplayMode(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, true);
+        app.setDisplayMode(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, false);
         app.start();
     }
 
