@@ -41,7 +41,7 @@ public class GameplayState extends BasicGameState {
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         // Setzen des Hintergrunds
-        container.getGraphics().setBackground(Color.black);
+        container.getGraphics().setBackground(Color.gray);
 
         // Bei Drücken der ESC-Taste zurueck ins Hauptmenue wechseln
         Entity esc_Listener = new Entity("ESC_Listener");
