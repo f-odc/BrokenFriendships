@@ -46,7 +46,7 @@ public class Figure implements IGameObject {
     @Override
     public boolean moveTo(IField targetField, boolean switchFlag){
         // check if target field is valid
-        if (targetField.getCurrentFigure() != null && targetField.getCurrentFigure().getOwnerID() == global.activePlayer){
+        if (targetField.getCurrentFigure() != null && targetField.getCurrentFigure().getOwnerID() == getOwnerID()){
             return false;
         }
         // store old fields
