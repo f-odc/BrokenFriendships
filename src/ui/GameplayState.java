@@ -1,5 +1,6 @@
 package ui;
 
+import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.event.basicevents.*;
 import model.enums.Phase;
 import model.game.GameManager;
@@ -7,6 +8,7 @@ import model.global;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -40,8 +42,19 @@ public class GameplayState extends BasicGameState {
      */
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
-        // Setzen des Hintergrunds
-        container.getGraphics().setBackground(Color.gray);
+        // Setzen der hintergrundfarbe
+        Color lightGreen = new Color(202, 255, 202);
+        container.getGraphics().setBackground(lightGreen);
+        // Hintergrund bild laden
+        int yDimensions = Toolkit.getDefaultToolkit().getScreenSize().height;
+        int xDimensions = Toolkit.getDefaultToolkit().getScreenSize().width;
+        Entity background = new Entity("background");	// Entitaet fuer Hintergrund
+        background.setPosition(new Vector2f(xDimensions/2, yDimensions/2));	// Startposition des Hintergrunds
+        background.setScale(1.8f);
+        background.addComponent(new ImageRenderComponent(new Image("/assets/test.png"))); // Bildkomponente
+
+        // Hintergrund-Entitaet an StateBasedEntityManager uebergeben
+        StateBasedEntityManager.getInstance().addEntity(global.GAMEPLAY_STATE, background);
 
         // Bei Drücken der ESC-Taste zurueck ins Hauptmenue wechseln
         Entity esc_Listener = new Entity("ESC_Listener");
