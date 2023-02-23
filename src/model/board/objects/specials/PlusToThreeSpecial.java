@@ -3,11 +3,8 @@ package model.board.objects.specials;
 import eea.engine.entity.Entity;
 import model.board.fields.IField;
 import model.board.objects.IGameObject;
-import model.game.logic.MoveLogic;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
-
-public class PlusTwoSpecial implements IGameObject {
+public class PlusToThreeSpecial implements IGameObject {
 
     private IField currentField;
 
@@ -34,7 +31,7 @@ public class PlusTwoSpecial implements IGameObject {
 
     @Override
     public boolean requiresFieldInteraction() {
-        return false;
+        return true;
     }
 
     @Override
