@@ -28,14 +28,14 @@ public class global {
     public static final int GAMEPLAY_STATE = 1;
 
     //Größe der Felder
-    private static final boolean largeScreenSize = Toolkit.getDefaultToolkit().getScreenSize().width >= 1920;
-    private static final boolean smallScreenSize = Toolkit.getDefaultToolkit().getScreenSize().width <= 1280;
-    public static final float HOME_AND_START_FIELD_SIZE = largeScreenSize ? 0.16f : smallScreenSize? 0.14f : 0.15f;
-    public static final float STANDARD_AND_BASE_FIELD_SIZE = largeScreenSize ? 0.14f : smallScreenSize? 0.12f : 0.13f;
-    public static final float FIGURE_SIZE = largeScreenSize ? 0.1f : smallScreenSize? 0.08f : 0.09f;
-    public static final float OBJECT_SIZE = largeScreenSize ? 0.08f : smallScreenSize? 0.06f : 0.07f;
-    public static final float BACKGROUND_SIZE = largeScreenSize ? 1.8f : smallScreenSize ? 1.2f : 1.6f;
-    public static final float ANIMATION_SIZE = largeScreenSize ? 100 : smallScreenSize ? 60 : 80;
+    public static final int X_DIMENSIONS = 1920;
+    public static final int Y_DIMENSIONS = 1080;
+    public static final float HOME_AND_START_FIELD_SIZE = 0.16f;
+    public static final float STANDARD_AND_BASE_FIELD_SIZE = 0.14f;
+    public static final float FIGURE_SIZE = 0.1f;
+    public static final float OBJECT_SIZE = 0.08f;
+    public static final float BACKGROUND_SIZE = 1.8f;
+    public static final float ANIMATION_SIZE = 100;
 
     //which player is currently active
     public static int activePlayer;
