@@ -16,8 +16,6 @@ import model.global;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
-import java.awt.Toolkit;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,10 +66,10 @@ public class Board {
      */
     private void initSizeAndOffset() {
         //Initialisieren der Spielbrett-Dimensionen
-        int dimensions = Toolkit.getDefaultToolkit().getScreenSize().height;
+        int dimensions = global.Y_DIMENSIONS;
 
         //offset um das Spielbrett in die Mitte des Fensters zu schieben
-        this.xOffset = Toolkit.getDefaultToolkit().getScreenSize().width / 2 - dimensions / 2;
+        this.xOffset = global.X_DIMENSIONS / 2 - dimensions / 2;
 
         //Schrittweite in die Breite
         this.xStep = dimensions / global.NUM_OF_FIELDS;

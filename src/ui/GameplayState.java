@@ -1,5 +1,6 @@
 package ui;
 
+import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.event.basicevents.*;
 import model.enums.Phase;
 import model.game.GameManager;
@@ -7,6 +8,7 @@ import model.global;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -40,8 +42,17 @@ public class GameplayState extends BasicGameState {
      */
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
-        // Setzen des Hintergrunds
-        container.getGraphics().setBackground(Color.black);
+        // Setzen der hintergrundfarbe
+        Color lightGreen = new Color(202, 255, 202);
+        container.getGraphics().setBackground(lightGreen);
+        // Hintergrund bild laden
+        Entity background = new Entity("background");	// Entitaet fuer Hintergrund
+        background.setPosition(new Vector2f(global.X_DIMENSIONS/2, global.Y_DIMENSIONS/2));	// Startposition des Hintergrunds
+        background.setScale(global.BACKGROUND_SIZE);
+        background.addComponent(new ImageRenderComponent(new Image("/assets/background.png"))); // Bildkomponente
+
+        // Hintergrund-Entitaet an StateBasedEntityManager uebergeben
+        StateBasedEntityManager.getInstance().addEntity(global.GAMEPLAY_STATE, background);
 
         // Bei Drücken der ESC-Taste zurueck ins Hauptmenue wechseln
         Entity esc_Listener = new Entity("ESC_Listener");
@@ -79,9 +90,8 @@ public class GameplayState extends BasicGameState {
         global.diceAnimation.draw(dicePos.x-48/2, dicePos.y-48/2, 48, 48);
         // render mystery selection
         int offset = 4;
-        int sizeAnimation = 100;
-        Vector2f mysteryAnimationPos = new Vector2f(Toolkit.getDefaultToolkit().getScreenSize().width/2,Toolkit.getDefaultToolkit().getScreenSize().height/2);
-        global.mysteryAnimation.draw(mysteryAnimationPos.x-sizeAnimation/2-offset, mysteryAnimationPos.y-sizeAnimation/2-offset, sizeAnimation, sizeAnimation);
+        Vector2f mysteryAnimationPos = new Vector2f(global.X_DIMENSIONS/2,global.Y_DIMENSIONS/2);
+        global.mysteryAnimation.draw(mysteryAnimationPos.x-global.ANIMATION_SIZE/2-offset, mysteryAnimationPos.y-global.ANIMATION_SIZE/2-offset, global.ANIMATION_SIZE, global.ANIMATION_SIZE);
     }
 
 }

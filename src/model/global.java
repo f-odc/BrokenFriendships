@@ -6,6 +6,7 @@ import model.player.Player;
 import model.enums.Phase;
 import org.newdawn.slick.Animation;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +28,14 @@ public class global {
     public static final int GAMEPLAY_STATE = 1;
 
     //Größe der Felder
+    public static final int X_DIMENSIONS = 1920;
+    public static final int Y_DIMENSIONS = 1080;
     public static final float HOME_AND_START_FIELD_SIZE = 0.16f;
     public static final float STANDARD_AND_BASE_FIELD_SIZE = 0.14f;
     public static final float FIGURE_SIZE = 0.1f;
+    public static final float OBJECT_SIZE = 0.08f;
+    public static final float BACKGROUND_SIZE = 1.8f;
+    public static final float ANIMATION_SIZE = 100;
 
     //which player is currently active
     public static int activePlayer;

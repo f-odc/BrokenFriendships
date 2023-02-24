@@ -26,7 +26,7 @@ public class BedSpecial implements IGameObject {
         } catch (SlickException e) {
             throw new RuntimeException(e);
         }
-        bedEntity.setScale(global.FIGURE_SIZE);
+        bedEntity.setScale(global.OBJECT_SIZE);
         // add to list
         this.entity = bedEntity;
         global.entityManager.addEntity(global.GAMEPLAY_STATE, entity);
