@@ -50,7 +50,7 @@ public class GameplayState extends BasicGameState {
         int xDimensions = Toolkit.getDefaultToolkit().getScreenSize().width;
         Entity background = new Entity("background");	// Entitaet fuer Hintergrund
         background.setPosition(new Vector2f(xDimensions/2, yDimensions/2));	// Startposition des Hintergrunds
-        background.setScale(1.8f);
+        background.setScale(global.BACKGROUND_SIZE);
         background.addComponent(new ImageRenderComponent(new Image("/assets/test.png"))); // Bildkomponente
 
         // Hintergrund-Entitaet an StateBasedEntityManager uebergeben
@@ -92,9 +92,8 @@ public class GameplayState extends BasicGameState {
         global.diceAnimation.draw(dicePos.x-48/2, dicePos.y-48/2, 48, 48);
         // render mystery selection
         int offset = 4;
-        int sizeAnimation = 100;
         Vector2f mysteryAnimationPos = new Vector2f(Toolkit.getDefaultToolkit().getScreenSize().width/2,Toolkit.getDefaultToolkit().getScreenSize().height/2);
-        global.mysteryAnimation.draw(mysteryAnimationPos.x-sizeAnimation/2-offset, mysteryAnimationPos.y-sizeAnimation/2-offset, sizeAnimation, sizeAnimation);
+        global.mysteryAnimation.draw(mysteryAnimationPos.x-global.ANIMATION_SIZE/2-offset, mysteryAnimationPos.y-global.ANIMATION_SIZE/2-offset, global.ANIMATION_SIZE, global.ANIMATION_SIZE);
     }
 
 }
