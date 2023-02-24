@@ -21,7 +21,7 @@ public class Player {
     private String color;
 
     /**
-     * Erstellt einen Spieler und seine Spielfiguren
+     * create a player and it's figures
      * @param id player id
      */
     public Player(int id) {
@@ -94,7 +94,6 @@ public class Player {
 
     /**
      * Get a specific player figure
-     *
      * @param i figure ID
      * @return Figure with the specific ID
      */
@@ -104,7 +103,6 @@ public class Player {
 
     /**
      * Set the start field
-     *
      * @return BoardField used as start field for the player
      */
     public IField setStartField() {

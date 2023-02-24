@@ -34,7 +34,7 @@ public class GameLogic {
 
 
     /**
-     * function controlling the logic of going into the next turn and choosing the next player
+     * controls the logic of going into the next turn and choosing the next player
      */
     public static void nextPlayer() {
         nextTurn();

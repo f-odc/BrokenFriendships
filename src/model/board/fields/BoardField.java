@@ -41,7 +41,7 @@ public class BoardField implements IField {
     }
 
     /**
-     * cretes an entity for the field
+     * creates an entity for the field
      * @param i x coordinate
      * @param j y coordinate
      * @param type field type
@@ -108,7 +108,6 @@ public class BoardField implements IField {
 
     /**
      * Get object currently occupying the field
-     *
      * @return GameObject
      */
     public IGameObject getCurrentObject() {
@@ -117,7 +116,6 @@ public class BoardField implements IField {
 
     /**
      * Set the game object on top of board field
-     *
      * @param gameObject Figure/Object
      */
     public void setGameObject(IGameObject gameObject) {
@@ -132,7 +130,6 @@ public class BoardField implements IField {
 
     /**
      * reset the current displayed object
-     *
      * @return the IGameObject being reset
      */
     public IGameObject resetCurrentObject() {
@@ -168,7 +165,6 @@ public class BoardField implements IField {
 
     /**
      * Checks if the object on the field is a figure
-     *
      * @return Figure if figure is contained, else null
      */
     public Figure getCurrentFigure() {
@@ -180,7 +176,6 @@ public class BoardField implements IField {
 
     /**
      * Checks if field is a start field from a player
-     *
      * @return true if start field, else false
      */
     public boolean isPlayerStartField() {
@@ -189,7 +184,6 @@ public class BoardField implements IField {
 
     /**
      * Checks if field is a home field from a player
-     *
      * @return true if home field, else false
      */
     public boolean isHomeField() {

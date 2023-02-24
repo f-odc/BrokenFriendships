@@ -15,9 +15,8 @@ public class PlayerColorFields {
     public List<BoardField> yellow = new ArrayList<>();
 
     /**
-     * Funktion um ein ColoredField zu einer der Listen hinzuzufügen.
-     *
-     * @param field Was hinzugefügt wird.
+     * adds a field to the corresponding list
+     * @param field the field that should be added
      */
     public void add(BoardField field, Color color) {
         if (color == Color.BLUE && blue.size() <= 4) blue.add(field);
@@ -35,11 +34,11 @@ public class PlayerColorFields {
     }
 
     /**
-     * Funktion um ein gewisses Feld zu erlangen (wird nicht aus der Liste gelöscht).
+     * get field out of list, without deleteing it
      *
-     * @param color         Welche Liste abgefragt werden soll.
-     * @param boardPosition Mit welcher Position verlgichen werden soll.
-     * @return Optional<ColoredField> das gewünschte Feld
+     * @param color         field color
+     * @param boardPosition  field position
+     * @return Optional<ColoredField> the field oof the correct list
      */
     public Optional<BoardField> get(Color color, Vector2f boardPosition) {
         float x = boardPosition.getX();

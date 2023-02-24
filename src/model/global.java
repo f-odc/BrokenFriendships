@@ -5,8 +5,6 @@ import model.board.Board;
 import model.player.Player;
 import model.enums.Phase;
 import org.newdawn.slick.Animation;
-
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,20 +12,20 @@ import java.util.List;
  * Class to store any global variables
  */
 public class global {
-    //Anzahl der Felder
+    //number of cells in a row of the board
     static public int NUM_OF_FIELDS = 11;
 
-    //Spielbrett
+    //board
     static public Board BOARD;
 
-    //zum hinzufügen und löschen von Entities
+    //add and remove entities with this manager
     static public StateBasedEntityManager entityManager;
 
-    // Jeder State wird durch einen Integer-Wert gekennzeichnet
+    // state ID
     public static final int MAINMENU_STATE = 0;
     public static final int GAMEPLAY_STATE = 1;
 
-    //Größe der Felder
+    //size of fields in pixel
     public static final int X_DIMENSIONS = 1920;
     public static final int Y_DIMENSIONS = 1080;
     public static final float HOME_AND_START_FIELD_SIZE = 0.16f;
@@ -37,7 +35,7 @@ public class global {
     public static final float BACKGROUND_SIZE = 1.8f;
     public static final float ANIMATION_SIZE = 100;
 
-    //which player is currently active
+    //currently active player: 0 == red, 1 == yellow, 2 == blue, 3 == green
     public static int activePlayer;
 
     // game rounds
