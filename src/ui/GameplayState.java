@@ -49,7 +49,7 @@ public class GameplayState extends BasicGameState {
         Entity background = new Entity("background");	// Entitaet fuer Hintergrund
         background.setPosition(new Vector2f(global.X_DIMENSIONS/2, global.Y_DIMENSIONS/2));	// Startposition des Hintergrunds
         background.setScale(global.BACKGROUND_SIZE);
-        background.addComponent(new ImageRenderComponent(new Image("/assets/test.png"))); // Bildkomponente
+        background.addComponent(new ImageRenderComponent(new Image("/assets/background.png"))); // Bildkomponente
 
         // Hintergrund-Entitaet an StateBasedEntityManager uebergeben
         StateBasedEntityManager.getInstance().addEntity(global.GAMEPLAY_STATE, background);
