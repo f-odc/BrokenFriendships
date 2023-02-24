@@ -54,12 +54,21 @@ public class GameLogic {
         // set position of dice to new player
         dice.setPosition(global.activePlayer);
 
-        // increase turn
+        // increase round
         if (global.activePlayer == 0)
             global.rounds++;
         // spawn new mystery item in once every 2 turns starting on turn 1
         if ((global.rounds == 1 || global.rounds % 2 == 0) && global.rounds != 0 && global.activePlayer == 0) {
             spawnMystery();
+        }
+
+        // check if player is currently sleeping
+        BedSpecial usedBed =  global.players[global.activePlayer].getActiveBed();
+        if(usedBed != null){
+            global.players[global.activePlayer].setBedSpecial(null);
+            global.entityManager.removeEntity(global.GAMEPLAY_STATE, usedBed.getEntity());
+            usedBed.reset();
+            nextPlayer();
         }
     }
 

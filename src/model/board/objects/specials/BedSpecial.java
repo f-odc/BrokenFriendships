@@ -4,6 +4,7 @@ import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
 import model.board.fields.IField;
 import model.board.objects.IGameObject;
+import model.game.logic.GameLogic;
 import model.global;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -50,18 +51,19 @@ public class BedSpecial implements IGameObject {
 
     @Override
     public void activate(IGameObject sourceGameObject) {
-        System.out.println("Activate Bed");
-        // TODO: perform action but only after one round
-        // TODO: test removement
-        global.entityManager.removeEntity(global.GAMEPLAY_STATE, this.entity);
-        // TODO: do not reset only after one round
-        reset();
+        // skip new turn
+        if (global.BOARD.getDice().getValue() == 6){
+            global.entityManager.removeEntity(global.GAMEPLAY_STATE, entity);
+            reset();
+        }else{
+            global.players[sourceGameObject.getOwnerID()].setBedSpecial(this);
+        }
+        GameLogic.nextPlayer();
     }
 
     @Override
     public void reset() {
         global.entityManager.removeEntity(global.GAMEPLAY_STATE, this.entity);
-        currentField.resetCurrentObject();
         currentField = null;
     }
 
