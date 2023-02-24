@@ -270,8 +270,6 @@ public class GameLogic {
             specialsObject.activate(sourceGameObject);
             // hide mystery selection
             global.mysteryAnimation = new Animation();
-            // next player
-            nextPlayer();
         }else {
             // save active special object
             activeSpecial = specialsObject;

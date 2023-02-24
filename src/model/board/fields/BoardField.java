@@ -18,17 +18,20 @@ public class BoardField implements IField{
 
     private Field type;
 
+    private int fieldIndex;
+
     private float scale;
 
     private IGameObject displayedObject;
 
     private Entity highlightEntity;
 
-    public BoardField(Entity baseEntity, Field type) {
+    public BoardField(Entity baseEntity, Field type, int fieldIndex) {
         this.baseEntity = baseEntity;
         this.scale = baseEntity.getScale();
         this.position = baseEntity.getPosition();
         this.type = type;
+        this.fieldIndex = fieldIndex;
 
         // create highlight entity
         Entity highlightEntity = new Entity("highlightFieldEntity" + position);
@@ -135,4 +138,9 @@ public class BoardField implements IField{
      * @return true if home field, else false
      */
     public boolean isHomeField(){ return type == Field.HOME;}
+
+    @Override
+    public int getFieldIndex() {
+        return fieldIndex;
+    }
 }

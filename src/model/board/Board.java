@@ -114,19 +114,19 @@ public class Board {
                 switch (type) {
                     case -3 -> {
                         //Ziel Feld
-                        boardtmp = new BoardField(currentEntity, Field.BASE);
+                        boardtmp = new BoardField(currentEntity, Field.BASE, type);
                         bases.add(boardtmp, color);
                     }
                     case -2 -> {
                         //Home Feld
-                        boardtmp = new BoardField(currentEntity, Field.HOME);
+                        boardtmp = new BoardField(currentEntity, Field.HOME, type);
                         homes.add(boardtmp, color);
                     }
                     default -> {
                         //Startfeld und Standardfeld
                         if (type == 0 || type == 10 || type == 20 || type == 30)
-                            boardtmp = new BoardField(currentEntity, Field.START);
-                        else boardtmp = new BoardField(currentEntity, Field.STANDARD);
+                            boardtmp = new BoardField(currentEntity, Field.START, type);
+                        else boardtmp = new BoardField(currentEntity, Field.STANDARD, type);
                         gameFields[type] = boardtmp;
                     }
                 }
@@ -351,6 +351,19 @@ public class Board {
             }
         }
         return occupiedFields;
+    }
+
+    /**
+     * Get +1 / -1 neighbors from the given field
+     * @param field current field, on the basis of which the neighbors are calculated
+     * @return ArrayList with fields next to the field
+     */
+    public ArrayList<IField> getNeighbors(IField field){
+        int fieldIndex = field.getFieldIndex();
+        ArrayList<IField> neighbors = new ArrayList<>();
+        neighbors.add(gameFields[fieldIndex + 1 % 40]);
+        neighbors.add(gameFields[fieldIndex - 1 % 40]);
+        return neighbors;
     }
 
 }

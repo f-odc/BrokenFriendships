@@ -3,6 +3,7 @@ package model.board.objects.specials;
 import eea.engine.entity.Entity;
 import model.board.fields.IField;
 import model.board.objects.IGameObject;
+import model.game.logic.GameLogic;
 
 public class DeadSpecial implements IGameObject {
 
@@ -15,6 +16,7 @@ public class DeadSpecial implements IGameObject {
     @Override
     public void activate(IGameObject sourceGameObject) {
         sourceGameObject.reset();
+        GameLogic.nextPlayer();
     }
 
     @Override
