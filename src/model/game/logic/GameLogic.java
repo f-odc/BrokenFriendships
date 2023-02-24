@@ -196,7 +196,7 @@ public class GameLogic {
             if (activeSpecial instanceof SwitchSpecial){
                 selectedGameObject = figure;
                 // movable fields all figures
-                movableFields.addAll(global.BOARD.getOccupiedFields(field));
+                movableFields.addAll(global.BOARD.getOccupiedGameFields(field));
                 highlightMovableFields();
                 global.phase = Phase.SELECT_MOVEMENT_PHASE;
             }

@@ -69,8 +69,8 @@ public class Player {
      * Get Home and Base Fields of the Board
      */
     private void getOwnFields() {
-        this.homeFields = global.BOARD.getHomeFields(id);
-        this.baseFields = global.BOARD.getBaseFields(id);
+        this.homeFields = global.BOARD.getHome(id);
+        this.baseFields = global.BOARD.getBase(id);
     }
 
     /**
@@ -108,7 +108,7 @@ public class Player {
      * @return BoardField used as start field for the player
      */
     public IField setStartField() {
-        startField = global.BOARD.getPlayField(startPoint);
+        startField = global.BOARD.getGameField(startPoint);
         return startField;
     }
 

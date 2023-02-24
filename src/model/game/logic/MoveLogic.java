@@ -52,7 +52,7 @@ public class MoveLogic {
                 movableFields.add(movableField);
             }
             // calculate reachable field of game fields
-            IField boardField = global.BOARD.getPlayField(((global.BOARD.getGameFieldsIndex(field.getPosition()) + stepValue) + 40) % 40);
+            IField boardField = global.BOARD.getGameField(((global.BOARD.getIndexFromPosition(field.getPosition()) + stepValue) + 40) % 40);
             // check if target field is not occupied with own figure
             if (boardField.getCurrentFigure() == null || (boardField.getCurrentFigure().getOwnerID() != currentFigure.getOwnerID())) {
                 movableFields.add(boardField);
@@ -74,7 +74,7 @@ public class MoveLogic {
         }
         // get base fields of owner of figure
         int figureOwnerId = field.getCurrentObject().getOwnerID();
-        List<BoardField> playerBaseFields = global.BOARD.getBaseFields(figureOwnerId);
+        List<BoardField> playerBaseFields = global.BOARD.getBase(figureOwnerId);
         // get index of current base field
         int indexOfBaseField = playerBaseFields.indexOf(field);
         int newIndex = indexOfBaseField + stepValue;
@@ -100,7 +100,7 @@ public class MoveLogic {
         int figureOwnerId = field.getCurrentObject().getOwnerID();
         int endIndex = global.players[figureOwnerId].getEndPoint();
         // calculate the new index of the reachable field
-        int selectedIndex = global.BOARD.getGameFieldsIndex(field.getPosition());
+        int selectedIndex = global.BOARD.getIndexFromPosition(field.getPosition());
 
         // special case: step value is negative
         if (stepValue < 0){
@@ -112,7 +112,7 @@ public class MoveLogic {
             // check if figure can move backwards into base
             if (selectedIndex >= endIndex && moveIndex < endIndex && moveIndex >= endIndex - 4){
                 int index = endIndex - moveIndex - 1;
-                BoardField currentBaseField = global.BOARD.getBaseFields(figureOwnerId).get(index);
+                BoardField currentBaseField = global.BOARD.getBase(figureOwnerId).get(index);
                 // if not occupied -> field can be reached
                 if (!currentBaseField.isOccupied()) {
                     return currentBaseField;
@@ -124,7 +124,7 @@ public class MoveLogic {
             if (selectedIndex <= endIndex && moveIndex > endIndex && moveIndex <= endIndex + 4) {
                 // calculate the base index
                 int index = moveIndex - (endIndex + 1);
-                BoardField currentBaseField = global.BOARD.getBaseFields(figureOwnerId).get(index);
+                BoardField currentBaseField = global.BOARD.getBase(figureOwnerId).get(index);
                 // if not occupied -> field can be reached
                 if (!currentBaseField.isOccupied()) {
                     return currentBaseField;
