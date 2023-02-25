@@ -3,7 +3,7 @@ package model.board.objects;
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
 import model.board.fields.IField;
-import model.board.objects.specials.BombSpecial;
+import model.enums.Color;
 import model.global;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -15,10 +15,10 @@ public class Figure implements IGameObject {
     private IField homeField;
     private IField currentField;
     private int playerID;
-    private String color;
+    private Color color;
     private int id;
 
-    public Figure(int playerID, int figureID, String color, IField startField, IField homeField) {
+    public Figure(int playerID, int figureID, Color color, IField startField, IField homeField) {
         this.id = figureID;
         this.playerID = playerID;
         this.color = color;
@@ -35,7 +35,7 @@ public class Figure implements IGameObject {
     public void initEntity() {
         Entity fieldEntity = new Entity("player:" + this.playerID + "-figure:" + this.id);
         try {
-            fieldEntity.addComponent(new ImageRenderComponent(new Image("assets/figures/" + color + ".png")));
+            fieldEntity.addComponent(new ImageRenderComponent(new Image("assets/figures/" + color.toString().toLowerCase() + ".png")));
         } catch (SlickException e) {
             throw new RuntimeException(e);
         }

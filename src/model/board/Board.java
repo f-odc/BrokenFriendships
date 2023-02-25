@@ -1,9 +1,5 @@
 package model.board;
 
-import eea.engine.event.ANDEvent;
-import eea.engine.event.basicevents.MouseClickedEvent;
-import eea.engine.event.basicevents.MouseEnteredEvent;
-import model.actions.BoardFieldAction;
 import model.board.fields.PlayerColorFields;
 import model.board.fields.IField;
 import model.board.objects.Dice;
@@ -12,13 +8,12 @@ import model.board.fields.BoardField;
 import model.enums.FieldType;
 import model.global;
 import org.newdawn.slick.geom.Vector2f;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * Klasse welches das Spielbrett und die darin vorhande Logik implementiert.
+ * Class implementing the play board and its logic
  */
 public class Board {
 
@@ -87,47 +82,42 @@ public class Board {
                 int type = boardTemplate[j][i];
                 //get color for the field
                 Color color = type < -1 ?
-                        getFieldColor(new Vector2f(i, j)) :
                         //house of base field
+                        getFieldColor(new Vector2f(i, j)) :
+                        //start fields
                         (type == 0 || type == 10 || type == 20 || type == 30) ? getFieldColor(new Vector2f(i, j)) :
                                 //standard field
                                 Color.NONE;
 
                 BoardField boardtmp;
+                Vector2f pos = getMidPoint(i, j);
                 switch (type) {
                     case -4 -> {
                         //initialize the positions for the dice
                         dicePositions[(i == 1 && j == 2) ? 0 :
                                 (i == 9 && j == 2) ? 1 :
-                                        (i == 9 && j == 8) ? 2 : 3] = getMidPoint(i, j);
-                        continue;
+                                        (i == 9 && j == 8) ? 2 : 3] = pos;
                     }
                     case -3 -> {
                         //initialize entity for the base fields
-                        boardtmp = new BoardField(getMidPoint(i, j), type, color, FieldType.BASE);
+                        boardtmp = new BoardField(pos, type, color, FieldType.BASE);
                         bases.add(boardtmp, color);
                     }
                     case -2 -> {
                         //initialize entity for the home fields
-                        boardtmp = new BoardField(getMidPoint(i, j), type, color, FieldType.HOME);
+                        boardtmp = new BoardField(pos, type, color, FieldType.HOME);
                         homes.add(boardtmp, color);
                     }
                     case -1 -> {
                         //no field
-                        continue;
                     }
                     default -> {
                         //initialize standard and start fields and their entity
                         FieldType field = (type == 0 || type == 10 || type == 20 || type == 30) ? FieldType.START : FieldType.STANDARD;
-                        boardtmp = new BoardField(getMidPoint(i, j), type, color, field);
+                        boardtmp = new BoardField(pos, type, color, field);
                         gameFields[type] = boardtmp;
                     }
                 }
-
-                //add action to entity
-                ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
-                clickEvent.addAction(new BoardFieldAction(boardtmp));
-                boardtmp.getBaseEntity().addComponent(clickEvent);
             }
         }
         //reverse order of bases, to make later access easier
@@ -142,8 +132,7 @@ public class Board {
     }
 
     /**
-     * calculate ht emid point of a board cell
-     *
+     * calculate the mid-point of a board cell
      * @param i x-index
      * @param j y-index
      * @return Vector2f with x and y coordinates of the mid-point
@@ -158,7 +147,6 @@ public class Board {
 
     /**
      * Get the color for a field, according to the fields position
-     *
      * @param point coordinates of the field
      * @return color of the field
      */
@@ -174,7 +162,6 @@ public class Board {
 
     /**
      * Get the dice
-     *
      * @return the dice
      */
     public Dice getDice() {
@@ -183,7 +170,6 @@ public class Board {
 
     /**
      * Get the home fields from the board for a specific player
-     *
      * @param id player id
      * @return List of all home fields
      */
@@ -193,7 +179,6 @@ public class Board {
 
     /**
      * Get all base fields from a player
-     *
      * @param id player id
      * @return List of the base fields
      */
@@ -209,7 +194,6 @@ public class Board {
 
     /**
      * Get the index of a gamefield in gamefields, according to postition
-     *
      * @param pos position of field
      * @return index belonging to the field, -1 if there is no field at the position
      */

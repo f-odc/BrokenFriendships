@@ -2,6 +2,10 @@ package model.board.fields;
 
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
+import eea.engine.event.ANDEvent;
+import eea.engine.event.basicevents.MouseClickedEvent;
+import eea.engine.event.basicevents.MouseEnteredEvent;
+import model.actions.BoardFieldAction;
 import model.board.objects.Figure;
 import model.board.objects.IGameObject;
 import model.enums.Color;
@@ -69,6 +73,12 @@ public class BoardField implements IField{
         if (isHighlightField){
             fieldEntity.setScale(fieldEntity.getScale() + 0.02f);
             fieldEntity.setVisible(false);
+        }
+        else{
+            //add action to entity
+            ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
+            clickEvent.addAction(new BoardFieldAction(this));
+            fieldEntity.addComponent(clickEvent);
         }
 
         return fieldEntity;
@@ -151,16 +161,6 @@ public class BoardField implements IField{
      */
     public void unHighlight() {
         highlightEntity.setVisible(false);
-    }
-
-    /**
-     * compare fields
-     * @param other field to compare to
-     * @return if fields are considered equal
-     */
-    public boolean equals(BoardField other) {
-        return getPosition().getX() == other.getPosition().getX() &&
-                getPosition().getY() == other.getPosition().getY();
     }
 
     /**
