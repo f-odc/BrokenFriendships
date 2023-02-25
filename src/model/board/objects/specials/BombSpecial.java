@@ -23,7 +23,7 @@ public class BombSpecial implements IGameObject {
         } catch (SlickException e) {
             throw new RuntimeException(e);
         }
-        bedEntity.setScale(global.FIGURE_SIZE);
+        bedEntity.setScale(global.OBJECT_SIZE);
         // add to list
         entity = bedEntity;
         global.entityManager.addEntity(global.GAMEPLAY_STATE, entity);
@@ -40,6 +40,7 @@ public class BombSpecial implements IGameObject {
         }
         // set figure to target field
         targetField.setGameObject(this);
+        System.out.println("Bomb Field: " + targetField.getCurrentObject());
         // set current field
         setCurrentField(targetField);
         return true;
@@ -47,8 +48,8 @@ public class BombSpecial implements IGameObject {
 
     @Override
     public void activate(IGameObject sourceGameObject) {
-        System.out.println("Activate Bomb");
-        // TODO: perform action
+        // reset figure
+        sourceGameObject.reset();
         // TODO: test removement
         global.entityManager.removeEntity(global.GAMEPLAY_STATE, entity);
         reset();
@@ -57,8 +58,8 @@ public class BombSpecial implements IGameObject {
     @Override
     public void reset() {
         global.entityManager.removeEntity(global.GAMEPLAY_STATE, entity);
-        currentField.resetCurrentObject();
-        currentField = null;
+        this.currentField.resetCurrentObject();
+        this.currentField = null;
     }
 
     @Override
@@ -73,7 +74,7 @@ public class BombSpecial implements IGameObject {
 
     @Override
     public void setCurrentField(IField field) {
-        currentField = field;
+        this.currentField = field;
     }
 
     @Override

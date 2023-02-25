@@ -8,7 +8,7 @@ import model.global;
 public class PlayerManager {
 
     /**
-     * Erstellt alle Spieler
+     * creates all players
      */
     public static void setup() {
         // Create Player

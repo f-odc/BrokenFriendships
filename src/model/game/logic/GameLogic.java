@@ -6,7 +6,7 @@ import model.board.objects.Figure;
 import model.board.objects.IGameObject;
 import model.board.objects.Mystery;
 import model.board.objects.specials.*;
-import model.enums.Field;
+import model.enums.FieldType;
 import model.enums.Phase;
 import model.global;
 import model.player.Player;
@@ -34,7 +34,7 @@ public class GameLogic {
 
 
     /**
-     * function controlling the logic of going into the next turn and choosing the next player
+     * controls the logic of going into the next turn and choosing the next player
      */
     public static void nextPlayer() {
         nextTurn();
@@ -54,12 +54,21 @@ public class GameLogic {
         // set position of dice to new player
         dice.setPosition(global.activePlayer);
 
-        // increase turn
+        // increase round
         if (global.activePlayer == 0)
             global.rounds++;
         // spawn new mystery item in once every 2 turns starting on turn 1
         if ((global.rounds == 1 || global.rounds % 2 == 0) && global.rounds != 0 && global.activePlayer == 0) {
             spawnMystery();
+        }
+
+        // check if player is currently sleeping
+        BedSpecial usedBed =  global.players[global.activePlayer].getActiveBed();
+        if(usedBed != null){
+            global.players[global.activePlayer].setBedSpecial(null);
+            global.entityManager.removeEntity(global.GAMEPLAY_STATE, usedBed.getEntity());
+            usedBed.reset();
+            nextPlayer();
         }
     }
 
@@ -178,7 +187,7 @@ public class GameLogic {
         movableFields = new ArrayList<IField>();
         // check if clicked field is suited
         Figure figure = field.getCurrentFigure();
-        if (figure == null || field.getType() == Field.BASE || field.getType() == Field.HOME){
+        if (figure == null || field.getType() == FieldType.BASE || field.getType() == FieldType.HOME){
             return;
         }
         // check if special active
@@ -196,7 +205,7 @@ public class GameLogic {
             if (activeSpecial instanceof SwitchSpecial){
                 selectedGameObject = figure;
                 // movable fields all figures
-                movableFields.addAll(global.BOARD.getOccupiedFields(field));
+                movableFields.addAll(global.BOARD.getOccupiedGameFields(field));
                 highlightMovableFields();
                 global.phase = Phase.SELECT_MOVEMENT_PHASE;
             }
@@ -231,7 +240,7 @@ public class GameLogic {
         // if clicked another field
 
         // bed and bomb special do not allow other behavior
-        if (activeSpecial instanceof BedSpecial || activeSpecial instanceof BombSpecial){
+        if (activeSpecial instanceof BedSpecial || activeSpecial instanceof BombSpecial || activeSpecial instanceof PlusToThreeSpecial){
             return;
         }
         // return to selection phase and reset values if move is not possible
@@ -270,8 +279,6 @@ public class GameLogic {
             specialsObject.activate(sourceGameObject);
             // hide mystery selection
             global.mysteryAnimation = new Animation();
-            // next player
-            nextPlayer();
         }else {
             // save active special object
             activeSpecial = specialsObject;
@@ -293,8 +300,18 @@ public class GameLogic {
             if (specialsObject instanceof SwitchSpecial){
                 global.phase = Phase.MYSTERY_SELECTION_PHASE;
             }
-            if (specialsObject instanceof MoveOutSpecial){
-                // highlight all figures in base
+            if (specialsObject instanceof PlusToThreeSpecial){
+                // empty movable fields
+                movableFields = new ArrayList<IField>();
+                // get movable fields +1 / +2 / +3
+                movableFields.addAll(MoveLogic.getMovableField(sourceGameObject.getCurrentField(), 1));
+                movableFields.addAll(MoveLogic.getMovableField(sourceGameObject.getCurrentField(), 2));
+                movableFields.addAll(MoveLogic.getMovableField(sourceGameObject.getCurrentField(), 3));
+                // highlight fields
+                highlightMovableFields();
+                // set phase
+                global.phase = Phase.SELECT_MOVEMENT_PHASE;
+                return;
             }
         }
     }

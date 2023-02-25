@@ -3,7 +3,7 @@ package model.game.logic;
 import model.board.fields.BoardField;
 import model.board.fields.IField;
 import model.board.objects.Figure;
-import model.enums.Field;
+import model.enums.FieldType;
 import model.global;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public class MoveLogic {
         Figure currentFigure = field.getCurrentFigure();
 
         // case: home field
-        if (field.getType() == Field.HOME) {
+        if (field.getType() == FieldType.HOME) {
             // case: check if no 6 is thrown and start field is occupied by own figure
             IField startField = currentFigure.getStartField();
             if (stepValue != 6 || (startField.getCurrentFigure() != null && startField.getCurrentFigure().getOwnerID() == currentFigure.getOwnerID()))
@@ -37,7 +37,7 @@ public class MoveLogic {
             return movableFields;
         }
         // case: figure in base
-        else if (field.getType() == Field.BASE) {
+        else if (field.getType() == FieldType.BASE) {
             IField possibleBaseMove = moveInsideBase(field, stepValue);
             if (possibleBaseMove != null){
                 movableFields.add(possibleBaseMove);
@@ -52,7 +52,7 @@ public class MoveLogic {
                 movableFields.add(movableField);
             }
             // calculate reachable field of game fields
-            IField boardField = global.BOARD.getPlayField(((global.BOARD.getGameFieldsIndex(field.getPosition()) + stepValue) + 40) % 40);
+            IField boardField = global.BOARD.getGameField(((global.BOARD.getIndexFromPosition(field.getPosition()) + stepValue) + 40) % 40);
             // check if target field is not occupied with own figure
             if (boardField.getCurrentFigure() == null || (boardField.getCurrentFigure().getOwnerID() != currentFigure.getOwnerID())) {
                 movableFields.add(boardField);
@@ -73,8 +73,8 @@ public class MoveLogic {
             return null;
         }
         // get base fields of owner of figure
-        int figureOwnerId = field.getCurrentObject().getOwnerID();
-        List<BoardField> playerBaseFields = global.BOARD.getBaseFields(figureOwnerId);
+        int figureOwnerId = field.getCurrentFigure() == null? global.activePlayer : field.getCurrentFigure().getOwnerID();
+        List<BoardField> playerBaseFields = global.BOARD.getBase(figureOwnerId);
         // get index of current base field
         int indexOfBaseField = playerBaseFields.indexOf(field);
         int newIndex = indexOfBaseField + stepValue;
@@ -97,10 +97,10 @@ public class MoveLogic {
      */
     static IField canEnterBase(IField field, int stepValue) {
         // get endpoint of owner of figure
-        int figureOwnerId = field.getCurrentObject().getOwnerID();
+        int figureOwnerId = field.getCurrentFigure() == null? global.activePlayer : field.getCurrentFigure().getOwnerID();
         int endIndex = global.players[figureOwnerId].getEndPoint();
         // calculate the new index of the reachable field
-        int selectedIndex = global.BOARD.getGameFieldsIndex(field.getPosition());
+        int selectedIndex = global.BOARD.getIndexFromPosition(field.getPosition());
 
         // special case: step value is negative
         if (stepValue < 0){
@@ -112,7 +112,7 @@ public class MoveLogic {
             // check if figure can move backwards into base
             if (selectedIndex >= endIndex && moveIndex < endIndex && moveIndex >= endIndex - 4){
                 int index = endIndex - moveIndex - 1;
-                BoardField currentBaseField = global.BOARD.getBaseFields(figureOwnerId).get(index);
+                BoardField currentBaseField = global.BOARD.getBase(figureOwnerId).get(index);
                 // if not occupied -> field can be reached
                 if (!currentBaseField.isOccupied()) {
                     return currentBaseField;
@@ -124,7 +124,7 @@ public class MoveLogic {
             if (selectedIndex <= endIndex && moveIndex > endIndex && moveIndex <= endIndex + 4) {
                 // calculate the base index
                 int index = moveIndex - (endIndex + 1);
-                BoardField currentBaseField = global.BOARD.getBaseFields(figureOwnerId).get(index);
+                BoardField currentBaseField = global.BOARD.getBase(figureOwnerId).get(index);
                 // if not occupied -> field can be reached
                 if (!currentBaseField.isOccupied()) {
                     return currentBaseField;

@@ -1,5 +1,6 @@
 package ui;
 
+import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.event.basicevents.*;
 import model.enums.Phase;
 import model.game.GameManager;
@@ -7,6 +8,7 @@ import model.global;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -36,23 +38,32 @@ public class GameplayState extends BasicGameState {
     }
 
     /**
-     * Wird vor dem (erstmaligen) Starten dieses States ausgefuehrt
+     * gets called once to initialize the game
      */
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
-        // Setzen des Hintergrunds
-        container.getGraphics().setBackground(Color.black);
+        // set the background color
+        Color lightGreen = new Color(202, 255, 202);
+        container.getGraphics().setBackground(lightGreen);
+        // set background image
+        Entity background = new Entity("background");
+        background.setPosition(new Vector2f(global.X_DIMENSIONS/2, global.Y_DIMENSIONS/2));	// Startposition des Hintergrunds
+        background.setScale(global.BACKGROUND_SIZE);
+        background.addComponent(new ImageRenderComponent(new Image("/assets/background.png"))); // Bildkomponente
 
-        // Bei Drücken der ESC-Taste zurueck ins Hauptmenue wechseln
+        // add background entity to the game
+        global.entityManager.addEntity(global.GAMEPLAY_STATE, background);
+
+        // go back to the main menu on ESC clicked
         Entity esc_Listener = new Entity("ESC_Listener");
         KeyPressedEvent esc_pressed = new KeyPressedEvent(Input.KEY_ESCAPE);
         esc_pressed.addAction(new ChangeStateAction(global.MAINMENU_STATE));
         esc_Listener.addComponent(esc_pressed);
         entityManager.addEntity(global.GAMEPLAY_STATE, esc_Listener);
 
-        // Initialisiert alle Spielobjekte
+        // initialize all game objects
         GameManager.setup();
-        // Startet das Spiel
+        // start the game
         GameManager.start();
 
     }
@@ -79,9 +90,8 @@ public class GameplayState extends BasicGameState {
         global.diceAnimation.draw(dicePos.x-48/2, dicePos.y-48/2, 48, 48);
         // render mystery selection
         int offset = 4;
-        int sizeAnimation = 100;
-        Vector2f mysteryAnimationPos = new Vector2f(Toolkit.getDefaultToolkit().getScreenSize().width/2,Toolkit.getDefaultToolkit().getScreenSize().height/2);
-        global.mysteryAnimation.draw(mysteryAnimationPos.x-sizeAnimation/2-offset, mysteryAnimationPos.y-sizeAnimation/2-offset, sizeAnimation, sizeAnimation);
+        Vector2f mysteryAnimationPos = new Vector2f(global.X_DIMENSIONS/2,global.Y_DIMENSIONS/2);
+        global.mysteryAnimation.draw(mysteryAnimationPos.x-global.ANIMATION_SIZE/2-offset, mysteryAnimationPos.y-global.ANIMATION_SIZE/2-offset, global.ANIMATION_SIZE, global.ANIMATION_SIZE);
     }
 
 }

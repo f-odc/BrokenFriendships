@@ -3,6 +3,7 @@ package model.board.objects;
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
 import model.board.fields.IField;
+import model.enums.Color;
 import model.global;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -14,10 +15,10 @@ public class Figure implements IGameObject {
     private IField homeField;
     private IField currentField;
     private int playerID;
-    private String color;
+    private Color color;
     private int id;
 
-    public Figure(int playerID, int figureID, String color, IField startField, IField homeField) {
+    public Figure(int playerID, int figureID, Color color, IField startField, IField homeField) {
         this.id = figureID;
         this.playerID = playerID;
         this.color = color;
@@ -34,7 +35,7 @@ public class Figure implements IGameObject {
     public void initEntity() {
         Entity fieldEntity = new Entity("player:" + this.playerID + "-figure:" + this.id);
         try {
-            fieldEntity.addComponent(new ImageRenderComponent(new Image("assets/figures/" + color + ".png")));
+            fieldEntity.addComponent(new ImageRenderComponent(new Image("assets/figures/" + color.toString().toLowerCase() + ".png")));
         } catch (SlickException e) {
             throw new RuntimeException(e);
         }
@@ -46,7 +47,7 @@ public class Figure implements IGameObject {
     @Override
     public boolean moveTo(IField targetField, boolean switchFlag){
         // check if target field is valid
-        if (targetField.getCurrentFigure() != null && targetField.getCurrentFigure().getOwnerID() == global.activePlayer){
+        if (targetField.getCurrentFigure() != null && targetField.getCurrentFigure().getOwnerID() == getOwnerID()){
             return false;
         }
         // store old fields
@@ -60,12 +61,15 @@ public class Figure implements IGameObject {
             // remove the occupying object from board
             targetField.resetCurrentObject();
         }
-        // set figure to target field
-        targetField.setGameObject(this);
-        // reset current field
-        currentField.resetCurrentObject();
-        // set current field
-        setCurrentField(targetField);
+        // check if current field is not already changed due to game object activate
+        if(currentField == currentStoredField){
+            // set figure to target field
+            targetField.setGameObject(this);
+            // reset current field
+            currentField.resetCurrentObject();
+            // set current field
+            setCurrentField(targetField);
+        }
 
         // check if switch with target figure possible
         if (targetFig != null && switchFlag){

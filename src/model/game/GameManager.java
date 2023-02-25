@@ -13,7 +13,7 @@ import java.util.List;
 public class GameManager {
 
     /**
-     * Initialisiert das Spielbrett und die Spielfiguren
+     * initializes the baord and the figures
      */
     public static void setup() {
 
@@ -28,12 +28,12 @@ public class GameManager {
         global.specialsMap.add(List.of("model.board.objects.specials.GrowingSpecial", "assets/MysterySelection/growing.png"));
         global.specialsMap.add(List.of("model.board.objects.specials.MoveFourSpecial", "assets/MysterySelection/moveFour.png"));
         global.specialsMap.add(List.of("model.board.objects.specials.MoveOutSpecial", "assets/MysterySelection/moveOutHome.png"));
-        global.specialsMap.add(List.of("model.board.objects.specials.PlusTwoSpecial", "assets/MysterySelection/plusTwo.png"));
+        global.specialsMap.add(List.of("model.board.objects.specials.PlusToThreeSpecial", "assets/MysterySelection/plusToThree.png"));
         global.specialsMap.add(List.of("model.board.objects.specials.SwitchSpecial", "assets/MysterySelection/switch.png"));
     }
 
     /**
-     * Startet das Spiel
+     * starts the game
      */
     public static void start() {
         //set first players turn
