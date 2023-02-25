@@ -12,7 +12,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 
-public class BoardField implements IField {
+public class BoardField implements IField{
 
     private Entity baseEntity;
 
@@ -20,6 +20,9 @@ public class BoardField implements IField {
 
     private Field type;
 
+    private int fieldIndex;
+
+    private float scale;
 
     private IGameObject displayedObject;
 
@@ -178,7 +181,7 @@ public class BoardField implements IField {
      * Checks if field is a start field from a player
      * @return true if start field, else false
      */
-    public boolean isPlayerStartField() {
+    public boolean isPlayerStartField(){
         return type == Field.START;
     }
 
@@ -186,7 +189,10 @@ public class BoardField implements IField {
      * Checks if field is a home field from a player
      * @return true if home field, else false
      */
-    public boolean isHomeField() {
-        return type == Field.HOME;
+    public boolean isHomeField(){ return type == Field.HOME;}
+
+    @Override
+    public int getFieldIndex() {
+        return fieldIndex;
     }
 }

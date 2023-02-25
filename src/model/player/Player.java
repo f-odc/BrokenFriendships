@@ -3,6 +3,8 @@ package model.player;
 import model.board.fields.BoardField;
 import model.board.fields.IField;
 import model.board.objects.Figure;
+import model.board.objects.IGameObject;
+import model.board.objects.specials.BedSpecial;
 import model.game.logic.MoveLogic;
 import model.global;
 import java.util.ArrayList;
@@ -12,6 +14,9 @@ import java.util.List;
 public class Player {
 
     private int id;
+    private boolean sleeps = false;
+
+    private BedSpecial activeBedSpecial;
     private List<Figure> figures = new ArrayList<>();
     private List<BoardField> homeFields;
     private List<BoardField> baseFields;
@@ -178,6 +183,21 @@ public class Player {
                 return;
             }
         }
+    }
+
+    /**
+     * Get the active bed object
+     * @return bed if active, else null
+     */
+    public BedSpecial getActiveBed(){
+        return activeBedSpecial;
+    }
+
+    /**
+     * Set the active bed object
+     */
+    public void setBedSpecial(BedSpecial bed){
+        activeBedSpecial = bed;
     }
 
 }

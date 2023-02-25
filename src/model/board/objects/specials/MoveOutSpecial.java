@@ -4,6 +4,7 @@ import eea.engine.entity.Entity;
 import model.board.fields.IField;
 import model.board.objects.Figure;
 import model.board.objects.IGameObject;
+import model.game.logic.GameLogic;
 import model.global;
 
 public class MoveOutSpecial implements IGameObject {
@@ -19,6 +20,8 @@ public class MoveOutSpecial implements IGameObject {
         System.out.println("Activate Move Out");
         // move a figure out of the start fields
         global.players[sourceGameObject.getOwnerID()].moveOut();
+        // next player
+        GameLogic.nextPlayer();
     }
 
     @Override

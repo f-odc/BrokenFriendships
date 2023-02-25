@@ -16,7 +16,6 @@ import model.global;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -272,6 +271,19 @@ public class Board {
             }
         }
         return occupiedFields;
+    }
+
+    /**
+     * Get +1 / -1 neighbors from the given field
+     * @param field current field, on the basis of which the neighbors are calculated
+     * @return ArrayList with fields next to the field
+     */
+    public ArrayList<IField> getNeighbors(IField field){
+        int fieldIndex = field.getFieldIndex();
+        ArrayList<IField> neighbors = new ArrayList<>();
+        neighbors.add(gameFields[fieldIndex + 1 % 40]);
+        neighbors.add(gameFields[fieldIndex - 1 % 40]);
+        return neighbors;
     }
 
 }

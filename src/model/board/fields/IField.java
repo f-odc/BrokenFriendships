@@ -21,4 +21,5 @@ public interface IField {
     Figure getCurrentFigure();
     boolean isPlayerStartField();
     boolean isHomeField();
+    int getFieldIndex();
 }

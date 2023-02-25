@@ -73,7 +73,7 @@ public class MoveLogic {
             return null;
         }
         // get base fields of owner of figure
-        int figureOwnerId = field.getCurrentObject().getOwnerID();
+        int figureOwnerId = field.getCurrentFigure() == null? global.activePlayer : field.getCurrentFigure().getOwnerID();
         List<BoardField> playerBaseFields = global.BOARD.getBase(figureOwnerId);
         // get index of current base field
         int indexOfBaseField = playerBaseFields.indexOf(field);
@@ -97,7 +97,7 @@ public class MoveLogic {
      */
     static IField canEnterBase(IField field, int stepValue) {
         // get endpoint of owner of figure
-        int figureOwnerId = field.getCurrentObject().getOwnerID();
+        int figureOwnerId = field.getCurrentFigure() == null? global.activePlayer : field.getCurrentFigure().getOwnerID();
         int endIndex = global.players[figureOwnerId].getEndPoint();
         // calculate the new index of the reachable field
         int selectedIndex = global.BOARD.getIndexFromPosition(field.getPosition());
