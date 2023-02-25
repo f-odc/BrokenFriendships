@@ -2,11 +2,10 @@ package model.board.fields;
 
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
-import model.board.Board;
 import model.board.objects.Figure;
 import model.board.objects.IGameObject;
 import model.enums.Color;
-import model.enums.Field;
+import model.enums.FieldType;
 import model.global;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -18,25 +17,24 @@ public class BoardField implements IField{
 
     private Vector2f position;
 
-    private Field type;
+    private FieldType type;
 
     private int fieldIndex;
-
-    private float scale;
 
     private IGameObject displayedObject;
 
     private Entity highlightEntity;
 
-    public BoardField(int i, int j, int type, Color color, Field field) {
+    public BoardField(Vector2f position, int fieldIndex, Color color, FieldType type) {
         try {
-            this.baseEntity = createEntity(i, j, type, color, false);
-            this.highlightEntity = createEntity(i, j, type, color, true);
+            this.baseEntity = createEntity(position, fieldIndex, color, false);
+            this.highlightEntity = createEntity(position, fieldIndex, color, true);
         } catch (SlickException e) {
             throw new RuntimeException(e);
         }
         this.position = baseEntity.getPosition();
-        this.type = field;
+        this.type = type;
+        this.fieldIndex = fieldIndex;
 
         // add board and highlight entity
         global.entityManager.addEntity(global.GAMEPLAY_STATE, this.highlightEntity);
@@ -45,18 +43,17 @@ public class BoardField implements IField{
 
     /**
      * creates an entity for the field
-     * @param i x coordinate
-     * @param j y coordinate
+     * @param position field coordinates
      * @param type field type
      * @param color field color
      * @param isHighlightField is it the highlighted version or normal
      * @return created entity
      * @throws SlickException if entity object cannot be created
      */
-    private Entity createEntity(int i, int j, int type, Color color, boolean isHighlightField) throws SlickException {
+    private Entity createEntity(Vector2f position, int type, Color color, boolean isHighlightField) throws SlickException {
         //create entity
-        Entity fieldEntity = new Entity("gameField:" + i + "," + j + "," + isHighlightField);
-        fieldEntity.setPosition(Board.getMidPoint(i, j));
+        Entity fieldEntity = new Entity("gameField:" + position.getX() + "," + position.getY() + "," + isHighlightField);
+        fieldEntity.setPosition(position);
 
         //initialize the image of the entity
         String imgPath = isHighlightField ? "assets/field/highlightField.png" :
@@ -87,7 +84,7 @@ public class BoardField implements IField{
 
     /**
      * get Entity of the field
-     * @return
+     * @return Entity of the field
      */
     public Entity getBaseEntity() {
         return baseEntity;
@@ -97,7 +94,7 @@ public class BoardField implements IField{
      * get the type of the field
      * @return field type
      */
-    public Field getType() {
+    public FieldType getType() {
         return type;
     }
 
@@ -182,14 +179,14 @@ public class BoardField implements IField{
      * @return true if start field, else false
      */
     public boolean isPlayerStartField(){
-        return type == Field.START;
+        return type == FieldType.START;
     }
 
     /**
      * Checks if field is a home field from a player
      * @return true if home field, else false
      */
-    public boolean isHomeField(){ return type == Field.HOME;}
+    public boolean isHomeField(){ return type == FieldType.HOME;}
 
     @Override
     public int getFieldIndex() {

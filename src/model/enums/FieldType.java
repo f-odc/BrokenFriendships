@@ -1,5 +1,5 @@
 package model.enums;
 
-public enum Field {
+public enum FieldType {
     BASE, HOME, START, STANDARD
 }

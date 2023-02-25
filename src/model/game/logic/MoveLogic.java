@@ -3,7 +3,7 @@ package model.game.logic;
 import model.board.fields.BoardField;
 import model.board.fields.IField;
 import model.board.objects.Figure;
-import model.enums.Field;
+import model.enums.FieldType;
 import model.global;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public class MoveLogic {
         Figure currentFigure = field.getCurrentFigure();
 
         // case: home field
-        if (field.getType() == Field.HOME) {
+        if (field.getType() == FieldType.HOME) {
             // case: check if no 6 is thrown and start field is occupied by own figure
             IField startField = currentFigure.getStartField();
             if (stepValue != 6 || (startField.getCurrentFigure() != null && startField.getCurrentFigure().getOwnerID() == currentFigure.getOwnerID()))
@@ -37,7 +37,7 @@ public class MoveLogic {
             return movableFields;
         }
         // case: figure in base
-        else if (field.getType() == Field.BASE) {
+        else if (field.getType() == FieldType.BASE) {
             IField possibleBaseMove = moveInsideBase(field, stepValue);
             if (possibleBaseMove != null){
                 movableFields.add(possibleBaseMove);

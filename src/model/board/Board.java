@@ -1,7 +1,5 @@
 package model.board;
 
-import eea.engine.component.render.ImageRenderComponent;
-import eea.engine.entity.Entity;
 import eea.engine.event.ANDEvent;
 import eea.engine.event.basicevents.MouseClickedEvent;
 import eea.engine.event.basicevents.MouseEnteredEvent;
@@ -11,11 +9,10 @@ import model.board.fields.IField;
 import model.board.objects.Dice;
 import model.enums.Color;
 import model.board.fields.BoardField;
-import model.enums.Field;
+import model.enums.FieldType;
 import model.global;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -107,12 +104,12 @@ public class Board {
                     }
                     case -3 -> {
                         //initialize entity for the base fields
-                        boardtmp = new BoardField(i, j, type, color, Field.BASE);
+                        boardtmp = new BoardField(getMidPoint(i, j), type, color, FieldType.BASE);
                         bases.add(boardtmp, color);
                     }
                     case -2 -> {
                         //initialize entity for the home fields
-                        boardtmp = new BoardField(i, j, type, color, Field.HOME);
+                        boardtmp = new BoardField(getMidPoint(i, j), type, color, FieldType.HOME);
                         homes.add(boardtmp, color);
                     }
                     case -1 -> {
@@ -121,8 +118,8 @@ public class Board {
                     }
                     default -> {
                         //initialize standard and start fields and their entity
-                        Field field = (type == 0 || type == 10 || type == 20 || type == 30) ? Field.START : Field.STANDARD;
-                        boardtmp = new BoardField(i, j, type, color, field);
+                        FieldType field = (type == 0 || type == 10 || type == 20 || type == 30) ? FieldType.START : FieldType.STANDARD;
+                        boardtmp = new BoardField(getMidPoint(i, j), type, color, field);
                         gameFields[type] = boardtmp;
                     }
                 }
@@ -275,10 +272,11 @@ public class Board {
 
     /**
      * Get +1 / -1 neighbors from the given field
+     *
      * @param field current field, on the basis of which the neighbors are calculated
      * @return ArrayList with fields next to the field
      */
-    public ArrayList<IField> getNeighbors(IField field){
+    public ArrayList<IField> getNeighbors(IField field) {
         int fieldIndex = field.getFieldIndex();
         ArrayList<IField> neighbors = new ArrayList<>();
         neighbors.add(gameFields[fieldIndex + 1 % 40]);

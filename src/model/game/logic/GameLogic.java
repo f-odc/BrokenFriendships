@@ -6,7 +6,7 @@ import model.board.objects.Figure;
 import model.board.objects.IGameObject;
 import model.board.objects.Mystery;
 import model.board.objects.specials.*;
-import model.enums.Field;
+import model.enums.FieldType;
 import model.enums.Phase;
 import model.global;
 import model.player.Player;
@@ -187,7 +187,7 @@ public class GameLogic {
         movableFields = new ArrayList<IField>();
         // check if clicked field is suited
         Figure figure = field.getCurrentFigure();
-        if (figure == null || field.getType() == Field.BASE || field.getType() == Field.HOME){
+        if (figure == null || field.getType() == FieldType.BASE || field.getType() == FieldType.HOME){
             return;
         }
         // check if special active
