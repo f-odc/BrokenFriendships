@@ -25,8 +25,8 @@ public class Dice {
     private ImageRenderComponent imgComponent; //zwischenspeicher des ImageRenderComponent um dies in updateEntity() zu überschreiben
 
     /**
-     * Initalisiert die Würfel Instanz
-     * @param displayPosition die Koordinaten auf dem Monitor.
+     * initialize the dice
+     * @param displayPosition the board coordinates
      */
     public Dice(Vector2f[] displayPosition){
         this.value = 1;
@@ -36,16 +36,16 @@ public class Dice {
     }
 
     /**
-     * Funktion die die Augenzahl des Würfels wiedergibt.
-     * @return Augenzahl des Würfels.
+     * returns dice value
+     * @return value of the dice
      */
     public int getValue() {
         return this.value;
     }
 
     /**
-     * Funktion die einen Würfelwurf simuliert.
-     * @return Augenzahl des würfels.
+     * simulates a throw of a dice
+     * @return value of dice
      */
     public int throwDice(){
         int diceThrow = new Random().nextInt(6) + 1;
@@ -108,7 +108,7 @@ public class Dice {
     }
 
     /**
-     * Initialisiert die Entity für den Würfel zusammen mit dem passenden Bild
+     * initializes entity of the dice
      */
     private void addDiceEntity(){
         Entity dice = new Entity("dice");
@@ -125,7 +125,7 @@ public class Dice {
     }
 
     /**
-     * Funktion die nach jedem Würfelwurf die Entity mit dem Bild der neuen Augenzahl aktualisiert.
+     * initializes the entity with correct image after throw
      */
     private void updateEntity(){
         Entity dice = global.entityManager.getEntity(global.GAMEPLAY_STATE, "dice");
@@ -138,8 +138,8 @@ public class Dice {
     }
 
     /**
-     * Funktion um die Position des Würfels zu tauschen, wenn eine andere Farbe dran ist.
-     * @param playerID welche Farbe dran ist
+     * changes the position of the die
+     * @param playerID who's turn it is
      */
     public void setPosition(int playerID) {
         Vector2f pos = displayPosition[playerID];

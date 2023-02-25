@@ -13,7 +13,7 @@ import java.util.List;
 public class GameManager {
 
     /**
-     * Initialisiert das Spielbrett und die Spielfiguren
+     * initializes the baord and the figures
      */
     public static void setup() {
 
@@ -33,7 +33,7 @@ public class GameManager {
     }
 
     /**
-     * Startet das Spiel
+     * starts the game
      */
     public static void start() {
         //set first players turn

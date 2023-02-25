@@ -38,32 +38,32 @@ public class GameplayState extends BasicGameState {
     }
 
     /**
-     * Wird vor dem (erstmaligen) Starten dieses States ausgefuehrt
+     * gets called once to initialize the game
      */
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
-        // Setzen der hintergrundfarbe
+        // set the background color
         Color lightGreen = new Color(202, 255, 202);
         container.getGraphics().setBackground(lightGreen);
-        // Hintergrund bild laden
-        Entity background = new Entity("background");	// Entitaet fuer Hintergrund
+        // set background image
+        Entity background = new Entity("background");
         background.setPosition(new Vector2f(global.X_DIMENSIONS/2, global.Y_DIMENSIONS/2));	// Startposition des Hintergrunds
         background.setScale(global.BACKGROUND_SIZE);
         background.addComponent(new ImageRenderComponent(new Image("/assets/background.png"))); // Bildkomponente
 
-        // Hintergrund-Entitaet an StateBasedEntityManager uebergeben
-        StateBasedEntityManager.getInstance().addEntity(global.GAMEPLAY_STATE, background);
+        // add background entity to the game
+        global.entityManager.addEntity(global.GAMEPLAY_STATE, background);
 
-        // Bei Drücken der ESC-Taste zurueck ins Hauptmenue wechseln
+        // go back to the main menu on ESC clicked
         Entity esc_Listener = new Entity("ESC_Listener");
         KeyPressedEvent esc_pressed = new KeyPressedEvent(Input.KEY_ESCAPE);
         esc_pressed.addAction(new ChangeStateAction(global.MAINMENU_STATE));
         esc_Listener.addComponent(esc_pressed);
         entityManager.addEntity(global.GAMEPLAY_STATE, esc_Listener);
 
-        // Initialisiert alle Spielobjekte
+        // initialize all game objects
         GameManager.setup();
-        // Startet das Spiel
+        // start the game
         GameManager.start();
 
     }
