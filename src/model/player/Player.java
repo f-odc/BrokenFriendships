@@ -17,9 +17,9 @@ public class Player {
     public int id;
     private BedSpecial activeBedSpecial;
     public List<Figure> figures = new ArrayList<>();
-    private List<BoardField> homeFields;
-    private List<BoardField> baseFields;
-    private IField startField;
+    public List<BoardField> homeFields;
+    public List<BoardField> baseFields;
+    public IField startField;
     private int startPoint;
     private int endPoint;
 
