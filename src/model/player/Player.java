@@ -14,9 +14,9 @@ import java.util.List;
 
 public class Player {
 
-    private int id;
+    public int id;
     private BedSpecial activeBedSpecial;
-    private List<Figure> figures = new ArrayList<>();
+    public List<Figure> figures = new ArrayList<>();
     private List<BoardField> homeFields;
     private List<BoardField> baseFields;
     private IField startField;

@@ -17,10 +17,13 @@ import java.awt.*;
  * zwei State's für das Menue und das eigentliche Spiel.
  */
 public class Launch extends StateBasedGame {
+
+    public static boolean debug;
     
-    public Launch()
+    public Launch(boolean debugging)
     {
         super("Broken friendships");
+        debug = debugging;
     }
  
     public static void main(String[] args) throws SlickException
@@ -37,7 +40,7 @@ public class Launch extends StateBasedGame {
         global.entityManager = StateBasedEntityManager.getInstance();
     	
     	// Setze dieses StateBasedGame in einen App Container (oder Fenster)
-        AppGameContainer app = new AppGameContainer(new Launch());
+        AppGameContainer app = new AppGameContainer(new Launch(false));
  
         // Lege die Einstellungen des Fensters fest und starte das Fenster
         app.setDisplayMode(global.X_DIMENSIONS, global.Y_DIMENSIONS, false);

@@ -14,6 +14,7 @@ import model.global;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
+import ui.Launch;
 
 public class BoardField implements IField{
 
@@ -63,7 +64,7 @@ public class BoardField implements IField{
         String imgPath = isHighlightField ? "assets/field/highlightField.png" :
                 color == Color.NONE ? "assets/field/standardField.png" :
                         "assets/field/" + color.toString().toLowerCase() + "Field.png";
-        fieldEntity.addComponent(new ImageRenderComponent(new Image(imgPath)));
+        if(!Launch.debug) fieldEntity.addComponent(new ImageRenderComponent(new Image(imgPath)));
         //initialize the size of the entity
         fieldEntity.setScale(type == -3 ? global.STANDARD_AND_BASE_FIELD_SIZE :
                 type == -2 ? global.HOME_AND_START_FIELD_SIZE :

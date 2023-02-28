@@ -7,6 +7,7 @@ import model.enums.Color;
 import model.global;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import ui.Launch;
 
 public class Figure implements IGameObject {
 
@@ -35,7 +36,7 @@ public class Figure implements IGameObject {
     public void initEntity() {
         Entity fieldEntity = new Entity("player:" + this.playerID + "-figure:" + this.id);
         try {
-            fieldEntity.addComponent(new ImageRenderComponent(new Image("assets/figures/" + color.toString().toLowerCase() + ".png")));
+            if(!Launch.debug) fieldEntity.addComponent(new ImageRenderComponent(new Image("assets/figures/" + color.toString().toLowerCase() + ".png")));
         } catch (SlickException e) {
             throw new RuntimeException(e);
         }
