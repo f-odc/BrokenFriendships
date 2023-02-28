@@ -8,16 +8,20 @@ import model.global;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import tests.adapter.TestAdapterMinimal;
+import org.junit.experimental.categories.Category;
+import tests.adapter.AdapterBonus;
+import tests.adapter.AdapterMinimal;
+import tests.adapter.AdapterTemplate;
+import tests.categories.Minimal;
+import tests.categories.Template;
 
 public class TemplateTest {
 
-    TestAdapterMinimal adapter;
+    AdapterBonus adapter;
 
     @Before
     public void setUp() {
-        adapter = new TestAdapterMinimal();
-        adapter.initializeGame();
+        adapter = new AdapterBonus();
     }
 
     @After
@@ -31,6 +35,8 @@ public class TemplateTest {
         assertNotNull(testObject);
         assertNotNull(testObject.getDice());
     }
+
+    @Category(Template.class)
     @Test
     public final void globalNotNullTest(){
         adapter.initializeBoard();
@@ -41,12 +47,19 @@ public class TemplateTest {
         assertNotNull(global.phase);
     }
 
+    @Category(Minimal.class)
     @Test
     public final void rightPhaseAndState(){
         assertEquals(0, global.activePlayer);
         assertEquals(0, global.rounds);
         assertEquals(Phase.DICE_PHASE, global.phase);
         assertEquals(1, global.GAMEPLAY_STATE);
+    }
+
+    @Category(Minimal.class)
+    @Test
+    public final void boardTest(){
+        assertNotNull(adapter.initializeBoard());
     }
 }
 

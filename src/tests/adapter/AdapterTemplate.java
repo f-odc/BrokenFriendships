@@ -9,20 +9,23 @@ import model.board.objects.Figure;
 import model.game.GameManager;
 import model.global;
 import model.player.Player;
-import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
 import ui.Launch;
 
 import java.util.List;
 
-public class TestAdapterMinimal {
+public class AdapterTemplate {
     Launch brokenFriendships;
     TestAppGameContainer app;
 
-    public TestAdapterMinimal() {
+    public AdapterTemplate() {
         brokenFriendships = null;
+        initializeGame();
     }
 
+    /**
+     * initialize game in test mode
+     */
     public void initializeGame() {
         // Setze den library Pfad abhaengig vom Betriebssystem
         if (System.getProperty("os.name").toLowerCase().contains("windows")) {
@@ -52,6 +55,9 @@ public class TestAdapterMinimal {
         GameManager.start();
     }
 
+    /**
+     * Ends the game
+     */
     public void stopGame() {
         if (app != null) {
             app.exit();
@@ -60,6 +66,8 @@ public class TestAdapterMinimal {
         StateBasedEntityManager.getInstance().clearAllStates();
         brokenFriendships = null;
     }
+
+    /** Test Section: */
 
     public Board initializeBoard() {
         return new Board();
