@@ -33,22 +33,6 @@ public class PlayerColorFields {
         Collections.reverse(green);
     }
 
-    /**
-     * get field out of list, without deleteing it
-     *
-     * @param color         field color
-     * @param boardPosition  field position
-     * @return Optional<ColoredField> the field oof the correct list
-     */
-    public Optional<BoardField> get(Color color, Vector2f boardPosition) {
-        float x = boardPosition.getX();
-        float y = boardPosition.getY();
-        System.out.println("get color: " + color + " position: " + x + "," + y);
-        return color == Color.BLUE ? blue.stream().filter(ele -> ele.getPosition().getX() == x && ele.getPosition().getY() == y).findAny() :
-                color == Color.GREEN ? green.stream().filter(ele -> ele.getPosition().getX() == x && ele.getPosition().getY() == y).findAny() :
-                        color == Color.RED ? red.stream().filter(ele -> ele.getPosition().getX() == x && ele.getPosition().getY() == y).findAny() :
-                                yellow.stream().filter(ele -> ele.getPosition().getX() == x && ele.getPosition().getY() == y).findAny();
-    }
 
     /**
      * Get player fields

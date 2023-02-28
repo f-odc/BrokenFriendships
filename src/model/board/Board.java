@@ -132,20 +132,6 @@ public class Board {
     }
 
     /**
-     * calculate the mid-point of a board cell
-     * @param i x-index
-     * @param j y-index
-     * @return Vector2f with x and y coordinates of the mid-point
-     */
-    public static Vector2f getMidPoint(int i, int j) {
-        //bottom-left point of the cell
-        Vector2f start = new Vector2f(i * stepSize + xOffset, j * stepSize);
-        //top-right point of the cell
-        Vector2f end = new Vector2f((i + 1) * stepSize + xOffset, (j + 1) * stepSize);
-        return new Vector2f((start.getX() + end.getX()) / 2, (start.getY() + end.getY()) / 2);
-    }
-
-    /**
      * Get the color for a field, according to the fields position
      * @param point coordinates of the field
      * @return color of the field
@@ -157,6 +143,21 @@ public class Board {
                                 point.getX() >= 5 && point.getY() >= 5 ? Color.BLUE :
                                         Color.NONE;
     }
+
+    /**
+     * calculate the mid-point of a board cell
+     * @param i x-index
+     * @param j y-index
+     * @return Vector2f with x and y coordinates of the mid-point
+     */
+    private static Vector2f getMidPoint(int i, int j) {
+        //bottom-left point of the cell
+        Vector2f start = new Vector2f(i * stepSize + xOffset, j * stepSize);
+        //top-right point of the cell
+        Vector2f end = new Vector2f((i + 1) * stepSize + xOffset, (j + 1) * stepSize);
+        return new Vector2f((start.getX() + end.getX()) / 2, (start.getY() + end.getY()) / 2);
+    }
+
 
     // public methods to interact with the board
 
@@ -183,29 +184,7 @@ public class Board {
      * @return List of the base fields
      */
     public List<BoardField> getBase(int id) {
-        return switch (id) {
-            case 0 -> bases.red;
-            case 1 -> bases.yellow;
-            case 2 -> bases.blue;
-            case 3 -> bases.green;
-            default -> throw new RuntimeException("Wrong ID");
-        };
-    }
-
-    /**
-     * Get the index of a gamefield in gamefields, according to postition
-     * @param pos position of field
-     * @return index belonging to the field, -1 if there is no field at the position
-     */
-    public int getIndexFromPosition(Vector2f pos) {
-        for (int i = 0; i < gameFields.length; i++) {
-            //find field with correct position
-            if (gameFields[i].getPosition().getX() == pos.getX() &&
-                    gameFields[i].getPosition().getY() == pos.getY()) {
-                return i;
-            }
-        }
-        return -1;
+        return bases.getFieldsFromId(id);
     }
 
     /**
