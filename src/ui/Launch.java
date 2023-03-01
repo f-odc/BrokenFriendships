@@ -43,7 +43,7 @@ public class Launch extends StateBasedGame {
         AppGameContainer app = new AppGameContainer(new Launch(false));
  
         // Lege die Einstellungen des Fensters fest und starte das Fenster
-        app.setDisplayMode(global.X_DIMENSIONS, global.Y_DIMENSIONS, false);
+        app.setDisplayMode(global.X_DIMENSIONS, global.Y_DIMENSIONS, true);
         app.start();
     }
 

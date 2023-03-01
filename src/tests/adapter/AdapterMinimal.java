@@ -1,8 +1,9 @@
 package tests.adapter;
 
+import eea.engine.entity.Entity;
 import model.board.Board;
-import model.board.objects.Dice;
 import model.global;
+import org.newdawn.slick.geom.Vector2f;
 
 public class AdapterMinimal extends AdapterTemplate {
 
@@ -21,11 +22,23 @@ public class AdapterMinimal extends AdapterTemplate {
         return global.BOARD.getDice().throwDice();
     }
 
-    public Dice getDice() {
-        return global.BOARD.getDice();
+    public int getDiceValue() {
+        return global.BOARD.getDice().getValue();
     }
 
-    public String getDiceEntityID() {
-        return "Dice";
+    public Vector2f getDicePosition() {
+        return global.BOARD.getDice().getCurrentPosition();
+    }
+
+    public void setDicePosition(int i) {
+        global.BOARD.getDice().setPosition(i);
+    }
+
+    public Vector2f calculateDicePositions(int i, int j){
+        return Board.getMidPoint(i , j);
+    }
+
+    public Entity getDiceEntity(){
+        return global.entityManager.getEntity(global.GAMEPLAY_STATE, "dice");
     }
 }

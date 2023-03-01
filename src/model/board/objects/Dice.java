@@ -160,6 +160,7 @@ public class Dice {
      * @return the current position of the dice
      */
     public Vector2f getCurrentPosition() {
-        return displayPosition[global.activePlayer];
+        Entity dice = global.entityManager.getEntity(global.GAMEPLAY_STATE, "dice");
+        return dice.getPosition();
     }
 }

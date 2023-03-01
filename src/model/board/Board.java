@@ -150,7 +150,7 @@ public class Board {
      * @param j y-index
      * @return Vector2f with x and y coordinates of the mid-point
      */
-    private static Vector2f getMidPoint(int i, int j) {
+    public static Vector2f getMidPoint(int i, int j) {
         //bottom-left point of the cell
         Vector2f start = new Vector2f(i * stepSize + xOffset, j * stepSize);
         //top-right point of the cell
