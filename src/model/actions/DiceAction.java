@@ -16,7 +16,7 @@ public class DiceAction implements Action {
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int i, Component component) {
         // can be only executed if during dice phase
         if (global.phase == Phase.DICE_PHASE) {
-            GameLogic.executeDicePhase();
+            GameLogic.executeDicePhase(-1, -1);
         }
     }
 

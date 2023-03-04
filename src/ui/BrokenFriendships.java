@@ -8,19 +8,17 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import eea.engine.entity.StateBasedEntityManager;
 
-import java.awt.*;
-
 /**
  * @author Timo Bähr
  *
  * Diese Klasse startet das Spiel "Drop of Water". Es enthaelt
  * zwei State's für das Menue und das eigentliche Spiel.
  */
-public class Launch extends StateBasedGame {
+public class BrokenFriendships extends StateBasedGame {
 
     public static boolean debug;
     
-    public Launch(boolean debugging)
+    public BrokenFriendships(boolean debugging)
     {
         super("Broken friendships");
         debug = debugging;
@@ -40,7 +38,7 @@ public class Launch extends StateBasedGame {
         global.entityManager = StateBasedEntityManager.getInstance();
     	
     	// Setze dieses StateBasedGame in einen App Container (oder Fenster)
-        AppGameContainer app = new AppGameContainer(new Launch(false));
+        AppGameContainer app = new AppGameContainer(new BrokenFriendships(false));
  
         // Lege die Einstellungen des Fensters fest und starte das Fenster
         app.setDisplayMode(global.X_DIMENSIONS, global.Y_DIMENSIONS, true);

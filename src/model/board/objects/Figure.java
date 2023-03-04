@@ -7,7 +7,7 @@ import model.enums.Color;
 import model.global;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import ui.Launch;
+import ui.BrokenFriendships;
 
 public class Figure implements IGameObject {
 
@@ -16,7 +16,7 @@ public class Figure implements IGameObject {
     private IField homeField;
     private IField currentField;
     private int playerID;
-    private Color color;
+    public Color color;
     private int id;
 
     public Figure(int playerID, int figureID, Color color, IField startField, IField homeField) {
@@ -36,7 +36,7 @@ public class Figure implements IGameObject {
     public void initEntity() {
         Entity fieldEntity = new Entity("player:" + this.playerID + "-figure:" + this.id);
         try {
-            if(!Launch.debug) fieldEntity.addComponent(new ImageRenderComponent(new Image("assets/figures/" + color.toString().toLowerCase() + ".png")));
+            if(!BrokenFriendships.debug) fieldEntity.addComponent(new ImageRenderComponent(new Image("assets/figures/" + color.toString().toLowerCase() + ".png")));
         } catch (SlickException e) {
             throw new RuntimeException(e);
         }

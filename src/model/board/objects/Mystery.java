@@ -9,18 +9,20 @@ import model.global;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import ui.BrokenFriendships;
+
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Mystery implements IGameObject{
+public class Mystery implements IGameObject {
 
     private Entity entity;
     private int id;
     private int ownerID;
     private IField currentField;
 
-    public Mystery(int id, int ownerID, IField field){
+    public Mystery(int id, int ownerID, IField field) {
         this.id = id;
         this.ownerID = ownerID;
         this.currentField = field;
@@ -33,7 +35,8 @@ public class Mystery implements IGameObject{
     public void initEntity() {
         Entity newEntity = new Entity("player:" + this.ownerID + "-mystery:" + this.id + "-hashcode:" + this.hashCode());
         try {
-            newEntity.addComponent(new ImageRenderComponent(new Image("assets/objects/questionmark.png")));
+            if (!BrokenFriendships.debug)
+                newEntity.addComponent(new ImageRenderComponent(new Image("assets/objects/questionmark.png")));
         } catch (SlickException e) {
             System.out.println("Cannot find: assets/objects/questionmark.png!");
             throw new RuntimeException(e);
@@ -42,6 +45,7 @@ public class Mystery implements IGameObject{
         // add to list
         this.entity = newEntity;
     }
+
     @Override
     public boolean moveTo(IField targetField, boolean switchFlag) {
         return false;
@@ -60,7 +64,7 @@ public class Mystery implements IGameObject{
 
         // wait till animation is over:
         int animationDuration = 0;
-        for (int frameDuration : global.mysteryAnimation.getDurations()){
+        for (int frameDuration : global.mysteryAnimation.getDurations()) {
             animationDuration += frameDuration;
         }
 
@@ -78,26 +82,30 @@ public class Mystery implements IGameObject{
 
         // dismiss mystery from field
         reset();
+        GameLogic.numOfMysteryFields--;
     }
 
     /**
      * Animate mystery selection
+     *
      * @param specialNr number of selected special
      */
-    private void animateMystery(int specialNr){
+    private void animateMystery(int specialNr) {
 
         // create new animation
         global.mysteryAnimation = new Animation();
         global.mysteryAnimation.setLooping(false);
-        try {
-            // mystery selection animation
-            for (int i = 1; i < 12; i++) {
-                global.mysteryAnimation.addFrame(new Image(global.specialsMap.get(i % 8).get(1)), 150 * i / 2);
+        if (!BrokenFriendships.debug) {
+            try {
+                // mystery selection animation
+                for (int i = 1; i < 12; i++) {
+                    global.mysteryAnimation.addFrame(new Image(global.specialsMap.get(i % 8).get(1)), 150 * i / 2);
+                }
+                // set last frame the selected mystery
+                global.mysteryAnimation.addFrame(new Image(global.specialsMap.get(specialNr).get(1)), 2000);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-            // set last frame the selected mystery
-            global.mysteryAnimation.addFrame(new Image(global.specialsMap.get(specialNr).get(1)), 2000);
-        } catch(Exception e){
-            throw new RuntimeException(e);
         }
     }
 
@@ -113,7 +121,7 @@ public class Mystery implements IGameObject{
 
     @Override
     public boolean requiresFieldInteraction() {
-        return true ;
+        return true;
     }
 
     @Override

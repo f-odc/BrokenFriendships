@@ -11,7 +11,7 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
-import ui.Launch;
+import ui.BrokenFriendships;
 
 import java.util.Random;
 
@@ -81,7 +81,7 @@ public class Dice {
      */
     public void animateNextArrow() {
         try {
-            global.diceAnimation.addFrame(new Image("assets/dice/nextArrow" + global.activePlayer + ".png"), 350);
+            if(!BrokenFriendships.debug)global.diceAnimation.addFrame(new Image("assets/dice/nextArrow" + global.activePlayer + ".png"), 350);
         } catch (SlickException e) {
             throw new RuntimeException(e);
         }
@@ -99,7 +99,7 @@ public class Dice {
      */
     private void initDiceImages() {
         try {
-            if (!Launch.debug) {
+            if (!BrokenFriendships.debug) {
                 diceImages[0] = new Image("assets/dice/diceOne.png");
                 diceImages[1] = new Image("assets/dice/diceTwo.png");
                 diceImages[2] = new Image("assets/dice/diceThree.png");

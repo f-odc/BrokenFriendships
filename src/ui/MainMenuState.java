@@ -34,7 +34,7 @@ public class MainMenuState extends BasicGameState {    // zugehoeriger entityMan
      */
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
-        if (!Launch.debug) {
+        if (!BrokenFriendships.debug) {
             // set the background
             container.getGraphics().setBackground(Color.white);
 

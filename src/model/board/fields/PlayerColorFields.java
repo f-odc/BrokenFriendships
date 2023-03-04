@@ -54,4 +54,19 @@ public class PlayerColorFields {
                 throw new RuntimeException("Invalid ID");
         }
     }
+
+    public int getBaseSize(int id){
+        switch (id) {
+            case 0:
+                return red.size();
+            case 1:
+                return yellow.size();
+            case 2:
+                return blue.size();
+            case 3:
+                return green.size();
+            default:
+                throw new RuntimeException("Invalid ID");
+        }
+    }
 }

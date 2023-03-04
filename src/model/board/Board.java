@@ -8,6 +8,7 @@ import model.board.fields.BoardField;
 import model.enums.FieldType;
 import model.global;
 import org.newdawn.slick.geom.Vector2f;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,9 +37,9 @@ public class Board {
     private static int stepSize;  //width and height of a board cell
     private Vector2f[] dicePositions; //positions of dice, relative to screen-size
     private Dice dice;  //the current dice object
-    private PlayerColorFields bases;  //base fields
-    private PlayerColorFields homes;  //house fields
-    private final IField[] gameFields = new IField[40]; //Standard- und Start-fields
+    public PlayerColorFields bases;  //base fields
+    public PlayerColorFields homes;  //house fields
+    public final BoardField[] gameFields = new BoardField[40]; //Standard- und Start-fields
 
     public Board() {
         //initialize size and offset
@@ -133,6 +134,7 @@ public class Board {
 
     /**
      * Get the color for a field, according to the fields position
+     *
      * @param point coordinates of the field
      * @return color of the field
      */
@@ -146,6 +148,7 @@ public class Board {
 
     /**
      * calculate the mid-point of a board cell
+     *
      * @param i x-index
      * @param j y-index
      * @return Vector2f with x and y coordinates of the mid-point
@@ -163,6 +166,7 @@ public class Board {
 
     /**
      * Get the dice
+     *
      * @return the dice
      */
     public Dice getDice() {
@@ -171,6 +175,7 @@ public class Board {
 
     /**
      * Get the home fields from the board for a specific player
+     *
      * @param id player id
      * @return List of all home fields
      */
@@ -180,6 +185,7 @@ public class Board {
 
     /**
      * Get all base fields from a player
+     *
      * @param id player id
      * @return List of the base fields
      */
@@ -193,7 +199,7 @@ public class Board {
      * @param index board field number
      * @return BoardField of the specific index
      */
-    public IField getGameField(int index) {
+    public BoardField getGameField(int index) {
         int tmpIndex = index < 0 ? -1 * index : index;
         if (tmpIndex >= gameFields.length) return gameFields[tmpIndex % gameFields.length];
         else return gameFields[tmpIndex];
@@ -242,8 +248,8 @@ public class Board {
     public ArrayList<IField> getNeighbors(IField field) {
         int fieldIndex = field.getFieldIndex();
         ArrayList<IField> neighbors = new ArrayList<>();
-        neighbors.add(gameFields[fieldIndex + 1 % 40]);
-        neighbors.add(gameFields[fieldIndex - 1 % 40]);
+        neighbors.add(gameFields[(fieldIndex + 1) % 40]);
+        neighbors.add(fieldIndex == 0 ? gameFields[39] : gameFields[(fieldIndex - 1) % 40]);
         return neighbors;
     }
 

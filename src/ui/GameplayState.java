@@ -2,7 +2,6 @@ package ui;
 
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.event.basicevents.*;
-import model.enums.Phase;
 import model.game.GameManager;
 import model.global;
 import org.newdawn.slick.*;
@@ -15,8 +14,6 @@ import org.newdawn.slick.state.StateBasedGame;
 import eea.engine.action.basicactions.ChangeStateAction;
 import eea.engine.entity.Entity;
 import eea.engine.entity.StateBasedEntityManager;
-
-import java.awt.*;
 
 /**
  * @author Timo Bähr
@@ -42,7 +39,7 @@ public class GameplayState extends BasicGameState {
      */
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
-        if (!Launch.debug) {
+        if (!BrokenFriendships.debug) {
             // set the background color
             Color lightGreen = new Color(202, 255, 202);
             container.getGraphics().setBackground(lightGreen);
