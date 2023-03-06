@@ -57,9 +57,9 @@ public class MoveTest {
                 assertTrue(adapter.allHomeFieldsOccupied(i));
                 adapter.resetFigures(i);
 
+                adapter.resetTurn();
                 adapter.setActivePlayer(i);
                 adapter.resetFigures(i);
-                adapter.resetTurn();
                 assertTrue(adapter.allHomeFieldsOccupied(i));
                 assertEquals(adapter.getDiceThrowAttempts(), 3);
                 adapter.move(i, j, 4);
@@ -72,9 +72,9 @@ public class MoveTest {
                 assertFalse(adapter.allHomeFieldsOccupied(i));
                 adapter.resetFigures(i);
 
+                adapter.resetTurn();
                 adapter.setActivePlayer(i);
                 adapter.resetFigures(i);
-                adapter.resetTurn();
                 assertTrue(adapter.allHomeFieldsOccupied(i));
                 assertEquals(adapter.getDiceThrowAttempts(), 3);
                 adapter.move(i, j, 2);
@@ -84,9 +84,9 @@ public class MoveTest {
                 assertFalse(adapter.allHomeFieldsOccupied(i));
                 adapter.resetFigures(i);
 
+                adapter.resetTurn();
                 adapter.setActivePlayer(i);
                 adapter.resetFigures(i);
-                adapter.resetTurn();
                 assertTrue(adapter.allHomeFieldsOccupied(i));
                 assertEquals(adapter.getDiceThrowAttempts(), 3);
                 adapter.move(i, j, 6);
@@ -137,6 +137,7 @@ public class MoveTest {
                 adapter.resetFigures(i);
                 adapter.move(i, j, 6);
                 adapter.move(i, j, 39);
+                adapter.setActivePlayer(i);
                 adapter.move(i, j, 2);
                 assertTrue(adapter.occupiesBaseField(i, j));
                 adapter.resetFigures(i);
@@ -166,8 +167,10 @@ public class MoveTest {
             adapter.setActivePlayer(i);
             adapter.resetFigures(i);
             for (int j = 0; j < 3; j++) {
+                adapter.setActivePlayer(i);
                 adapter.move(i, j, 6);
                 adapter.move(i, j, 39);
+                adapter.setActivePlayer(i);
                 adapter.move(i, j, 4 - j);
             }
             assertEquals(3, adapter.getDiceThrowAttempts());

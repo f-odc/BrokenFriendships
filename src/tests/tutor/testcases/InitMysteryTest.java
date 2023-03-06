@@ -32,14 +32,14 @@ public class InitMysteryTest {
     public void testMysterySpawn() {
         adapter.resetTurn();
         for (int i = 0; i < 4; i++) {
-            adapter.skipTurn(i);
+            adapter.skipTurn();
         }
         assertEquals(1, adapter.getNumberOfMysteryObjects());
 
         adapter.resetTurn();
         for (int t = 0; t < 2; t++) {
             for (int i = 0; i < 4; i++) {
-                adapter.skipTurn(i);
+                adapter.skipTurn();
             }
         }
         assertEquals(2, adapter.getNumberOfMysteryObjects());
@@ -47,7 +47,7 @@ public class InitMysteryTest {
         adapter.resetTurn();
         for (int t = 0; t < 35; t++) {
             for (int i = 0; i < 4; i++) {
-                adapter.skipTurn(i);
+                adapter.skipTurn();
             }
             if (t % 2 == 0) {
                 if (t >= 22)

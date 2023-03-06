@@ -30,14 +30,14 @@ public class MoveOutSpecialTest {
                 adapter.resetTurn();
                 adapter.setActivePlayer(i);
                 adapter.resetFigures(i);
-                adapter.forceSimpleMysteryActivate("moveOut", i, j);
+                adapter.forceSimpleSpecialActivation("moveOut", i, j);
                 assertFalse(adapter.allHomeFieldsOccupied(i));
 
                 adapter.resetTurn();
                 adapter.setActivePlayer(i);
                 adapter.resetFigures(i);
                 adapter.move(i, j, 6);
-                adapter.forceSimpleMysteryActivate("moveOut", i, (j + 1) % 4);
+                adapter.forceSimpleSpecialActivation("moveOut", i, (j + 1) % 4);
                 assertFalse(adapter.occupiesHomeField(i, j));
                 for (int z = 0; z < 3; z++) {
                     if (z == j) continue;

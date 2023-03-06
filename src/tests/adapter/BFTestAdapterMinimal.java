@@ -297,12 +297,12 @@ public class BFTestAdapterMinimal {
     public void move(int playerID, int figureID, int diceThrow) {
         //TODO
         GameLogic.spawnMystery = false;
+        GameLogic.setDebugDiceThrow(diceThrow);
         List<IField> lst = MoveLogic.getMovableField(global.players[playerID].figures.get(figureID).getCurrentField(), diceThrow);
         GameLogic.executeDicePhase(diceThrow, playerID);
         if (GameLogic.isNextPlayer) GameLogic.executeDicePhase(diceThrow, playerID);
         GameLogic.executeSelectFigurePhase(global.players[playerID].figures.get(figureID).getCurrentField(), diceThrow);
         if (lst.size() > 0) {
-            global.players[playerID].figures.get(figureID).moveTo(lst.get(0), false);
             GameLogic.executeSelectMovementPhase(lst.get(0), diceThrow);
 
         } else if (GameLogic.isNextPlayer) {
@@ -331,6 +331,9 @@ public class BFTestAdapterMinimal {
         GameLogic.isNextPlayer = false;
         for (int i = 0; i < 40; i++) {
             if (global.BOARD.getGameField(i).isOccupied()) global.BOARD.getGameField(i).getCurrentObject().reset();
+        }
+        for (int i = 0; i < 4; i++) {
+            global.players[i].setBedSpecial(null);
         }
         GameLogic.numOfMysteryFields = 0;
         global.rounds = 0;

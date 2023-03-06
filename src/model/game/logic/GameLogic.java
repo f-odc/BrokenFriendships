@@ -35,6 +35,8 @@ public class GameLogic {
 
     public static boolean spawnMystery = true;
 
+    public static int debugDiceThrow;
+
 
     /**
      * controls the logic of going into the next turn and choosing the next player
@@ -277,8 +279,6 @@ public class GameLogic {
      * @param sourceGameObject figure which activate the mystery selection
      */
     public static void executeInitSpecialsPhase(int specialNr, IGameObject sourceGameObject) {
-        System.out.println("Execute Init Specials Phase");
-
         // create new game object depending on mysteryNr
         String className = global.specialsMap.get(specialNr).get(0);
         IGameObject specialsObject;
@@ -350,6 +350,14 @@ public class GameLogic {
                 field.unHighlight();
             }
         }
+    }
+
+    public static int getDebugDiceThrow() {
+        return debugDiceThrow;
+    }
+
+    public static void setDebugDiceThrow(int diceThrow) {
+        debugDiceThrow = diceThrow;
     }
 
 }

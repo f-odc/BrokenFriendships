@@ -33,12 +33,13 @@ public class GrowingSpecialTest {
                 adapter.resetFigures(i);
                 adapter.move(i, j, 6);
                 adapter.move(i, j, 1);
+                adapter.setActivePlayer(i);
                 adapter.move(i, (j + 1) % 4, 6);
                 adapter.setActivePlayer((i + 1) % 4);
                 adapter.resetFigures((i + 1) % 4);
                 adapter.move((i + 1) % 4, j, 6);
                 adapter.move((i + 1) % 4, j, 29);
-                adapter.forceSimpleMysteryActivate("growing", i, (j + 1) % 4);
+                adapter.forceSimpleSpecialActivation("growing", i, (j + 1) % 4);
                 assertTrue(adapter.occupiesHomeField((i + 1) % 4, j));
                 assertTrue(adapter.occupiesHomeField(i, j));
 
@@ -47,13 +48,15 @@ public class GrowingSpecialTest {
                 adapter.resetFigures(i);
                 adapter.move(i, j, 6);
                 adapter.move(i, j, 39);
+                adapter.setActivePlayer(i);
                 adapter.move(i, j, 1);
                 adapter.setActivePlayer((i + 1) % 4);
                 adapter.move((i + 1) % 4, j, 6);
                 adapter.move((i + 1) % 4, j, 29);
+                adapter.setActivePlayer((i + 1) % 4);
                 adapter.move((i + 1) % 4, (j + 1) % 4, 6);
                 adapter.move((i + 1) % 4, (j + 1) % 4, 30);
-                adapter.forceSimpleMysteryActivate("growing", (i + 1) % 4, j);
+                adapter.forceSimpleSpecialActivation("growing", (i + 1) % 4, j);
                 assertFalse(adapter.occupiesHomeField(i, j));
                 assertTrue(adapter.occupiesHomeField((i + 1) % 4, (j + 1) % 4));
             }

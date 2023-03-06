@@ -1,14 +1,7 @@
 package tests.adapter;
 
-import model.board.fields.BoardField;
-import model.board.objects.Figure;
-import model.board.objects.Mystery;
-import model.board.objects.specials.DeadSpecial;
-import model.enums.Color;
-import model.enums.FieldType;
 import model.game.logic.GameLogic;
 import model.global;
-import org.newdawn.slick.geom.Vector2f;
 
 public class BFTestAdapterExtended2 extends BFTestAdapterExtended1 {
 
@@ -16,23 +9,55 @@ public class BFTestAdapterExtended2 extends BFTestAdapterExtended1 {
      * ****** Initialisierung der Mystery Objekte ********
      * *************************************************** */
 
+    /**
+     * Gebe die Anzahl an Mystery Objekten zurück, die auf dem Feld sind.
+     *
+     * @return Anzahl der Mytsery objekten
+     */
     public int getNumberOfMysteryObjects() {
         return GameLogic.numOfMysteryFields;
     }
 
-    public void skipTurn(int playerID) {
+    /**
+     * Spinge zum nächsten Spieler.
+     */
+    public void skipTurn() {
         GameLogic.nextPlayer();
     }
 
+    /**
+     * Erzwinge das Erscheinen eines Mystery Objektes.
+     *
+     * @param index An welchem Feld Index das Objekt erscheinen soll.
+     */
     public void spawnMystery(int index) {
         GameLogic.spawnMystery(index);
     }
 
-    public void moveTo(int playerID, int FieldID, int index) {
-        global.players[playerID].figures.get(FieldID).moveTo(global.BOARD.getGameField(index), false);
+    /**
+     * Bewege eine Figure zu einer gewissen Position.
+     *
+     * @param playerID ID des Spielers
+     * @param from     ID des Feldes von welchem getauscht wird
+     * @param to       ID des Feldes zu welchem getauscht wird
+     */
+    public void moveTo(int playerID, int from, int to) {
+        global.players[playerID].figures.get(from).moveTo(global.BOARD.getGameField(to), false);
     }
 
-    public void forceSimpleMysteryActivate(String type, int playerID, int figureID) {
+
+    /* ***************************************************
+     * *********** Test der simplen Specials *************
+     * *************************************************** */
+
+    /**
+     * Erzwinge die Acivierung eines simplen Special Objektes.
+     *
+     * @param type     Typ des Specials
+     * @param playerID ID des Spielers
+     * @param figureID ID der Figur
+     */
+    public void forceSimpleSpecialActivation(String type, int playerID, int figureID) {
         switch (type) {
             case "dead" -> {
                 //TODO
@@ -45,8 +70,6 @@ public class BFTestAdapterExtended2 extends BFTestAdapterExtended1 {
             case "growing" -> {
                 //TODO
                 GameLogic.executeInitSpecialsPhase(3, global.players[playerID].figures.get(figureID));
-            }
-            default -> {
             }
         }
     }

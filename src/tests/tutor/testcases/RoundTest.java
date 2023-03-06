@@ -70,8 +70,10 @@ public class RoundTest {
             adapter.resetFigures(i);
             adapter.resetTurn();
             for (int j = 0; j < 4; j++) {
+                adapter.setActivePlayer(i);
                 adapter.move(i, j, 6);
                 adapter.move(i, j, 39);
+                adapter.setActivePlayer(i);
                 adapter.move(i, j, 4 - j);
             }
             assertTrue(adapter.hasWon(i));
