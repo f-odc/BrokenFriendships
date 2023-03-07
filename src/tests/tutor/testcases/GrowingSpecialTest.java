@@ -8,8 +8,6 @@ import tests.adapter.BFTestAdapterExtended2;
 import static org.junit.Assert.*;
 
 public class GrowingSpecialTest {
-
-
     BFTestAdapterExtended2 adapter;
 
     @Before
@@ -40,7 +38,9 @@ public class GrowingSpecialTest {
                 adapter.move((i + 1) % 4, j, 6);
                 adapter.move((i + 1) % 4, j, 29);
                 adapter.forceSimpleSpecialActivation("growing", i, (j + 1) % 4);
+                //other color`s figure beaten
                 assertTrue(adapter.occupiesHomeField((i + 1) % 4, j));
+                //own figure beaten
                 assertTrue(adapter.occupiesHomeField(i, j));
 
                 adapter.resetTurn();
@@ -57,7 +57,9 @@ public class GrowingSpecialTest {
                 adapter.move((i + 1) % 4, (j + 1) % 4, 6);
                 adapter.move((i + 1) % 4, (j + 1) % 4, 30);
                 adapter.forceSimpleSpecialActivation("growing", (i + 1) % 4, j);
+                //own figure in base not beaten
                 assertFalse(adapter.occupiesHomeField(i, j));
+                //other color`s figure beaten
                 assertTrue(adapter.occupiesHomeField((i + 1) % 4, (j + 1) % 4));
             }
         }

@@ -8,8 +8,6 @@ import tests.adapter.BFTestAdapterExtended2;
 import static org.junit.Assert.*;
 
 public class DeadSpecialTest {
-
-
     BFTestAdapterExtended2 adapter;
 
     @Before
@@ -37,9 +35,20 @@ public class DeadSpecialTest {
                 adapter.setActivePlayer(i);
                 adapter.move(i, j, 6);
                 adapter.forceSimpleSpecialActivation("dead", i, j);
-                int currentPlayer = adapter.getActivePlayer();
+                //figure moved back into home
                 assertTrue(adapter.occupiesHomeField(i, j));
-                assertEquals(currentPlayer, adapter.getActivePlayer());
+                //current player stays same after 6
+                assertEquals(i, adapter.getActivePlayer());
+
+                adapter.resetTurn();
+                adapter.setActivePlayer(i);
+                adapter.move(i, j, 6);
+                adapter.move(i, j, 3);
+                adapter.forceSimpleSpecialActivation("dead", i, j);
+                //figure moved back into home
+                assertTrue(adapter.occupiesHomeField(i, j));
+                //current player changes
+                assertNotEquals(i, adapter.getActivePlayer());
             }
         }
     }

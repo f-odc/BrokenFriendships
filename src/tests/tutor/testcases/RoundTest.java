@@ -9,8 +9,6 @@ import tests.adapter.BFTestAdapterMinimal;
 import static org.junit.Assert.*;
 
 public class RoundTest {
-
-
     BFTestAdapterMinimal adapter;
 
     @Before
@@ -24,11 +22,6 @@ public class RoundTest {
         adapter.stopGame();
     }
 
-    //keine möglichkeit sich zu bewegen -> nächster Spieler
-    //6 gewürfelt, nochmal gleicher spieler
-    //has won
-    //nächster Spieler dran nach Zug & pos des Würfels
-
     @Test
     public void testNextPlayerAfterNoMovement() {
         for (int i = 0; i < 4; i++) {
@@ -39,7 +32,10 @@ public class RoundTest {
                 adapter.move(i, j, 3);
                 adapter.move(i, j, 3);
                 adapter.move(i, j, 3);
+                //player changes
                 assertNotEquals(i, adapter.getActivePlayer());
+                //next player after 3 get out of base tries
+                assertEquals((i + 1) % 4, adapter.getActivePlayer());
 
                 adapter.resetTurn();
                 adapter.setActivePlayer(i);
@@ -48,17 +44,24 @@ public class RoundTest {
                 adapter.move(i, j, 3);
                 adapter.setActivePlayer(i);
                 adapter.move(i, j, 4);
+                //player changes
                 assertNotEquals(i, adapter.getActivePlayer());
+                //next player after standard move
+                assertEquals((i + 1) % 4, adapter.getActivePlayer());
 
                 adapter.resetTurn();
                 adapter.setActivePlayer(i);
                 adapter.resetFigures(i);
                 adapter.move(i, j, 6);
                 adapter.move(i, j, 39);
+                adapter.setActivePlayer(i);
                 adapter.move(i, j, 3);
                 adapter.setActivePlayer(i);
                 adapter.move(i, j, 3);
+                //player changes
                 assertNotEquals(i, adapter.getActivePlayer());
+                //next player after
+                assertEquals((i + 1) % 4, adapter.getActivePlayer());
             }
         }
     }
@@ -76,6 +79,7 @@ public class RoundTest {
                 adapter.setActivePlayer(i);
                 adapter.move(i, j, 4 - j);
             }
+            //player has all figures in base
             assertTrue(adapter.hasWon(i));
             adapter.resetFigures(i);
         }
@@ -88,8 +92,13 @@ public class RoundTest {
             adapter.setActivePlayer(i);
             adapter.resetFigures(i);
             adapter.move(i, 0, 6);
+            //same player after a 6
+            assertEquals(i, adapter.getActivePlayer());
             adapter.move(i, 0, 3);
+            //player changes
             assertNotEquals(i, adapter.getActivePlayer());
+            //next player after not getting a 6
+            assertEquals((i + 1) % 4, adapter.getActivePlayer());
         }
     }
 
@@ -99,9 +108,12 @@ public class RoundTest {
             adapter.resetTurn();
             adapter.setActivePlayer(i);
             adapter.resetFigures(i);
+            //dice has the correct position
+            assertEquals(adapter.getDicePosition(i), adapter.getActiveDicePosition());
             Vector2f before = adapter.getActiveDicePosition();
             adapter.move(i, 0, 6);
             adapter.move(i, 0, 1);
+            //dice has moved
             assertNotEquals(before, adapter.getActiveDicePosition());
         }
     }

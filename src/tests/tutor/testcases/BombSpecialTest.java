@@ -4,10 +4,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import tests.adapter.BFTestAdapterExtended3;
+
 import static org.junit.Assert.*;
 
 public class BombSpecialTest {
-
     BFTestAdapterExtended3 adapter;
 
     @Before

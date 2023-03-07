@@ -11,8 +11,6 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class FigureTest {
-
-
     BFTestAdapterMinimal adapter;
 
     @Before
@@ -47,18 +45,18 @@ public class FigureTest {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 String homeColor = adapter.getColorOfHome(i, j);
-                assertEquals(adapter.getFigureColor(i, j), homeColor);
+                assertEquals(homeColor, adapter.getFigureColor(i, j));
             }
         }
     }
 
     @Test
-    public void testFigureColor() {
+    public void testUniqueFigureColor() {
         for (int i = 0; i < 4; i++) {
             String color = adapter.getFigureColor(i, 0);
             List<String> comparison = new ArrayList<>();
             for (int j = 0; j < 4; j++) {
-                assertEquals(adapter.getFigureColor(i, j), color);
+                assertEquals(color, adapter.getFigureColor(i, j));
                 assertFalse(comparison.contains(adapter.getFigureColor(j, 0)));
                 comparison.add(adapter.getFigureColor(j, 0));
             }

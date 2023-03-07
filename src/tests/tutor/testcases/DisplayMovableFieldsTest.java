@@ -10,8 +10,6 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class DisplayMovableFieldsTest {
-
-
     BFTestAdapterExtended1 adapter;
 
     @Before
@@ -24,11 +22,6 @@ public class DisplayMovableFieldsTest {
     public void finish() {
         adapter.stopGame();
     }
-
-    //alle sachen wie bei MoveTest -
-    //zurück zum figuren auswählen, wenn kein Movement möglich
-    //zurück zum figuren auswählen, wenn figur abgewählt
-    //nächster Spieler, wenn sich keine Figur bewegen kann
 
     @Test
     public void testMovementDisplay() {
@@ -76,31 +69,35 @@ public class DisplayMovableFieldsTest {
             adapter.setActivePlayer(i);
             adapter.resetFigures(i);
             List<Integer> indices = adapter.displayField(i, 0, 6);
-            //move out of home
             adapter.move(i, 0, 6);
+            //only one field gets displayed
             assertEquals(1, adapter.displayField(i, 0, 3).size());
+            //displayed fields vary when changing position
             assertNotEquals(indices.get(0), adapter.displayField(i, 0, 3).get(0));
+            //figure actually got moved
             assertFalse(adapter.occupiesHomeField(i, 0));
 
             adapter.resetTurn();
             adapter.resetFigures(i);
             adapter.setActivePlayer(i);
             adapter.move(i, 0, 6);
-            //same field is recognized to be the same
             indices = adapter.displayField(i, 0, 6);
             adapter.move(i, 0, 3);
+            //only one field is displayed
             assertEquals(1, adapter.displayField(i, 0, 3).size());
             indices.add(adapter.displayField(i, 0, 3).get(0));
+            //same field is recognized to be the same
             assertEquals(indices.get(0), indices.get(1));
 
             adapter.resetTurn();
             adapter.resetFigures(i);
             adapter.setActivePlayer(i);
-            //move into base
             adapter.move(i, 0, 6);
             adapter.move(i, 0, 39);
             indices = adapter.displayField(i, 0, 4);
+            //two options are displayed
             assertEquals(2, indices.size());
+            //not twice the same option
             assertNotEquals(indices.get(0), indices.get(1));
         }
     }
@@ -115,13 +112,14 @@ public class DisplayMovableFieldsTest {
                 adapter.move(i, j, 6);
                 //select other figure after move out of home
                 assertEquals(0, adapter.displayField(i, (j + 1) % 4, 3).size());
+                //select correct figure after move out of home
                 assertEquals(1, adapter.displayField(i, j, 3).size());
             }
 
             adapter.resetTurn();
             adapter.setActivePlayer(i);
             adapter.resetFigures(i);
-            //three in base and 1 in home, try to move without 6
+            //three in base and 1 in home
             for (int z = 0; z < 3; z++) {
                 adapter.setActivePlayer(i);
                 adapter.move(i, z, 6);
@@ -129,6 +127,7 @@ public class DisplayMovableFieldsTest {
                 adapter.setActivePlayer(i);
                 adapter.move(i, z, 4 - z);
             }
+            //try to move any figure
             assertEquals(0, adapter.displayField(i, 0, 3).size());
             assertEquals(0, adapter.displayField(i, 1, 3).size());
             assertEquals(0, adapter.displayField(i, 2, 3).size());

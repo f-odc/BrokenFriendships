@@ -9,8 +9,6 @@ import static org.junit.Assert.*;
 
 
 public class SwitchSpecialTest {
-
-
     BFTestAdapterExtended3 adapter;
 
     @Before

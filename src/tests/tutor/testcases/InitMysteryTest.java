@@ -1,6 +1,5 @@
 package tests.tutor.testcases;
 
-import model.global;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,8 +8,6 @@ import tests.adapter.BFTestAdapterExtended2;
 import static org.junit.Assert.*;
 
 public class InitMysteryTest {
-
-
     BFTestAdapterExtended2 adapter;
 
     @Before
@@ -24,16 +21,13 @@ public class InitMysteryTest {
         adapter.stopGame();
     }
 
-    //mystery objekt spawned
-    //mystery objekt geht weg wenn figur drauf geht
-    //korrekte Anzahl an Mystery objekten
-
     @Test
     public void testMysterySpawn() {
         adapter.resetTurn();
         for (int i = 0; i < 4; i++) {
             adapter.skipTurn();
         }
+        //one mystery spawned after the first round
         assertEquals(1, adapter.getNumberOfMysteryObjects());
 
         adapter.resetTurn();
@@ -42,6 +36,7 @@ public class InitMysteryTest {
                 adapter.skipTurn();
             }
         }
+        //two mysteries spawned after 2 rounds
         assertEquals(2, adapter.getNumberOfMysteryObjects());
 
         adapter.resetTurn();
@@ -51,8 +46,10 @@ public class InitMysteryTest {
             }
             if (t % 2 == 0) {
                 if (t >= 22)
+                    //not more than 12 mysteries spawned
                     assertEquals(12, adapter.getNumberOfMysteryObjects());
                 else
+                    //correct number of mysteries spawned
                     assertEquals((t / 2) + 1, adapter.getNumberOfMysteryObjects());
             }
 
@@ -66,6 +63,7 @@ public class InitMysteryTest {
         adapter.setActivePlayer(0);
         adapter.resetFigures(0);
         adapter.moveTo(0, 0, 10);
+        //mystery gets deleted, when appropriate
         assertEquals(0, adapter.getNumberOfMysteryObjects());
     }
 

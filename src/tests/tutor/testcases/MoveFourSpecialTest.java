@@ -8,7 +8,6 @@ import tests.adapter.BFTestAdapterExtended3;
 import static org.junit.Assert.*;
 
 public class MoveFourSpecialTest {
-
     BFTestAdapterExtended3 adapter;
 
     @Before
