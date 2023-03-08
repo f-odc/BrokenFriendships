@@ -13,7 +13,6 @@ public class BFTestsuiteExtended3 {
         suite.addTest(new JUnit4TestAdapter(BedSpecialTest.class));
         suite.addTest(new JUnit4TestAdapter(BombSpecialTest.class));
         suite.addTest(new JUnit4TestAdapter(MoveFourSpecialTest.class));
-        suite.addTest(new JUnit4TestAdapter(MoveFourSpecialTest.class));
         suite.addTest(new JUnit4TestAdapter(SwitchSpecialTest.class));
         return suite;
     }

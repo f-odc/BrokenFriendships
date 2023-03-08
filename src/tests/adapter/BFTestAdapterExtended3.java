@@ -36,9 +36,8 @@ public class BFTestAdapterExtended3 extends BFTestAdapterExtended2 {
             case "MoveFour" -> {
                 //TODO
                 GameLogic.executeInitSpecialsPhase(4, global.players[playerID].figures.get(figureID));
-                GameLogic.executeMysterySelectionPhase(global.BOARD.getGameField(global.players[playerID].figures.get(figureID).getCurrentField().getFieldIndex()));
             }
-            case "switch" -> {
+            case "Switch" -> {
                 //TODO
                 GameLogic.executeInitSpecialsPhase(7, global.players[playerID].figures.get(figureID));
             }
@@ -69,10 +68,21 @@ public class BFTestAdapterExtended3 extends BFTestAdapterExtended2 {
     /**
      * Wähle ein Feld aus. Simuliert das auswählen eines Feldes durch den Spieler.
      *
-     * @param fieldID ID des Feldes
+     * @param fieldID1 ID des Feldes
      */
-    public void selectField(int fieldID) {
-        GameLogic.executeSelectMovementPhase(global.BOARD.getGameField(fieldID), 6);
+    public void selectField(int fieldID1) {
+        GameLogic.executeSelectMovementPhase(global.BOARD.getGameField(fieldID1), 6);
+    }
+
+    /**
+     * Wähle zwei Felder aus. Simuliert das auswählen der Felder durch den Spieler.
+     *
+     * @param fieldID1 ID des ersten Feldes.
+     * @param fieldID2 ID des zweiten Feldes.
+     */
+    public void selectTwoFields(int fieldID1, int fieldID2) {
+        GameLogic.executeMysterySelectionPhase(global.BOARD.getGameField(fieldID1));
+        GameLogic.executeSelectMovementPhase(global.BOARD.getGameField(fieldID2), 6);
     }
 
     /**
@@ -81,7 +91,8 @@ public class BFTestAdapterExtended3 extends BFTestAdapterExtended2 {
      * @param playerID ID des Spielers
      * @param fieldID  ID des Feldes
      */
-    public void selectBaseField(int playerID, int fieldID) {
+    public void selectBaseField(int playerID, int figureID, int fieldID) {
+        GameLogic.executeMysterySelectionPhase(global.players[playerID].figures.get(figureID).getCurrentField());
         GameLogic.executeSelectMovementPhase(global.BOARD.getBase(playerID).get(fieldID), 6);
     }
 }
