@@ -55,23 +55,12 @@ public class BFTestAdapterExtended3 extends BFTestAdapterExtended2 {
     }
 
     /**
-     * Gebe den Index einer Figur zurück.
-     *
-     * @param playerID ID des Spielers
-     * @param figureID ID der Figur
-     * @return Index der Figur
-     */
-    public int getFigureIndex(int playerID, int figureID) {
-        return global.players[playerID].figures.get(figureID).getCurrentField().getFieldIndex();
-    }
-
-    /**
      * Wähle ein Feld aus. Simuliert das auswählen eines Feldes durch den Spieler.
      *
-     * @param fieldID1 ID des Feldes
+     * @param fieldID ID des Feldes
      */
-    public void selectField(int fieldID1) {
-        GameLogic.executeSelectMovementPhase(global.BOARD.getGameField(fieldID1), 6);
+    public void selectField(int fieldID) {
+        GameLogic.executeSelectMovementPhase(global.BOARD.getGameField(fieldID), 6);
     }
 
     /**
@@ -92,7 +81,8 @@ public class BFTestAdapterExtended3 extends BFTestAdapterExtended2 {
      * @param fieldID  ID des Feldes
      */
     public void selectBaseField(int playerID, int figureID, int fieldID) {
-        GameLogic.executeMysterySelectionPhase(global.players[playerID].figures.get(figureID).getCurrentField());
+        if (GameLogic.activeSpecial instanceof MoveFourSpecial || GameLogic.activeSpecial instanceof SwitchSpecial)
+            GameLogic.executeMysterySelectionPhase(global.players[playerID].figures.get(figureID).getCurrentField());
         GameLogic.executeSelectMovementPhase(global.BOARD.getBase(playerID).get(fieldID), 6);
     }
 }

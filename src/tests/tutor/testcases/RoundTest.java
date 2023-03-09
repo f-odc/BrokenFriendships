@@ -69,19 +69,34 @@ public class RoundTest {
     @Test
     public void testWinCondition() {
         for (int i = 0; i < 4; i++) {
+            adapter.resetTurn();
             adapter.setActivePlayer(i);
             adapter.resetFigures(i);
-            adapter.resetTurn();
             for (int j = 0; j < 4; j++) {
                 adapter.setActivePlayer(i);
                 adapter.move(i, j, 6);
-                adapter.move(i, j, 39);
-                adapter.setActivePlayer(i);
-                adapter.move(i, j, 4 - j);
+                adapter.move(i, j, 39 - j);
             }
-            //player has all figures in base
+            adapter.setActivePlayer(i);
+            adapter.move(i, 0, 4);
+            assertTrue(adapter.occupiesBaseField(i, 0));
+            //player has not won with only one figure in base
+            assertFalse(adapter.hasWon(i));
+            adapter.setActivePlayer(i);
+            adapter.move(i, 1, 4);
+            assertTrue(adapter.occupiesBaseField(i, 1));
+            //player has not won with only two figures in base
+            assertFalse(adapter.hasWon(i));
+            adapter.setActivePlayer(i);
+            adapter.move(i, 2, 4);
+            assertTrue(adapter.occupiesBaseField(i, 2));
+            //player has not won with only three figures in base
+            assertFalse(adapter.hasWon(i));
+            adapter.setActivePlayer(i);
+            adapter.move(i, 3, 4);
+            assertTrue(adapter.occupiesBaseField(i, 3));
+            //player has won with four figures in base
             assertTrue(adapter.hasWon(i));
-            adapter.resetFigures(i);
         }
     }
 
@@ -115,6 +130,14 @@ public class RoundTest {
             adapter.move(i, 0, 1);
             //dice has moved
             assertNotEquals(before, adapter.getActiveDicePosition());
+            adapter.move((i + 1) % 4, 0, 6);
+            adapter.move((i + 1) % 4, 0, 2);
+            adapter.move((i + 2) % 4, 0, 6);
+            adapter.move((i + 2) % 4, 0, 2);
+            adapter.move((i + 3) % 4, 0, 6);
+            adapter.move((i + 3) % 4, 0, 2);
+            //dice is back to the start position
+            assertEquals(before, adapter.getActiveDicePosition());
         }
     }
 }

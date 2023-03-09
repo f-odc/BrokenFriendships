@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import tests.adapter.BFTestAdapterExtended1;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -27,6 +28,7 @@ public class DisplayMovableFieldsTest {
     public void testMovementDisplay() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
+                List<Integer> displayedFields = new ArrayList<>();
                 adapter.resetTurn();
                 adapter.setActivePlayer(i);
                 adapter.resetFigures(i);
@@ -35,16 +37,32 @@ public class DisplayMovableFieldsTest {
 
                 adapter.resetTurn();
                 //move out of home with 6
-                assertEquals(1, adapter.displayField(i, j, 6).size());
+                displayedFields = adapter.displayField(i, j, 6);
+                assertEquals(1, displayedFields.size());
+                adapter.setActivePlayer(i);
+                adapter.move(i, j, 6);
+                //displayed field is the correct start field
+                assertEquals((int) displayedFields.get(0), adapter.getFigureIndex(i, j));
 
                 adapter.resetTurn();
                 adapter.resetFigures(i);
                 adapter.setActivePlayer(i);
                 adapter.move(i, j, 6);
                 adapter.move(i, j, 39);
+                displayedFields = adapter.displayField(i, j, 2);
                 //move into or past base
-                assertEquals(2, adapter.displayField(i, j, 2).size());
-
+                assertEquals(2, displayedFields.size());
+                adapter.setActivePlayer(i);
+                adapter.move(i, (j + 1) % 4, 6);
+                adapter.move(i, (j + 1) % 4, 1);
+                int indexPastBase = adapter.getFigureIndex(i, (j + 1) % 4);
+                adapter.setActivePlayer(i);
+                adapter.move(i, j, 2);
+                int indexInBase = adapter.getFigureIndex(i, j);
+                //one of the displayed fields is the correct index going past the base
+                assertTrue(displayedFields.contains(indexPastBase));
+                //one of the displayed fields is the correct index going into the base
+                assertTrue(displayedFields.contains(indexInBase));
 
                 adapter.resetTurn();
                 adapter.resetFigures(i);
@@ -57,7 +75,13 @@ public class DisplayMovableFieldsTest {
                 adapter.setActivePlayer(i);
                 adapter.move(i, (j + 1) % 4, 6);
                 adapter.move(i, (j + 1) % 4, 39);
-                assertEquals(1, adapter.displayField(i, (j + 1) % 4, 3).size());
+                displayedFields = adapter.displayField(i, (j + 1) % 4, 3);
+                assertEquals(1, displayedFields.size());
+                adapter.setActivePlayer(i);
+                adapter.move(i, (j + 2) % 4, 6);
+                adapter.move(i, (j + 2) % 4, 2);
+                //the displayed field is the correct index going past the base
+                assertTrue(displayedFields.contains(adapter.getFigureIndex(i, (j + 2) % 4)));
             }
         }
     }

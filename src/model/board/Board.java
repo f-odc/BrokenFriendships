@@ -248,6 +248,7 @@ public class Board {
     public ArrayList<IField> getNeighbors(IField field) {
         int fieldIndex = field.getFieldIndex();
         ArrayList<IField> neighbors = new ArrayList<>();
+        if (fieldIndex < 0) return neighbors;
         neighbors.add(gameFields[(fieldIndex + 1) % 40]);
         neighbors.add(fieldIndex == 0 ? gameFields[39] : gameFields[(fieldIndex - 1) % 40]);
         return neighbors;

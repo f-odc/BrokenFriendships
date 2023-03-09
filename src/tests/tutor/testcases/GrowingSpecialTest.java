@@ -64,4 +64,16 @@ public class GrowingSpecialTest {
             }
         }
     }
+
+    @Test
+    public void testGrowingWithoutNeighbors() {
+        for (int i = 0; i < 4; i++) {
+            adapter.resetTurn();
+            adapter.setActivePlayer(i);
+            adapter.resetFigures(i);
+            adapter.move(i, 0, 6);
+            adapter.forceSimpleSpecialActivation("growing", i, 0);
+            assertFalse(adapter.occupiesHomeField(i, 0));
+        }
+    }
 }

@@ -56,6 +56,19 @@ public class BedSpecialTest {
                 adapter.skipTurn();
                 //player gets skipped, if he is asleep
                 assertNotEquals(i, adapter.getActivePlayer());
+
+                adapter.resetTurn();
+                adapter.setActivePlayer(i);
+                adapter.resetFigures(i);
+                adapter.move(i, j, 6);
+                adapter.forceComplicatedSpecialSpawn("bed", (i + 1) % 4, j);
+                adapter.selectField(adapter.getFigureIndex(i, j) + 1);
+                adapter.move(i, j, 1);
+                adapter.skipTurn();
+                adapter.skipTurn();
+                adapter.skipTurn();
+                //bed placed by player 2 affects player 1
+                assertNotEquals(i, adapter.getActivePlayer());
             }
         }
     }

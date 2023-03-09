@@ -34,6 +34,24 @@ public class BombSpecialTest {
                 adapter.move(i, j, 1);
                 //bomb gets activated, when figure moves on its field
                 assertTrue(adapter.occupiesHomeField(i, j));
+                adapter.setActivePlayer(i);
+                adapter.move(i, j, 6);
+                adapter.move(i, j, 1);
+                //bomb gets removed and does not work twice or more times
+                assertFalse(adapter.occupiesHomeField(i, j));
+
+                adapter.resetTurn();
+                adapter.setActivePlayer(i);
+                adapter.resetFigures(i);
+                adapter.move(i, j, 6);
+                adapter.forceComplicatedSpecialSpawn("bomb", i, j);
+                adapter.selectField(adapter.getFigureIndex(i, j) + 11);
+                adapter.setActivePlayer((i + 1) % 4);
+                adapter.resetFigures((i + 1) % 4);
+                adapter.move((i + 1) % 4, j, 6);
+                adapter.move((i + 1) % 4, j, 1);
+                //bomb from player1 gets activated from any other player
+                assertTrue(adapter.occupiesHomeField((i + 1) % 4, j));
             }
         }
     }

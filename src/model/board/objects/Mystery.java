@@ -75,7 +75,7 @@ public class Mystery implements IGameObject {
             public void run() {
                 // animation is finished
                 // execute special execution phase
-                GameLogic.executeInitSpecialsPhase(mysteryNr, sourceGameObject);
+                if (!BrokenFriendships.debug) GameLogic.executeInitSpecialsPhase(mysteryNr, sourceGameObject);
             }
         };
         timer.schedule(startNewPhaseAfterAnimation, animationDuration);
@@ -114,7 +114,7 @@ public class Mystery implements IGameObject {
         // remove entity from entity manager
         global.entityManager.removeEntity(global.GAMEPLAY_STATE, entity);
         // reset the current field
-        currentField.resetCurrentObject();
+        if (currentField != null) currentField.resetCurrentObject();
         entity = null;
         currentField = null;
     }

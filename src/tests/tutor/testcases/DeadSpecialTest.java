@@ -28,11 +28,12 @@ public class DeadSpecialTest {
     }
 
     @Test
-    public void testDeadMysteryFunctionality() {
+    public void testDeadFunctionality() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 adapter.resetTurn();
                 adapter.setActivePlayer(i);
+                adapter.resetFigures(i);
                 adapter.move(i, j, 6);
                 adapter.forceSimpleSpecialActivation("dead", i, j);
                 //figure moved back into home
@@ -42,6 +43,7 @@ public class DeadSpecialTest {
 
                 adapter.resetTurn();
                 adapter.setActivePlayer(i);
+                adapter.resetFigures(i);
                 adapter.move(i, j, 6);
                 adapter.move(i, j, 3);
                 adapter.forceSimpleSpecialActivation("dead", i, j);

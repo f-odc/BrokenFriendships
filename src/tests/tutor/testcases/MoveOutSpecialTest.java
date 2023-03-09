@@ -47,4 +47,22 @@ public class MoveOutSpecialTest {
             }
         }
     }
+
+    @Test
+    public void testNoFigureInBase() {
+        for (int i = 0; i < 4; i++) {
+            adapter.resetTurn();
+            adapter.setActivePlayer(i);
+            adapter.resetFigures(i);
+            for (int j = 0; j < 4; j++) {
+                adapter.setActivePlayer(i);
+                adapter.move(i, j, 6);
+                adapter.move(i, j, 5 - j);
+            }
+            assertFalse(adapter.allHomeFieldsOccupied(i));
+            adapter.setActivePlayer(i);
+            adapter.forceSimpleSpecialActivation("moveOut", i, 0);
+            assertNotEquals(i, adapter.getActivePlayer());
+        }
+    }
 }

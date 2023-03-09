@@ -108,10 +108,32 @@ public class MoveFourSpecialTest {
                 adapter.setActivePlayer(i);
                 adapter.resetFigures(i);
                 adapter.move(i, j, 6);
+                adapter.move(i, j, 39);
+                adapter.setActivePlayer(i);
+                adapter.forceComplicatedSpecialSpawn("MoveFour", i, j);
+                fieldID = adapter.getFigureIndex(i, j);
+                adapter.selectTwoFields(fieldID, (fieldID + 4) % 40);
+                //forward movement past base
+                assertEquals((fieldID + 4) % 40, adapter.getFigureIndex(i, j));
+
+                adapter.resetTurn();
+                adapter.setActivePlayer(i);
+                adapter.resetFigures(i);
+                adapter.move(i, j, 6);
                 adapter.forceComplicatedSpecialSpawn("MoveFour", i, j);
                 adapter.selectBaseField(i, j, 2);
                 //movement when correct base and index selected
                 assertTrue(adapter.occupiesBaseField(i, j));
+
+                adapter.resetTurn();
+                adapter.setActivePlayer(i);
+                adapter.resetFigures(i);
+                adapter.move(i, j, 6);
+                adapter.forceComplicatedSpecialSpawn("MoveFour", i, j);
+                fieldID = adapter.getFigureIndex(i, j);
+                adapter.selectTwoFields(fieldID, (fieldID - 4) < 0 ? 40 + (fieldID - 4) : fieldID - 4);
+                //backward movement past the base
+                assertEquals((fieldID - 4) < 0 ? 40 + (fieldID - 4) : fieldID - 4, adapter.getFigureIndex(i, j));
             }
         }
     }

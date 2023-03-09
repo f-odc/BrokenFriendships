@@ -122,4 +122,19 @@ public class PlusToThreeSpecialTest {
             }
         }
     }
+
+    @Test
+    public void testIntoBase() {
+        for (int i = 0; i < 4; i++) {
+            adapter.resetTurn();
+            adapter.setActivePlayer(i);
+            adapter.resetFigures(i);
+            adapter.move(i, 0, 6);
+            adapter.move(i, 0, 39);
+            adapter.forceComplicatedSpecialSpawn("PlusToThree", i, 0);
+            adapter.selectBaseField(i, 0, 2);
+            //can enter base with PlusToThree
+            assertTrue(adapter.occupiesBaseField(i, 0));
+        }
+    }
 }

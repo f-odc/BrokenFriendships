@@ -52,17 +52,31 @@ public class InitMysteryTest {
                     //correct number of mysteries spawned
                     assertEquals((t / 2) + 1, adapter.getNumberOfMysteryObjects());
             }
+        }
 
+        for (int i = 0; i < 4; i++) {
+            adapter.resetTurn();
+            adapter.setActivePlayer(i);
+            adapter.resetFigures(i);
+            for (int z = 0; z < 15; z++) {
+                adapter.spawnMystery(z);
+            }
+            assertEquals(12, adapter.getNumberOfMysteryObjects());
+            adapter.moveTo(i, 0, 1);
+            assertEquals(11, adapter.getNumberOfMysteryObjects());
+            adapter.spawnMystery(1);
+            assertEquals(11, adapter.getNumberOfMysteryObjects());
         }
     }
 
     @Test
     public void testMysteryDisappearing() {
         adapter.resetTurn();
-        adapter.spawnMystery(10);
+        adapter.spawnMystery(11);
+        assertEquals(1, adapter.getNumberOfMysteryObjects());
         adapter.setActivePlayer(0);
         adapter.resetFigures(0);
-        adapter.moveTo(0, 0, 10);
+        adapter.moveTo(0, 0, 11);
         //mystery gets deleted, when appropriate
         assertEquals(0, adapter.getNumberOfMysteryObjects());
     }

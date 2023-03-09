@@ -31,7 +31,8 @@ public class BFTestAdapterExtended2 extends BFTestAdapterExtended1 {
      * @param index An welchem Feld Index das Objekt erscheinen soll.
      */
     public void spawnMystery(int index) {
-        GameLogic.spawnMystery(index);
+        if (!global.BOARD.getGameField(index).isOccupied())
+            GameLogic.spawnMystery(index);
     }
 
     /**
