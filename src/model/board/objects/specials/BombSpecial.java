@@ -51,7 +51,6 @@ public class BombSpecial implements IGameObject {
     public void activate(IGameObject sourceGameObject) {
         // reset figure
         sourceGameObject.reset();
-        // TODO: test removement
         global.entityManager.removeEntity(global.GAMEPLAY_STATE, entity);
         reset();
     }

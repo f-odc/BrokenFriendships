@@ -16,12 +16,6 @@ public class PlusToThreeSpecial implements IGameObject {
 
     @Override
     public void activate(IGameObject sourceGameObject) {
-        // TODO: change
-        /*IField movableField = MoveLogic.getMovableField(sourceGameObject.getCurrentField(), 2);
-        if (movableField != null){
-            sourceGameObject.moveTo(movableField);
-        }
-         */
     }
 
     @Override

@@ -14,7 +14,6 @@ public class MoveFourSpecial implements IGameObject {
 
     @Override
     public void activate(IGameObject sourceGameObject) {
-        System.out.println("Activate Move Four");
     }
 
     @Override
