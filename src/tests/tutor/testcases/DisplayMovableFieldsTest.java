@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import tests.adapter.BFTestAdapterExtended1;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -25,15 +24,17 @@ public class DisplayMovableFieldsTest {
     }
 
     @Test
-    public void testMovementDisplay() {
+    public void testHomeMovementDisplay() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                List<Integer> displayedFields = new ArrayList<>();
+                List<Integer> displayedFields;
+
                 adapter.resetTurn();
                 adapter.setActivePlayer(i);
                 adapter.resetFigures(i);
+                displayedFields = adapter.displayField(i, j, 1);
                 //move out of home with 1
-                assertEquals(0, adapter.displayField(i, j, 1).size());
+                assertEquals(0, displayedFields.size());
 
                 adapter.resetTurn();
                 //move out of home with 6
@@ -43,6 +44,15 @@ public class DisplayMovableFieldsTest {
                 adapter.move(i, j, 6);
                 //displayed field is the correct start field
                 assertEquals((int) displayedFields.get(0), adapter.getFigureIndex(i, j));
+            }
+        }
+    }
+
+    @Test
+    public void testBaseMovementDisplay(){
+        for (int i = 0; i < 4;i++){
+            for (int j = 0; j < 4; j++){
+                List<Integer> displayedFields;
 
                 adapter.resetTurn();
                 adapter.resetFigures(i);
