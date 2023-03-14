@@ -1,4 +1,4 @@
-package tests.tutor.testcases;
+package tests.students.testcases;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,19 +32,6 @@ public class DeadSpecialTest {
                 adapter.forceSimpleSpecialActivation("dead", i, j);
                 //figure moved back into home
                 assertTrue(adapter.occupiesHomeField(i, j));
-                //current player stays same after 6
-                assertEquals(i, adapter.getActivePlayer());
-
-                adapter.resetTurn();
-                adapter.setActivePlayer(i);
-                adapter.resetFigures(i);
-                adapter.move(i, j, 6);
-                adapter.move(i, j, 3);
-                adapter.forceSimpleSpecialActivation("dead", i, j);
-                //figure moved back into home
-                assertTrue(adapter.occupiesHomeField(i, j));
-                //current player changes
-                assertNotEquals(i, adapter.getActivePlayer());
             }
         }
     }

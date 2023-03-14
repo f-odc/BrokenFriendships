@@ -1,11 +1,11 @@
-package tests.tutor.testcases;
+package tests.students.testcases;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import tests.adapter.BFTestAdapterExtended2;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class InitMysteryTest {
     BFTestAdapterExtended2 adapter;
@@ -52,6 +52,20 @@ public class InitMysteryTest {
                     //correct number of mysteries spawned
                     assertEquals((t / 2) + 1, adapter.getNumberOfMysteryObjects());
             }
+        }
+
+        for (int i = 0; i < 4; i++) {
+            adapter.resetTurn();
+            adapter.setActivePlayer(i);
+            adapter.resetFigures(i);
+            for (int z = 0; z < 15; z++) {
+                adapter.spawnMystery(z);
+            }
+            assertEquals(12, adapter.getNumberOfMysteryObjects());
+            adapter.moveTo(i, 0, 1);
+            assertEquals(11, adapter.getNumberOfMysteryObjects());
+            adapter.spawnMystery(1);
+            assertEquals(11, adapter.getNumberOfMysteryObjects());
         }
     }
 

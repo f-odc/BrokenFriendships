@@ -24,15 +24,4 @@ public class BFTestAdapterExtended1 extends BFTestAdapterMinimal {
         //TODO
         return MoveLogic.getMovableField(global.players[playerID].figures.get(figureID).getCurrentField(), diceThrow).stream().map(IField::getFieldIndex).collect(Collectors.toList());
     }
-
-    /**
-     * Gebe den Index einer Figur zurück.
-     *
-     * @param playerID ID des Spielers
-     * @param figureID ID der Figur
-     * @return Index der Figur
-     */
-    public int getFigureIndex(int playerID, int figureID) {
-        return global.players[playerID].figures.get(figureID).getCurrentField().getFieldIndex();
-    }
 }

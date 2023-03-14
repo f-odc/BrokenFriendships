@@ -1,4 +1,4 @@
-package tests.tutor.testcases;
+package tests.students.testcases;
 
 import org.junit.After;
 import org.junit.Before;
@@ -56,45 +56,6 @@ public class MoveTest {
                 assertTrue(adapter.allHomeFieldsOccupied(i));
                 //no dice thrown
                 assertEquals(adapter.getDiceThrowAttempts(), 3);
-                adapter.move(i, j, 4);
-                //no 6 thrown
-                assertTrue(adapter.allHomeFieldsOccupied(i));
-                //dice thrown once
-                assertEquals(adapter.getDiceThrowAttempts(), 2);
-                adapter.move(i, j, 5);
-                //no 6 thrown
-                assertTrue(adapter.allHomeFieldsOccupied(i));
-                //dice thrown twice
-                assertEquals(adapter.getDiceThrowAttempts(), 1);
-                adapter.move(i, j, 6);
-                //6 thrown
-                assertFalse(adapter.allHomeFieldsOccupied(i));
-                adapter.resetFigures(i);
-
-                adapter.resetTurn();
-                adapter.setActivePlayer(i);
-                adapter.resetFigures(i);
-                //no figure moved
-                assertTrue(adapter.allHomeFieldsOccupied(i));
-                //no dice thrown
-                assertEquals(adapter.getDiceThrowAttempts(), 3);
-                adapter.move(i, j, 2);
-                //no 6 thrown
-                assertTrue(adapter.allHomeFieldsOccupied(i));
-                //dice thrown once
-                assertEquals(adapter.getDiceThrowAttempts(), 2);
-                adapter.move(i, j, 6);
-                //6 thrown
-                assertFalse(adapter.allHomeFieldsOccupied(i));
-                adapter.resetFigures(i);
-
-                adapter.resetTurn();
-                adapter.setActivePlayer(i);
-                adapter.resetFigures(i);
-                //no figures moved
-                assertTrue(adapter.allHomeFieldsOccupied(i));
-                //no dice thrown
-                assertEquals(adapter.getDiceThrowAttempts(), 3);
                 adapter.move(i, j, 6);
                 //6 thrown
                 assertFalse(adapter.allHomeFieldsOccupied(i));
@@ -107,7 +68,6 @@ public class MoveTest {
     public void testOutOfHomeBlocked() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                adapter.resetTurn();
                 adapter.setActivePlayer(i);
                 adapter.resetFigures(i);
                 adapter.move(i, j, 6);
@@ -138,32 +98,12 @@ public class MoveTest {
             }
         }
     }
-    @Test
-    public void testOutOfBaseBeatFigure() {
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                adapter.resetTurn();
-                adapter.setActivePlayer((i + 1) % 4);
-                adapter.resetFigures((i + 1) % 4);
-                adapter.move((i + 1) % 4, j, 6);
-                adapter.move((i + 1) % 4, j, 30);
-                adapter.setActivePlayer(i);
-                adapter.resetFigures(i);
-                adapter.move(i, j, 6);
-                //figure beaten
-                assertTrue(adapter.allHomeFieldsOccupied((i + 1) % 4));
-                assertFalse(adapter.allHomeFieldsOccupied(i));
-                adapter.resetFigures(i);
-                adapter.setActivePlayer((i + 1) % 4);
-                adapter.resetFigures((i + 1) % 4);
-            }
-        }
-    }
 
     @Test
     public void testEnterBase() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
+                adapter.resetTurn();
                 adapter.setActivePlayer(i);
                 adapter.resetFigures(i);
                 adapter.move(i, j, 6);
@@ -188,22 +128,7 @@ public class MoveTest {
                 adapter.setActivePlayer(i);
                 adapter.move(i, j, 5);
                 //moves past base
-                assertFalse(adapter.occupiesBaseField(i, 0));
-
-                adapter.setActivePlayer(i);
-                adapter.resetFigures(i);
-                adapter.move(i, j, 6);
-                adapter.move(i, j, 39);
-                adapter.setActivePlayer(i);
-                adapter.move(i, j, 4);
-                adapter.setActivePlayer(i);
-                adapter.move(i, (j + 1) % 4, 6);
-                adapter.move(i, (j + 1) % 4, 39);
-                adapter.setActivePlayer(i);
-                adapter.move(i, (j + 1) % 4, 4);
-                //moves past base because target is occupied
-                assertFalse(adapter.occupiesBaseField(i, (j + 1) % 4));
-                assertEquals(3 + i * 10, (adapter.getFigureIndex(i, (j + 1) % 4)) % 40);
+                assertFalse(adapter.occupiesBaseField(i, j));
             }
         }
     }

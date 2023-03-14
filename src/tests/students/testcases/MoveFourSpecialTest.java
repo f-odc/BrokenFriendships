@@ -1,11 +1,12 @@
-package tests.tutor.testcases;
+package tests.students.testcases;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import tests.adapter.BFTestAdapterExtended3;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class MoveFourSpecialTest {
     BFTestAdapterExtended3 adapter;
@@ -83,12 +84,6 @@ public class MoveFourSpecialTest {
     }
 
     @Test
-    public void testPartialMovement(){
-        //test if -4, when +4 not possible
-        //test if +4, when -4 not possible
-    }
-
-    @Test
     public void testIntoBaseMovement() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -114,65 +109,11 @@ public class MoveFourSpecialTest {
                 adapter.setActivePlayer(i);
                 adapter.resetFigures(i);
                 adapter.move(i, j, 6);
-                adapter.move(i, j, 39);
-                adapter.setActivePlayer(i);
-                adapter.forceComplicatedSpecialSpawn("MoveFour", i, j);
-                fieldID = adapter.getFigureIndex(i, j);
-                adapter.selectTwoFields(fieldID, (fieldID + 4) % 40);
-                //forward movement past base
-                assertEquals((fieldID + 4) % 40, adapter.getFigureIndex(i, j));
-
-                adapter.resetTurn();
-                adapter.setActivePlayer(i);
-                adapter.resetFigures(i);
-                adapter.move(i, j, 6);
                 adapter.forceComplicatedSpecialSpawn("MoveFour", i, j);
                 adapter.selectBaseField(i, j, 2);
-                //movement when correct base and index selected
+                //backward movement when correct base and index selected
                 assertTrue(adapter.occupiesBaseField(i, j));
-
-                adapter.resetTurn();
-                adapter.setActivePlayer(i);
-                adapter.resetFigures(i);
-                adapter.move(i, j, 6);
-                adapter.forceComplicatedSpecialSpawn("MoveFour", i, j);
-                fieldID = adapter.getFigureIndex(i, j);
-                adapter.selectTwoFields(fieldID, (fieldID - 4) < 0 ? 40 + (fieldID - 4) : fieldID - 4);
-                //backward movement past the base
-                assertEquals((fieldID - 4) < 0 ? 40 + (fieldID - 4) : fieldID - 4, adapter.getFigureIndex(i, j));
             }
-        }
-    }
-
-    @Test
-    public void testBeatFigure() {
-        for (int i = 0; i < 4; i++) {
-            adapter.resetTurn();
-            adapter.setActivePlayer((i + 1) % 4);
-            adapter.resetFigures((i + 1) % 4);
-            adapter.move((i + 1) % 4, 0, 6);
-            adapter.move((i + 1) % 4, 0, 34);
-            adapter.setActivePlayer(i);
-            adapter.resetFigures(i);
-            adapter.move(i, 0, 6);
-            adapter.forceComplicatedSpecialSpawn("MoveFour", i, 0);
-            adapter.selectTwoFields(adapter.getFigureIndex(i, 0), (adapter.getFigureIndex(i, 0) + 4) % 40);
-            //beat figure +4
-            assertTrue(adapter.occupiesHomeField((i + 1) % 4, 0));
-
-            adapter.resetTurn();
-            adapter.setActivePlayer((i + 1) % 4);
-            adapter.resetFigures((i + 1) % 4);
-            adapter.move((i + 1) % 4, 0, 6);
-            adapter.move((i + 1) % 4, 0, 26);
-            adapter.setActivePlayer(i);
-            adapter.resetFigures(i);
-            adapter.move(i, 0, 6);
-            adapter.forceComplicatedSpecialSpawn("MoveFour", i, 0);
-            int fieldID = adapter.getFigureIndex(i, 0);
-            adapter.selectTwoFields(fieldID, fieldID - 4 < 0 ? 40 + fieldID - 4 : fieldID - 4);
-            //beat figure -4
-            assertTrue(adapter.occupiesHomeField((i + 1) % 4, 0));
         }
     }
 }

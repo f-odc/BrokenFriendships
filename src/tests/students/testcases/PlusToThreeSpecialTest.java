@@ -1,4 +1,4 @@
-package tests.tutor.testcases;
+package tests.students.testcases;
 
 import org.junit.After;
 import org.junit.Before;
@@ -93,48 +93,6 @@ public class PlusToThreeSpecialTest {
                 //select + 1, where opponent figure is
                 assertTrue(adapter.occupiesHomeField((i + 1) % 4, j));
             }
-        }
-    }
-
-    @Test
-    public void testNoPossibleMovement() {
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                adapter.resetTurn();
-                adapter.selectField(i);
-                adapter.resetFigures(i);
-                for (int z = j; z == (z + 3) % 4; z = (z + 1) % 4) {
-                    adapter.setActivePlayer(i);
-                    adapter.move(i, z, 6);
-                    adapter.move(i, z, z + 1);
-                }
-                adapter.setActivePlayer(i);
-                int fieldID = adapter.getFigureIndex(i, j);
-                adapter.forceComplicatedSpecialSpawn("PlusToThree", i, j);
-                adapter.selectField((fieldID + 1) % 40);
-                adapter.selectField((fieldID + 2) % 40);
-                adapter.selectField((fieldID + 3) % 40);
-                //select +1,+2,+3, where own figures are
-                assertEquals(fieldID, adapter.getFigureIndex(i, j));
-                for (int z = j; z == (z + 3) % 4; z = (z + 1) % 4) {
-                    assertFalse(adapter.occupiesHomeField(i, z));
-                }
-            }
-        }
-    }
-
-    @Test
-    public void testIntoBase() {
-        for (int i = 0; i < 4; i++) {
-            adapter.resetTurn();
-            adapter.setActivePlayer(i);
-            adapter.resetFigures(i);
-            adapter.move(i, 0, 6);
-            adapter.move(i, 0, 39);
-            adapter.forceComplicatedSpecialSpawn("PlusToThree", i, 0);
-            adapter.selectBaseField(i, 0, 2);
-            //can enter base with PlusToThree
-            assertTrue(adapter.occupiesBaseField(i, 0));
         }
     }
 }

@@ -311,6 +311,17 @@ public class BFTestAdapterMinimal {
     }
 
     /**
+     * Gebe den Index einer Figur zurück.
+     *
+     * @param playerID ID des Spielers
+     * @param figureID ID der Figur
+     * @return Index der Figur
+     */
+    public int getFigureIndex(int playerID, int figureID) {
+        return global.players[playerID].figures.get(figureID).getCurrentField().getFieldIndex();
+    }
+
+    /**
      * Gebe die Anzahl an Würfel versuchen zurück.
      *
      * @return Die Anzahl an Würfel versuchen.

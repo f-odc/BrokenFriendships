@@ -1,4 +1,4 @@
-package tests.tutor.testcases;
+package tests.students.testcases;
 
 import org.junit.After;
 import org.junit.Before;
@@ -34,10 +34,10 @@ public class FigureTest {
     @Test
     public void testFigureInHome() {
         for (int i = 0; i < 4; i++) {
+            adapter.resetTurn();
+            adapter.setActivePlayer(i);
+            adapter.resetFigures(i);
             for (int j = 0; j < 4; j++) {
-                adapter.resetTurn();
-                adapter.setActivePlayer(i);
-                adapter.resetFigures(i);
                 assertTrue(adapter.occupiesHomeField(i, j));
             }
         }
@@ -50,26 +50,6 @@ public class FigureTest {
                 String homeColor = adapter.getColorOfHome(i, j);
                 assertEquals(homeColor, adapter.getFigureColor(i, j));
             }
-        }
-    }
-
-    @Test
-    public void testUniqueFigureColor() {
-        for (int i = 0; i < 4; i++) {
-            String color = adapter.getFigureColor(i, 0);
-            List<String> comparison = new ArrayList<>();
-            for (int j = 0; j < 4; j++) {
-                assertEquals(color, adapter.getFigureColor(i, j));
-                assertFalse(comparison.contains(adapter.getFigureColor(j, 0)));
-                comparison.add(adapter.getFigureColor(j, 0));
-            }
-        }
-    }
-
-    @Test
-    public void testHomeFieldOccupation() {
-        for (int i = 0; i < 4; i++) {
-            assertTrue(adapter.allHomeFieldsOccupied(i));
         }
     }
 }

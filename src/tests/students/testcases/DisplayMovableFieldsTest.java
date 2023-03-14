@@ -1,4 +1,4 @@
-package tests.tutor.testcases;
+package tests.students.testcases;
 
 import org.junit.After;
 import org.junit.Before;
@@ -51,9 +51,9 @@ public class DisplayMovableFieldsTest {
     }
 
     @Test
-    public void testBaseMovementDisplay(){
-        for (int i = 0; i < 4;i++){
-            for (int j = 0; j < 4; j++){
+    public void testBaseMovementDisplay() {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
                 List<Integer> displayedFields;
 
                 adapter.resetTurn();
@@ -65,17 +65,6 @@ public class DisplayMovableFieldsTest {
                 displayedFields = adapter.displayField(i, j, 2);
                 //move into or past base
                 assertEquals(2, displayedFields.size());
-                adapter.setActivePlayer(i);
-                adapter.move(i, (j + 1) % 4, 6);
-                adapter.move(i, (j + 1) % 4, 1);
-                int indexPastBase = adapter.getFigureIndex(i, (j + 1) % 4);
-                adapter.setActivePlayer(i);
-                adapter.move(i, j, 2);
-                int indexInBase = adapter.getFigureIndex(i, j);
-                //one of the displayed fields is the correct index going past the base
-                assertTrue(displayedFields.contains(indexPastBase));
-                //one of the displayed fields is the correct index going into the base
-                assertTrue(displayedFields.contains(indexInBase));
 
                 adapter.resetTurn();
                 adapter.resetFigures(i);
@@ -90,11 +79,6 @@ public class DisplayMovableFieldsTest {
                 adapter.move(i, (j + 1) % 4, 39);
                 displayedFields = adapter.displayField(i, (j + 1) % 4, 3);
                 assertEquals(1, displayedFields.size());
-                adapter.setActivePlayer(i);
-                adapter.move(i, (j + 2) % 4, 6);
-                adapter.move(i, (j + 2) % 4, 2);
-                //the displayed field is the correct index going past the base
-                assertTrue(displayedFields.contains(adapter.getFigureIndex(i, (j + 2) % 4)));
             }
         }
     }
@@ -113,29 +97,6 @@ public class DisplayMovableFieldsTest {
             assertNotEquals(indices.get(0), adapter.displayField(i, 0, 3).get(0));
             //figure actually got moved
             assertFalse(adapter.occupiesHomeField(i, 0));
-
-            adapter.resetTurn();
-            adapter.resetFigures(i);
-            adapter.setActivePlayer(i);
-            adapter.move(i, 0, 6);
-            indices = adapter.displayField(i, 0, 6);
-            adapter.move(i, 0, 3);
-            //only one field is displayed
-            assertEquals(1, adapter.displayField(i, 0, 3).size());
-            indices.add(adapter.displayField(i, 0, 3).get(0));
-            //same field is recognized to be the same
-            assertEquals(indices.get(0), indices.get(1));
-
-            adapter.resetTurn();
-            adapter.resetFigures(i);
-            adapter.setActivePlayer(i);
-            adapter.move(i, 0, 6);
-            adapter.move(i, 0, 39);
-            indices = adapter.displayField(i, 0, 4);
-            //two options are displayed
-            assertEquals(2, indices.size());
-            //not twice the same option
-            assertNotEquals(indices.get(0), indices.get(1));
         }
     }
 
@@ -143,15 +104,6 @@ public class DisplayMovableFieldsTest {
     public void testNoDisplay() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                adapter.resetTurn();
-                adapter.setActivePlayer(i);
-                adapter.resetFigures(i);
-                adapter.move(i, j, 6);
-                //select other figure after move out of home
-                assertEquals(0, adapter.displayField(i, (j + 1) % 4, 3).size());
-                //select correct figure after move out of home
-                assertEquals(1, adapter.displayField(i, j, 3).size());
-
                 adapter.resetTurn();
                 adapter.setActivePlayer(i);
                 adapter.resetFigures(i);

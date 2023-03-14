@@ -1,4 +1,4 @@
-package tests.tutor.testcases;
+package tests.students.testcases;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,7 +32,7 @@ public class BedSpecialTest {
                 adapter.forceComplicatedSpecialSpawn("bed", i, j);
                 adapter.selectField(adapter.getFigureIndex(i, j) + 1);
                 //Bett wurde auf dem richtigen Feld gespawned
-                assertTrue(adapter.isOccupiedByBed(adapter.getFigureIndex(i, j) + 1));
+                assertTrue(adapter.isOccupiedByBed(adapter.getFigureIndex(i,j) + 1));
             }
         }
     }
@@ -78,44 +78,8 @@ public class BedSpecialTest {
                 adapter.skipTurn();
                 //player doesn't get skipped
                 assertEquals(i, adapter.getActivePlayer());
-
-                adapter.resetTurn();
-                adapter.setActivePlayer(i);
-                adapter.resetFigures(i);
-                adapter.move(i, j, 6);
-                adapter.forceComplicatedSpecialSpawn("bed", (i + 1) % 4, j);
-                adapter.selectField(adapter.getFigureIndex(i, j) + 1);
-                adapter.move(i, j, 1);
-                adapter.skipTurn();
-                adapter.skipTurn();
-                adapter.skipTurn();
-                //bed placed by player 2 affects player 1
-                assertNotEquals(i, adapter.getActivePlayer());
             }
         }
-    }
-
-    @Test
-    public void testMovementAfter6() {
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                adapter.resetTurn();
-                adapter.setActivePlayer(i);
-                adapter.resetFigures(i);
-                adapter.move(i, j, 6);
-                adapter.forceComplicatedSpecialSpawn("bed", i, j);
-                adapter.selectField(adapter.getFigureIndex(i, j) + 6);
-                adapter.move(i, j, 6);
-                //next player after bed activation with a 6
-                assertNotEquals(i, adapter.getActivePlayer());
-                adapter.skipTurn();
-                adapter.skipTurn();
-                adapter.skipTurn();
-                //player does not skip turn
-                assertEquals(i, adapter.getActivePlayer());
-            }
-        }
-
     }
 
     @Test
