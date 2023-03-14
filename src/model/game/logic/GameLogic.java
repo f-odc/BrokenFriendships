@@ -332,6 +332,17 @@ public class GameLogic {
                 movableFields.addAll(MoveLogic.getMovableField(sourceGameObject.getCurrentField(), 1));
                 movableFields.addAll(MoveLogic.getMovableField(sourceGameObject.getCurrentField(), 2));
                 movableFields.addAll(MoveLogic.getMovableField(sourceGameObject.getCurrentField(), 3));
+
+                int diceValue = BrokenFriendships.debug ? debugDiceThrow : global.BOARD.getDice().getValue();
+                // if no figure can be moved
+                if(movableFields.isEmpty()){
+                    if(diceValue != 6){
+                        nextTurn();
+                        return;
+                    }
+                    nextPlayer();
+                    return;
+                }
                 // highlight fields
                 highlightMovableFields();
                 // set phase
