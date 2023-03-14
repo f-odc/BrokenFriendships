@@ -53,11 +53,13 @@ public class BrokenFriendships extends StateBasedGame {
         GameplayState gameplayState = new GameplayState();
 		addState(new MainMenuState());
         addState(gameplayState);
+        addState(new OnPauseMenuState(global.PAUSE_STATE));
 
         
         // Fuege dem StateBasedEntityManager die States hinzu
         StateBasedEntityManager.getInstance().addState(global.MAINMENU_STATE);
         StateBasedEntityManager.getInstance().addState(global.GAMEPLAY_STATE);
+        StateBasedEntityManager.getInstance().addState(global.PAUSE_STATE);
 		
 	}
 }

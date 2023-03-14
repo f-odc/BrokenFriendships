@@ -1,6 +1,9 @@
 package ui;
 
+import eea.engine.action.Action;
+import eea.engine.action.basicactions.ChangeStateInitAction;
 import eea.engine.component.render.ImageRenderComponent;
+import eea.engine.event.ANDEvent;
 import eea.engine.event.basicevents.*;
 import model.game.GameManager;
 import model.global;
@@ -52,10 +55,25 @@ public class GameplayState extends BasicGameState {
             // add background entity to the game
             global.entityManager.addEntity(global.GAMEPLAY_STATE, background);
 
+            //set exit button
+            Entity exit = new Entity("exit");
+            exit.setPosition(new Vector2f(global.X_DIMENSIONS - 40, 40));
+            exit.setScale(0.1f);
+            exit.addComponent(new ImageRenderComponent(new Image("/assets/exit.png")));
+
+            //add pause event
+            ANDEvent pauseEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
+            Action pauseAction = new ChangeStateAction(global.PAUSE_STATE);
+            pauseEvent.addAction(pauseAction);
+            exit.addComponent(pauseEvent);
+
+            // add exit entity to the game
+            global.entityManager.addEntity(global.GAMEPLAY_STATE, exit);
+
             // go back to the main menu on ESC clicked
             Entity esc_Listener = new Entity("ESC_Listener");
             KeyPressedEvent esc_pressed = new KeyPressedEvent(Input.KEY_ESCAPE);
-            esc_pressed.addAction(new ChangeStateAction(global.MAINMENU_STATE));
+            esc_pressed.addAction(new ChangeStateAction(global.PAUSE_STATE));
             esc_Listener.addComponent(esc_pressed);
             entityManager.addEntity(global.GAMEPLAY_STATE, esc_Listener);
         }
