@@ -39,7 +39,8 @@ public class BFTestAdapterExtended3 extends BFTestAdapterExtended2 {
             }
             case "Switch" -> {
                 //TODO
-                GameLogic.executeInitSpecialsPhase(7, global.players[playerID].figures.get(figureID));
+                GameLogic.setDebugDiceThrow(3);
+                GameLogic.executeInitSpecialsPhase(7,  global.players[playerID].figures.get(figureID));
             }
         }
     }

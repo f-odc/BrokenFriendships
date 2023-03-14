@@ -130,4 +130,24 @@ public class SwitchSpecialTest {
             }
         }
     }
+
+    @Test
+    public void testNoSwitch() {
+        for (int i = 0; i < 4; i++) {
+            adapter.resetTurn();
+            adapter.setActivePlayer(i);
+            adapter.resetFigures(i);
+            adapter.forceComplicatedSpecialSpawn("Switch", i, 0);
+            assertEquals((i + 1) % 4, adapter.getActivePlayer());
+
+            adapter.resetTurn();
+            adapter.setActivePlayer(i);
+            adapter.resetFigures(i);
+            adapter.move(i, 0, 6);
+            adapter.move(i, 0, 3);
+            adapter.setActivePlayer(i);
+            adapter.forceComplicatedSpecialSpawn("Switch", i, 0);
+            assertEquals((i + 1) % 4, adapter.getActivePlayer());
+        }
+    }
 }

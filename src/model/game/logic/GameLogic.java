@@ -1,5 +1,6 @@
 package model.game.logic;
 
+import eea.engine.action.basicactions.ChangeStateAction;
 import model.board.fields.IField;
 import model.board.objects.Dice;
 import model.board.objects.Figure;
@@ -11,8 +12,10 @@ import model.enums.Phase;
 import model.global;
 import model.player.Player;
 import org.newdawn.slick.Animation;
+import ui.BrokenFriendships;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class GameLogic {
@@ -27,7 +30,7 @@ public class GameLogic {
 
     public static boolean isNextPlayer = false;
 
-    private static Dice dice = global.BOARD.getDice();
+    public static Dice dice = global.BOARD.getDice();
 
     public static int numOfMysteryFields = 0; // current number of mystery fields
 
@@ -312,11 +315,19 @@ public class GameLogic {
                 global.phase = Phase.MYSTERY_SELECTION_PHASE;
             }
             if (specialsObject instanceof SwitchSpecial) {
-                global.phase = Phase.MYSTERY_SELECTION_PHASE;
+                List<IField> occupied = global.BOARD.getOccupiedGameFields();
+                int diceValue = BrokenFriendships.debug ? debugDiceThrow : global.BOARD.getDice().getValue();
+                //no figure to switch and no 6 thrown
+                if (occupied.size() < 2 && diceValue != 6)
+                    nextPlayer();
+                    //no figure to switch and  6 thrown
+                else if (occupied.size() < 2)
+                    nextTurn();
+                else global.phase = Phase.MYSTERY_SELECTION_PHASE;
             }
             if (specialsObject instanceof PlusToThreeSpecial) {
                 // empty movable fields
-                movableFields = new ArrayList<IField>();
+                movableFields = new ArrayList<>();
                 // get movable fields +1 / +2 / +3
                 movableFields.addAll(MoveLogic.getMovableField(sourceGameObject.getCurrentField(), 1));
                 movableFields.addAll(MoveLogic.getMovableField(sourceGameObject.getCurrentField(), 2));
@@ -325,7 +336,6 @@ public class GameLogic {
                 highlightMovableFields();
                 // set phase
                 global.phase = Phase.SELECT_MOVEMENT_PHASE;
-                return;
             }
         }
     }
