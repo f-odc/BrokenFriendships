@@ -52,7 +52,7 @@ public class MoveLogic {
                 movableFields.add(movableField);
             }
             // calculate reachable field of game fields
-            IField boardField = global.BOARD.getGameField(((global.BOARD.getIndexFromPosition(field.getPosition()) + stepValue) + 40) % 40);
+            IField boardField = global.BOARD.getGameField(((field.getFieldIndex() + stepValue) + 40) % 40);
             // check if target field is not occupied with own figure
             if (boardField.getCurrentFigure() == null || (boardField.getCurrentFigure().getOwnerID() != currentFigure.getOwnerID())) {
                 movableFields.add(boardField);
@@ -99,18 +99,19 @@ public class MoveLogic {
         // get endpoint of owner of figure
         int figureOwnerId = field.getCurrentFigure() == null? global.activePlayer : field.getCurrentFigure().getOwnerID();
         int endIndex = global.players[figureOwnerId].getEndPoint();
+        int currentIndex = field.getFieldIndex();
+
         // calculate the new index of the reachable field
-        int selectedIndex = global.BOARD.getIndexFromPosition(field.getPosition());
 
         // special case: step value is negative
         if (stepValue < 0){
             // convert negative results
-            if (selectedIndex + stepValue < 0){
-                selectedIndex = selectedIndex + 40;
+            if (currentIndex + stepValue < 0){
+                currentIndex = currentIndex + 40;
             }
-            int moveIndex = selectedIndex + stepValue;
+            int moveIndex = currentIndex + stepValue;
             // check if figure can move backwards into base
-            if (selectedIndex >= endIndex && moveIndex < endIndex && moveIndex >= endIndex - 4){
+            if (currentIndex >= endIndex && moveIndex < endIndex && moveIndex >= endIndex - 4){
                 int index = endIndex - moveIndex - 1;
                 BoardField currentBaseField = global.BOARD.getBase(figureOwnerId).get(index);
                 // if not occupied -> field can be reached
@@ -119,9 +120,9 @@ public class MoveLogic {
                 }
             }
         }else{ // for positive steps
-            int moveIndex = selectedIndex + stepValue;
+            int moveIndex = currentIndex + stepValue;
             // check if figure is for the end point, new move index is between endIndex + 1 and endIndex + 4
-            if (selectedIndex <= endIndex && moveIndex > endIndex && moveIndex <= endIndex + 4) {
+            if (currentIndex <= endIndex && moveIndex > endIndex && moveIndex <= endIndex + 4) {
                 // calculate the base index
                 int index = moveIndex - (endIndex + 1);
                 BoardField currentBaseField = global.BOARD.getBase(figureOwnerId).get(index);

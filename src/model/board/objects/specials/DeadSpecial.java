@@ -5,6 +5,7 @@ import model.board.fields.IField;
 import model.board.objects.IGameObject;
 import model.game.logic.GameLogic;
 import model.global;
+import ui.BrokenFriendships;
 
 public class DeadSpecial implements IGameObject {
 
@@ -18,7 +19,8 @@ public class DeadSpecial implements IGameObject {
     public void activate(IGameObject sourceGameObject) {
         sourceGameObject.reset();
         // only next player if
-        if (global.BOARD.getDice().getValue() != 6){
+        int diceThrow = BrokenFriendships.debug ? GameLogic.getDebugDiceThrow() : global.BOARD.getDice().getValue();
+        if (diceThrow != 6) {
             GameLogic.nextPlayer();
         }
     }

@@ -33,22 +33,6 @@ public class PlayerColorFields {
         Collections.reverse(green);
     }
 
-    /**
-     * get field out of list, without deleteing it
-     *
-     * @param color         field color
-     * @param boardPosition  field position
-     * @return Optional<ColoredField> the field oof the correct list
-     */
-    public Optional<BoardField> get(Color color, Vector2f boardPosition) {
-        float x = boardPosition.getX();
-        float y = boardPosition.getY();
-        System.out.println("get color: " + color + " position: " + x + "," + y);
-        return color == Color.BLUE ? blue.stream().filter(ele -> ele.getPosition().getX() == x && ele.getPosition().getY() == y).findAny() :
-                color == Color.GREEN ? green.stream().filter(ele -> ele.getPosition().getX() == x && ele.getPosition().getY() == y).findAny() :
-                        color == Color.RED ? red.stream().filter(ele -> ele.getPosition().getX() == x && ele.getPosition().getY() == y).findAny() :
-                                yellow.stream().filter(ele -> ele.getPosition().getX() == x && ele.getPosition().getY() == y).findAny();
-    }
 
     /**
      * Get player fields
@@ -66,6 +50,21 @@ public class PlayerColorFields {
                 return blue;
             case 3:
                 return green;
+            default:
+                throw new RuntimeException("Invalid ID");
+        }
+    }
+
+    public int getBaseSize(int id){
+        switch (id) {
+            case 0:
+                return red.size();
+            case 1:
+                return yellow.size();
+            case 2:
+                return blue.size();
+            case 3:
+                return green.size();
             default:
                 throw new RuntimeException("Invalid ID");
         }

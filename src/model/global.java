@@ -24,6 +24,7 @@ public class global {
     // state ID
     public static final int MAINMENU_STATE = 0;
     public static final int GAMEPLAY_STATE = 1;
+    public static final int PAUSE_STATE = 2;
 
     //size of fields in pixel
     public static final int X_DIMENSIONS = 1920;

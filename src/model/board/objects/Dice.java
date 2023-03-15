@@ -11,6 +11,7 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
+import ui.BrokenFriendships;
 
 import java.util.Random;
 
@@ -26,9 +27,10 @@ public class Dice {
 
     /**
      * initialize the dice
+     *
      * @param displayPosition the board coordinates
      */
-    public Dice(Vector2f[] displayPosition){
+    public Dice(Vector2f[] displayPosition) {
         this.value = 1;
         this.displayPosition = displayPosition;
         initDiceImages();
@@ -37,6 +39,7 @@ public class Dice {
 
     /**
      * returns dice value
+     *
      * @return value of the dice
      */
     public int getValue() {
@@ -45,9 +48,10 @@ public class Dice {
 
     /**
      * simulates a throw of a dice
+     *
      * @return value of dice
      */
-    public int throwDice(){
+    public int throwDice() {
         int diceThrow = new Random().nextInt(6) + 1;
         this.value = diceThrow;
         // update dice image
@@ -60,24 +64,24 @@ public class Dice {
     /**
      * Create dice animation
      */
-    public void animate(){
+    public void animate() {
         // create new animation
         global.diceAnimation = new Animation();
         global.diceAnimation.setLooping(false);
-        for (int i=0; i<4; i++){
+        for (int i = 0; i < 4; i++) {
             int randomPictureIndex = new Random().nextInt(6);
             global.diceAnimation.addFrame(diceImages[randomPictureIndex], 150);
         }
         // set last frame the dice value
-        global.diceAnimation.addFrame(diceImages[value-1], 1000);
+        global.diceAnimation.addFrame(diceImages[value - 1], 1000);
     }
 
     /**
      * Append to the dice animation a frame with a next arrow
      */
-    public void animateNextArrow(){
+    public void animateNextArrow() {
         try {
-            global.diceAnimation.addFrame(new Image("assets/dice/nextArrow" + global.activePlayer + ".png"), 350);
+            if(!BrokenFriendships.debug)global.diceAnimation.addFrame(new Image("assets/dice/nextArrow" + global.activePlayer + ".png"), 350);
         } catch (SlickException e) {
             throw new RuntimeException(e);
         }
@@ -86,21 +90,23 @@ public class Dice {
     /**
      * Stop and set animation to null
      */
-    public void resetAnimation(){
+    public void resetAnimation() {
         global.diceAnimation = new Animation();
     }
 
     /**
      * Stores the dice images from assets in class
      */
-    private void initDiceImages(){
+    private void initDiceImages() {
         try {
-            diceImages[0] = new Image("assets/dice/diceOne.png");
-            diceImages[1] = new Image("assets/dice/diceTwo.png");
-            diceImages[2] = new Image("assets/dice/diceThree.png");
-            diceImages[3] = new Image("assets/dice/diceFour.png");
-            diceImages[4] = new Image("assets/dice/diceFive.png");
-            diceImages[5] = new Image("assets/dice/diceSix.png");
+            if (!BrokenFriendships.debug) {
+                diceImages[0] = new Image("assets/dice/diceOne.png");
+                diceImages[1] = new Image("assets/dice/diceTwo.png");
+                diceImages[2] = new Image("assets/dice/diceThree.png");
+                diceImages[3] = new Image("assets/dice/diceFour.png");
+                diceImages[4] = new Image("assets/dice/diceFive.png");
+                diceImages[5] = new Image("assets/dice/diceSix.png");
+            }
         } catch (SlickException e) {
             System.out.println("Dice images missing!");
             throw new RuntimeException(e);
@@ -110,10 +116,10 @@ public class Dice {
     /**
      * initializes entity of the dice
      */
-    private void addDiceEntity(){
+    private void addDiceEntity() {
         Entity dice = new Entity("dice");
         dice.setPosition(new Vector2f(displayPosition[0].getX(), displayPosition[0].getY()));
-        ImageRenderComponent comp = new ImageRenderComponent(diceImages[value-1]);
+        ImageRenderComponent comp = new ImageRenderComponent(diceImages[value - 1]);
         this.imgComponent = comp;
         dice.addComponent(comp);
         dice.setScale(0.12f);
@@ -127,18 +133,19 @@ public class Dice {
     /**
      * initializes the entity with correct image after throw
      */
-    private void updateEntity(){
+    private void updateEntity() {
         Entity dice = global.entityManager.getEntity(global.GAMEPLAY_STATE, "dice");
         dice.removeComponent(this.imgComponent);
         ImageRenderComponent comp = null;
         // set new image
-        comp = new ImageRenderComponent(diceImages[value-1]);
+        comp = new ImageRenderComponent(diceImages[value - 1]);
         this.imgComponent = comp;
         dice.addComponent(comp);
     }
 
     /**
      * changes the position of the die
+     *
      * @param playerID who's turn it is
      */
     public void setPosition(int playerID) {
@@ -149,9 +156,11 @@ public class Dice {
 
     /**
      * Get current position of the dice depending on current player
+     *
      * @return the current position of the dice
      */
-    public Vector2f getCurrentPosition(){
-        return displayPosition[global.activePlayer];
+    public Vector2f getCurrentPosition() {
+        Entity dice = global.entityManager.getEntity(global.GAMEPLAY_STATE, "dice");
+        return dice.getPosition();
     }
 }

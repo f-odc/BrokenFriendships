@@ -13,13 +13,7 @@ public class BoardManager {
      * Zusätzlich wird der Würfel erstellt
      */
     static public void setup(){
-        try {
             // initialisieren des Spielbrettes
             global.BOARD = new Board();
-        }
-        catch (Exception e){
-            // TODO: end game with failure message
-            System.out.println(e.getMessage());
-        }
     }
 }

@@ -8,13 +8,14 @@ import model.game.logic.GameLogic;
 import model.global;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import ui.BrokenFriendships;
 
 public class BedSpecial implements IGameObject {
 
     private Entity entity;
     private IField currentField;
 
-    public BedSpecial(){
+    public BedSpecial() {
     }
 
     /**
@@ -23,7 +24,8 @@ public class BedSpecial implements IGameObject {
     public void initEntity() {
         Entity bedEntity = new Entity("bed special-hashcode:" + this.hashCode());
         try {
-            bedEntity.addComponent(new ImageRenderComponent(new Image("assets/objects/bed.png")));
+            if (!BrokenFriendships.debug)
+                bedEntity.addComponent(new ImageRenderComponent(new Image("assets/objects/bed.png")));
         } catch (SlickException e) {
             throw new RuntimeException(e);
         }
@@ -39,7 +41,7 @@ public class BedSpecial implements IGameObject {
         initEntity();
 
         // check if target field is occupied
-        if (targetField.isOccupied()){
+        if (targetField.isOccupied()) {
             return false;
         }
         // set figure to target field
@@ -52,10 +54,11 @@ public class BedSpecial implements IGameObject {
     @Override
     public void activate(IGameObject sourceGameObject) {
         // skip new turn
-        if (global.BOARD.getDice().getValue() == 6){
+        int diceThrow = BrokenFriendships.debug ? GameLogic.getDebugDiceThrow() : global.BOARD.getDice().getValue();
+        if (diceThrow == 6) {
             global.entityManager.removeEntity(global.GAMEPLAY_STATE, entity);
             reset();
-        }else{
+        } else {
             global.players[sourceGameObject.getOwnerID()].setBedSpecial(this);
         }
         GameLogic.nextPlayer();

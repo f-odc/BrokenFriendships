@@ -2,6 +2,7 @@ package model.game;
 
 import model.board.BoardManager;
 import model.enums.Phase;
+import model.game.logic.GameLogic;
 import model.global;
 import model.player.PlayerManager;
 
@@ -16,7 +17,6 @@ public class GameManager {
      * initializes the baord and the figures
      */
     public static void setup() {
-
         // setup board
         BoardManager.setup();
         // setup player
@@ -41,5 +41,6 @@ public class GameManager {
         global.rounds = 0;
         global.phase = Phase.DICE_PHASE;
         global.BOARD.getDice().setPosition(global.activePlayer);
+        GameLogic.dice = global.BOARD.getDice();
     }
 }

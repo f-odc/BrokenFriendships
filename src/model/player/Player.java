@@ -14,12 +14,12 @@ import java.util.List;
 
 public class Player {
 
-    private int id;
+    public int id;
     private BedSpecial activeBedSpecial;
-    private List<Figure> figures = new ArrayList<>();
-    private List<BoardField> homeFields;
-    private List<BoardField> baseFields;
-    private IField startField;
+    public List<Figure> figures = new ArrayList<>();
+    public List<BoardField> homeFields;
+    public List<BoardField> baseFields;
+    public IField startField;
     private int startPoint;
     private int endPoint;
 

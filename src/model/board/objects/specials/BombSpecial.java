@@ -7,6 +7,7 @@ import model.board.objects.IGameObject;
 import model.global;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import ui.BrokenFriendships;
 
 public class BombSpecial implements IGameObject {
 
@@ -19,7 +20,8 @@ public class BombSpecial implements IGameObject {
     public void initEntity() {
         Entity bedEntity = new Entity("bomb special-hashcode:" + this.hashCode());
         try {
-            bedEntity.addComponent(new ImageRenderComponent(new Image("assets/objects/bomb.png")));
+            if (!BrokenFriendships.debug)
+                bedEntity.addComponent(new ImageRenderComponent(new Image("assets/objects/bomb.png")));
         } catch (SlickException e) {
             throw new RuntimeException(e);
         }
@@ -35,12 +37,11 @@ public class BombSpecial implements IGameObject {
         initEntity();
 
         // check if target field is occupied
-        if (targetField.isOccupied()){
+        if (targetField.isOccupied()) {
             return false;
         }
         // set figure to target field
         targetField.setGameObject(this);
-        System.out.println("Bomb Field: " + targetField.getCurrentObject());
         // set current field
         setCurrentField(targetField);
         return true;
@@ -50,7 +51,6 @@ public class BombSpecial implements IGameObject {
     public void activate(IGameObject sourceGameObject) {
         // reset figure
         sourceGameObject.reset();
-        // TODO: test removement
         global.entityManager.removeEntity(global.GAMEPLAY_STATE, entity);
         reset();
     }

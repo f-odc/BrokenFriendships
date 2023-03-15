@@ -8,19 +8,20 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import eea.engine.entity.StateBasedEntityManager;
 
-import java.awt.*;
-
 /**
  * @author Timo Bähr
  *
  * Diese Klasse startet das Spiel "Drop of Water". Es enthaelt
  * zwei State's für das Menue und das eigentliche Spiel.
  */
-public class Launch extends StateBasedGame {
+public class BrokenFriendships extends StateBasedGame {
+
+    public static boolean debug;
     
-    public Launch()
+    public BrokenFriendships(boolean debugging)
     {
         super("Broken friendships");
+        debug = debugging;
     }
  
     public static void main(String[] args) throws SlickException
@@ -37,10 +38,10 @@ public class Launch extends StateBasedGame {
         global.entityManager = StateBasedEntityManager.getInstance();
     	
     	// Setze dieses StateBasedGame in einen App Container (oder Fenster)
-        AppGameContainer app = new AppGameContainer(new Launch());
+        AppGameContainer app = new AppGameContainer(new BrokenFriendships(false));
  
         // Lege die Einstellungen des Fensters fest und starte das Fenster
-        app.setDisplayMode(global.X_DIMENSIONS, global.Y_DIMENSIONS, false);
+        app.setDisplayMode(global.X_DIMENSIONS, global.Y_DIMENSIONS, true);
         app.start();
     }
 
@@ -52,11 +53,13 @@ public class Launch extends StateBasedGame {
         GameplayState gameplayState = new GameplayState();
 		addState(new MainMenuState());
         addState(gameplayState);
+        addState(new OnPauseMenuState(global.PAUSE_STATE));
 
         
         // Fuege dem StateBasedEntityManager die States hinzu
         StateBasedEntityManager.getInstance().addState(global.MAINMENU_STATE);
         StateBasedEntityManager.getInstance().addState(global.GAMEPLAY_STATE);
+        StateBasedEntityManager.getInstance().addState(global.PAUSE_STATE);
 		
 	}
 }

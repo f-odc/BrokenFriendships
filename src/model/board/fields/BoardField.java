@@ -14,6 +14,7 @@ import model.global;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
+import ui.BrokenFriendships;
 
 public class BoardField implements IField{
 
@@ -29,6 +30,8 @@ public class BoardField implements IField{
 
     private Entity highlightEntity;
 
+    public Color color;
+
     public BoardField(Vector2f position, int fieldIndex, Color color, FieldType type) {
         try {
             this.baseEntity = createEntity(position, fieldIndex, color, false);
@@ -39,6 +42,7 @@ public class BoardField implements IField{
         this.position = baseEntity.getPosition();
         this.type = type;
         this.fieldIndex = fieldIndex;
+        this.color = color;
 
         // add board and highlight entity
         global.entityManager.addEntity(global.GAMEPLAY_STATE, this.highlightEntity);
@@ -63,7 +67,7 @@ public class BoardField implements IField{
         String imgPath = isHighlightField ? "assets/field/highlightField.png" :
                 color == Color.NONE ? "assets/field/standardField.png" :
                         "assets/field/" + color.toString().toLowerCase() + "Field.png";
-        fieldEntity.addComponent(new ImageRenderComponent(new Image(imgPath)));
+        if(!BrokenFriendships.debug) fieldEntity.addComponent(new ImageRenderComponent(new Image(imgPath)));
         //initialize the size of the entity
         fieldEntity.setScale(type == -3 ? global.STANDARD_AND_BASE_FIELD_SIZE :
                 type == -2 ? global.HOME_AND_START_FIELD_SIZE :

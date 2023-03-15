@@ -20,9 +20,9 @@ public class BoardFieldAction implements Action {
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int i, Component component) {
         // selection phase
         if (global.phase == Phase.SELECT_FIGURE_PHASE){
-            GameLogic.executeSelectFigurePhase(field);
+            GameLogic.executeSelectFigurePhase(field, -1);
         }else if (global.phase == Phase.SELECT_MOVEMENT_PHASE){
-            GameLogic.executeSelectMovementPhase(field);
+            GameLogic.executeSelectMovementPhase(field, -1);
         }else if (global.phase == Phase.MYSTERY_SELECTION_PHASE){
             GameLogic.executeMysterySelectionPhase(field);
         }
