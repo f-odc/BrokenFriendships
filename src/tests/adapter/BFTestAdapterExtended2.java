@@ -1,9 +1,11 @@
 package tests.adapter;
 
+import model.board.objects.jpanel.WheelOfFortunePane;
 import model.game.logic.GameLogic;
 import model.global;
 
 public class BFTestAdapterExtended2 extends BFTestAdapterExtended1 {
+    private WheelOfFortunePane wofp;
 
     /* ***************************************************
      * ****** Initialisierung der Mystery Objekte ********
@@ -73,5 +75,48 @@ public class BFTestAdapterExtended2 extends BFTestAdapterExtended1 {
                 GameLogic.executeInitSpecialsPhase(3, global.players[playerID].figures.get(figureID));
             }
         }
+    }
+
+    /* ***************************************************
+     * ************ Test des CE Abschnittes **************
+     * *************************************************** */
+
+    /**
+     * Initialisiere das Glücksrad.
+     */
+    public void setupWheelOfFortune() {
+        wofp = new WheelOfFortunePane(null, null);
+        wofp.setup();
+    }
+
+    /**
+     * Setze die initialkraft für das Glücksrad.
+     * @param initialForce die Initialkraft
+     */
+    public void setInitialForce(int initialForce) {
+        wofp.speed = initialForce;
+    }
+
+    /**
+     * Gebe den nächsten Gradwert zurück.
+     * @param degreeT1 Gradwert zur Zeit T1.
+     * @param degreeT0 Gradwert zur Zeit T0.
+     * @return neuen Gradwert
+     */
+    public double nextDegree(double degreeT1, double degreeT0) {
+        wofp.degreesT0 = degreeT0;
+        wofp.degreesT1 = degreeT1;
+        if (degreeT0 != 0 || degreeT1 != 0) {
+            wofp.speed = degreeT1 - degreeT0;
+        }
+        return wofp.getNextDegreeValue();
+    }
+
+    /**
+     * Setze den Reibungskonstanten für das Glücksrad.
+     * @param constant der Reibungskonstant
+     */
+    public void setFrictionConstant(int constant){
+        wofp.frictionConstant = constant;
     }
 }

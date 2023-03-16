@@ -17,18 +17,18 @@ import java.util.ArrayList;
 
 public class WheelOfFortunePane extends JPanel {
 
-    private double degreesT0 = 0;
-    private double degreesT1 = 0;
-    private double nextDegree = 0;
+    public double degreesT0 = 0;
+    public double degreesT1 = 0;
+    public double nextDegree = 0;
     private int imageSize = 60;
     private ArrayList<Image> images = new ArrayList<>();
     private float radius;
-    private double speed = 0;
+    public double speed = 0;
     private int t = 0;
     private int rotationNr = 1;
     private boolean wheelIsStarted = false;
 
-    private double frictionConstant = 4;
+    public double frictionConstant = 4;
 
     public WheelOfFortunePane(IGameObject sourceGameObject, JFrame frame) {
         loadImages();
@@ -109,7 +109,7 @@ public class WheelOfFortunePane extends JPanel {
     /**
      * Setup used variables
      */
-    private void setup() {
+    public void setup() {
         radius = getPreferredSize().height / 3;
     }
 
