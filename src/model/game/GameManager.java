@@ -1,13 +1,11 @@
 package model.game;
 
 import model.board.BoardManager;
-import model.board.objects.TestPane;
 import model.enums.Phase;
 import model.game.logic.GameLogic;
 import model.global;
 import model.player.PlayerManager;
 
-import javax.swing.*;
 import java.util.List;
 
 /**
@@ -32,14 +30,6 @@ public class GameManager {
         global.specialsMap.add(List.of("model.board.objects.specials.MoveOutSpecial", "assets/MysterySelection/moveOutHome.png"));
         global.specialsMap.add(List.of("model.board.objects.specials.PlusToThreeSpecial", "assets/MysterySelection/plusToThree.png"));
         global.specialsMap.add(List.of("model.board.objects.specials.SwitchSpecial", "assets/MysterySelection/switch.png"));
-
-        JFrame frame = new JFrame("Testing");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new TestPane());
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-
     }
 
     /**

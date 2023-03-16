@@ -3,6 +3,7 @@ package model.board.objects;
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
 import model.board.fields.IField;
+import model.board.objects.jpanel.WheelOfFortunePane;
 import model.enums.Phase;
 import model.game.logic.GameLogic;
 import model.global;
@@ -11,6 +12,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import ui.BrokenFriendships;
 
+import javax.swing.*;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -53,32 +55,42 @@ public class Mystery implements IGameObject {
 
     @Override
     public void activate(IGameObject sourceGameObject) {
-        System.out.println("Activate Mystery");
         global.phase = Phase.MYSTERY_SELECTION_PHASE;
 
         // random select mystery
         int mysteryNr = new Random().nextInt(8);
 
-        // animate mystery selection
-        animateMystery(mysteryNr);
+        // CE Part
+        if (global.activeCE) {
+            JFrame frame = new JFrame("Mystery Selection");
+            WheelOfFortunePane selector = new WheelOfFortunePane(sourceGameObject, frame);
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.add(selector);
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+        }else { // Normal Part
+            // animate mystery selection
+            animateMystery(mysteryNr);
 
-        // wait till animation is over:
-        int animationDuration = 0;
-        for (int frameDuration : global.mysteryAnimation.getDurations()) {
-            animationDuration += frameDuration;
-        }
-
-        // after delay execute new phase
-        Timer timer = new Timer();
-        TimerTask startNewPhaseAfterAnimation = new TimerTask() {
-            @Override
-            public void run() {
-                // animation is finished
-                // execute special execution phase
-                if (!BrokenFriendships.debug) GameLogic.executeInitSpecialsPhase(mysteryNr, sourceGameObject);
+            // wait till animation is over:
+            int animationDuration = 0;
+            for (int frameDuration : global.mysteryAnimation.getDurations()) {
+                animationDuration += frameDuration;
             }
-        };
-        timer.schedule(startNewPhaseAfterAnimation, animationDuration);
+
+            // after delay execute new phase
+            Timer timer = new Timer();
+            TimerTask startNewPhaseAfterAnimation = new TimerTask() {
+                @Override
+                public void run() {
+                    // animation is finished
+                    // execute special execution phase
+                    if (!BrokenFriendships.debug) GameLogic.executeInitSpecialsPhase(mysteryNr, sourceGameObject);
+                }
+            };
+            timer.schedule(startNewPhaseAfterAnimation, animationDuration);
+        }
 
         // dismiss mystery from field
         reset();

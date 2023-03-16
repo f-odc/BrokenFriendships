@@ -54,4 +54,7 @@ public class global {
     public static Animation mysteryAnimation = new Animation();
     // mystery objects, name and image
     public static ArrayList<List<String>> specialsMap = new ArrayList<List<String>>();
+
+    // CE tasks flag
+    public static boolean activeCE = true;
 }
