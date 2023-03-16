@@ -1,6 +1,7 @@
 package ui;
 
 import eea.engine.action.basicactions.ChangeStateAction;
+import model.actions.ActivateCEAction;
 import model.global;
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Vector2f;
@@ -35,7 +36,6 @@ public class MainMenuState extends BasicGameState {    // zugehoeriger entityMan
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         if (!BrokenFriendships.debug) {
-
             // set background image
             Entity background = new Entity("background");
             background.setPosition(new Vector2f(global.X_DIMENSIONS / 2, global.Y_DIMENSIONS / 2));    // Startposition des Hintergrunds
@@ -79,8 +79,38 @@ public class MainMenuState extends BasicGameState {    // zugehoeriger entityMan
 
             // Fuege die Entity zum StateBasedEntityManager hinzu
             global.entityManager.addEntity(global.MAINMENU_STATE, quit_Entity);
-        }
 
+            //CE-aktivieren textbox Entitaet
+            Entity ce_ActivateEntity = new Entity("CE-activate-text");
+
+            // Setze Position und Bildkomponente
+            ce_ActivateEntity.setPosition(new Vector2f(global.X_DIMENSIONS - 100, global.Y_DIMENSIONS - 145));
+            ce_ActivateEntity.setScale(0.07f);
+            ce_ActivateEntity.addComponent(new ImageRenderComponent(new Image("assets/entryButton.png")));
+
+            // Fuege die Entity zum StateBasedEntityManager hinzu
+            global.entityManager.addEntity(global.MAINMENU_STATE, ce_ActivateEntity);
+
+            //CE-aktivieren checkbox Entitaet
+            Entity ce_Entity = new Entity("CE-activate");
+
+            // Setze Position und Bildkomponente
+            ce_Entity.setPosition(new Vector2f(global.X_DIMENSIONS - 100, global.Y_DIMENSIONS - 100));
+            ce_Entity.setScale(0.1f);
+            if(!global.activeCE)
+                ce_Entity.addComponent(new ImageRenderComponent(new Image("assets/checkmark_empty.png")));
+            else
+                ce_Entity.addComponent(new ImageRenderComponent(new Image("assets/checkmark_full.png")));
+
+            // Erstelle das Ausloese-Event und die zugehoerige Action
+            ANDEvent mainEvents_ce = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
+            Action ce_action = new ActivateCEAction();
+            mainEvents_ce.addAction(ce_action);
+            ce_Entity.addComponent(mainEvents_ce);
+
+            // Fuege die Entity zum StateBasedEntityManager hinzu
+            global.entityManager.addEntity(global.MAINMENU_STATE, ce_Entity);
+        }
     }
 
     /**
@@ -104,6 +134,7 @@ public class MainMenuState extends BasicGameState {    // zugehoeriger entityMan
         g.drawString("  Neues Spiel  ", global.X_DIMENSIONS / 2 - 72, start_Position + counter * distance);
         counter++;
         g.drawString("    Beenden    ", global.X_DIMENSIONS / 2 - 72, start_Position + counter * distance);
+        g.drawString("CE Aufgabe", global.X_DIMENSIONS - 140, global.Y_DIMENSIONS - 155);
     }
 
     @Override
