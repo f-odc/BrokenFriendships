@@ -99,7 +99,7 @@ public class OnPauseMenuState extends BasicGameState {
 
         graphics.drawString("  Neues Spiel  ", global.X_DIMENSIONS / 2 - 72, start_Position + counter * distance);
         counter++;
-        graphics.drawString("Zum Hauptmenue ", global.X_DIMENSIONS / 2 - 72, start_Position + counter * distance);
+        graphics.drawString(" Zum Hauptmenü ", global.X_DIMENSIONS / 2 - 72, start_Position + counter * distance);
         counter++;
         graphics.drawString("Weiter spielen ", global.X_DIMENSIONS / 2 - 72, start_Position + counter * distance);
     }

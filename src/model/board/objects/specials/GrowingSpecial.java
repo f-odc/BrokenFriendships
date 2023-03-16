@@ -27,7 +27,6 @@ public class GrowingSpecial implements IGameObject {
         ArrayList<IField> neighbors = global.BOARD.getNeighbors(sourceGameObject.getCurrentField());
         animate(sourceGameObject);
         for (IField field : neighbors){
-            System.out.println(field.getCurrentObject());
             // reset all neighboring figures
             if (field.getCurrentFigure() != null){
                 field.getCurrentFigure().activate(sourceGameObject);

@@ -74,7 +74,6 @@ public class Figure implements IGameObject {
 
         // check if switch with target figure possible
         if (targetFig != null && switchFlag){
-            System.out.println("Switch");
             targetFig.moveTo(currentStoredField, false);
         }
         return true;
