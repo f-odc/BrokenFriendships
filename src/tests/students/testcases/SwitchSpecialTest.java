@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import tests.adapter.BFTestAdapterExtended3;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 
 public class SwitchSpecialTest {
@@ -37,6 +37,7 @@ public class SwitchSpecialTest {
                 adapter.move((i + 1) % 4, j, 6);
                 adapter.move((i + 1) % 4, j, 3);
                 int figureIndexSecond = adapter.getFigureIndex((i + 1) % 4, j);
+                assertNotEquals(figureIndexFirst, figureIndexSecond);
                 adapter.forceComplicatedSpecialSpawn("Switch", i, j);
                 adapter.selectTwoFields(figureIndexFirst, figureIndexSecond);
                 //first figure has the index of the second
@@ -55,6 +56,7 @@ public class SwitchSpecialTest {
                 adapter.move((i + 2) % 4, j, 3);
                 int figurePlayer2 = adapter.getFigureIndex((i + 1) % 4, j);
                 int figurePlayer3 = adapter.getFigureIndex((i + 2) % 4, j);
+                assertNotEquals(figurePlayer2, figurePlayer3);
                 adapter.setActivePlayer(i);
                 //player i can change figures from (i + 1) % 4 with figures from (i + 2) % 4
                 adapter.forceComplicatedSpecialSpawn("Switch", i, j);

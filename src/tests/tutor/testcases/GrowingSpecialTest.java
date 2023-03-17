@@ -93,6 +93,7 @@ public class GrowingSpecialTest {
             adapter.move(i, 0, 6);
             adapter.forceSimpleSpecialActivation("growing", i, 0);
             assertFalse(adapter.occupiesHomeField(i, 0));
+            assertTrue(adapter.occupiesHomeField(i, 1));
         }
     }
 }
