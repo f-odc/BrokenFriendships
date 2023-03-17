@@ -16,20 +16,25 @@ public class BFTestAdapterExtended3 extends BFTestAdapterExtended2 {
      */
     public void forceComplicatedSpecialSpawn(String type, int playerID, int figureID) {
         switch (type) {
-            case "bed" -> {
+            case "bed" : {
                 //TODO
+                break;
             }
-            case "bomb" -> {
+            case "bomb" : {
                 //TODO
+                break;
             }
-            case "PlusToThree" -> {
+            case "PlusToThree" : {
                 //TODO
+                break;
             }
-            case "MoveFour" -> {
+            case "MoveFour" : {
                 //TODO
+                break;
             }
-            case "Switch" -> {
+            case "Switch" : {
                 //TODO
+                break;
             }
         }
     }

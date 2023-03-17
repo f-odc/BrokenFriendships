@@ -55,14 +55,17 @@ public class BFTestAdapterExtended2 extends BFTestAdapterExtended1 {
      */
     public void forceSimpleSpecialActivation(String type, int playerID, int figureID) {
         switch (type) {
-            case "dead" -> {
+            case "dead" : {
                 //TODO
+                break;
             }
-            case "moveOut" -> {
+            case "moveOut" : {
                 //TODO
+                break;
             }
-            case "growing" -> {
+            case "growing" : {
                 //TODO
+                break;
             }
         }
     }
