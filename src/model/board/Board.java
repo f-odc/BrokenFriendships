@@ -93,30 +93,35 @@ public class Board {
                 BoardField boardtmp;
                 Vector2f pos = getMidPoint(i, j);
                 switch (type) {
-                    case -4 -> {
+                    case -4 : {
                         //initialize the positions for the dice
                         dicePositions[(i == 1 && j == 2) ? 0 :
                                 (i == 9 && j == 2) ? 1 :
                                         (i == 9 && j == 8) ? 2 : 3] = pos;
+                        break;
                     }
-                    case -3 -> {
+                    case -3 : {
                         //initialize entity for the base fields
                         boardtmp = new BoardField(pos, type, color, FieldType.BASE);
                         bases.add(boardtmp, color);
+                        break;
                     }
-                    case -2 -> {
+                    case -2 : {
                         //initialize entity for the home fields
                         boardtmp = new BoardField(pos, type, color, FieldType.HOME);
                         homes.add(boardtmp, color);
+                        break;
                     }
-                    case -1 -> {
+                    case -1 : {
                         //no field
+                        break;
                     }
-                    default -> {
+                    default : {
                         //initialize standard and start fields and their entity
                         FieldType field = (type == 0 || type == 10 || type == 20 || type == 30) ? FieldType.START : FieldType.STANDARD;
                         boardtmp = new BoardField(pos, type, color, field);
                         gameFields[type] = boardtmp;
+                        break;
                     }
                 }
             }
