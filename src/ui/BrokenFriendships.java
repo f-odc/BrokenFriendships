@@ -1,12 +1,10 @@
 package ui;
 
-import model.global;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import eea.engine.entity.StateBasedEntityManager;
 
 /**
  * @author Timo Bähr
@@ -35,31 +33,24 @@ public class BrokenFriendships extends StateBasedGame {
     		System.setProperty("org.lwjgl.librarypath",System.getProperty("user.dir") + "/native/" +System.getProperty("os.name").toLowerCase());
     	}
 
-        global.entityManager = StateBasedEntityManager.getInstance();
-    	
+
+        // Fuehren Sie hier (falls noetig), weitere Initialisierungen ein
+        //TODO Initialisierungen
+
     	// Setze dieses StateBasedGame in einen App Container (oder Fenster)
         AppGameContainer app = new AppGameContainer(new BrokenFriendships(false));
- 
-        // Lege die Einstellungen des Fensters fest und starte das Fenster
-        app.setDisplayMode(global.X_DIMENSIONS, global.Y_DIMENSIONS, true);
+
+        //Starte das Spiel
         app.start();
     }
 
 	@Override
 	public void initStatesList(GameContainer arg0) throws SlickException {
-		
-		// Fuege dem StateBasedGame die States hinzu 
-		// (der zuerst hinzugefuegte State wird als erster State gestartet)
-        GameplayState gameplayState = new GameplayState();
-		addState(new MainMenuState());
-        addState(gameplayState);
-        addState(new OnPauseMenuState(global.PAUSE_STATE));
 
-        
-        // Fuege dem StateBasedEntityManager die States hinzu
-        StateBasedEntityManager.getInstance().addState(global.MAINMENU_STATE);
-        StateBasedEntityManager.getInstance().addState(global.GAMEPLAY_STATE);
-        StateBasedEntityManager.getInstance().addState(global.PAUSE_STATE);
-		
+        // Fuege dem StateBasedGame die State's hinzu
+        // TODO State's hinzu fuegen, z.B. this.addState(new MainMenuState(MAINMENUSTATE));
+
+        // Fuege dem StateBasedEntityManager die State's hinzu
+        // TODO State's hinzu fuegen, z.B. StateBasedEntityManager.getInstance().addState(MAINMENUSTATE);
 	}
 }

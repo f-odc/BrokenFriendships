@@ -2,18 +2,9 @@ package tests.adapter;
 
 import eea.engine.entity.StateBasedEntityManager;
 import eea.engine.test.TestAppGameContainer;
-import model.board.fields.IField;
-import model.enums.FieldType;
-import model.enums.Phase;
-import model.game.GameManager;
-import model.game.logic.GameLogic;
-import model.game.logic.MoveLogic;
-import model.global;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 import ui.BrokenFriendships;
-
-import java.util.List;
 
 /**
  * This is the test adapter for the minimal stage of completion. You must implement the method stubs and match
@@ -62,8 +53,6 @@ public class BFTestAdapterMinimal {
             System.setProperty("org.lwjgl.librarypath", System.getProperty("user.dir") + "/native/" + System.getProperty("os.name").toLowerCase());
         }
 
-        global.entityManager = StateBasedEntityManager.getInstance();
-
         // Setze dieses StateBasedGame in einen App Container (oder Fenster)
         try {
             app = new TestAppGameContainer(new BrokenFriendships(true));
@@ -73,11 +62,6 @@ public class BFTestAdapterMinimal {
         }
 
         //TODO: initialisiere alle notwendigen Spiel Komponenten
-
-        // initialize all game objects
-        GameManager.setup();
-        // start the game
-        GameManager.start();
     }
 
     /**
@@ -104,7 +88,7 @@ public class BFTestAdapterMinimal {
      */
     public int getNumberOfBaseFields(int id) {
         //TODO
-        return global.BOARD.bases.getBaseSize(id);
+        return 0;
     }
 
     /**
@@ -115,7 +99,7 @@ public class BFTestAdapterMinimal {
      */
     public int getNumberOfHomeFields(int id) {
         //TODO
-        return global.BOARD.homes.getBaseSize(id);
+        return 0;
     }
 
     /**
@@ -125,11 +109,7 @@ public class BFTestAdapterMinimal {
      */
     public int getNumberOfStartFields() {
         //TODO
-        int numOfStartfields = 0;
-        for (int i = 0; i < 40; i++) {
-            if (global.BOARD.getGameField(i).getType() == FieldType.START) numOfStartfields++;
-        }
-        return numOfStartfields;
+        return 0;
     }
 
     /**
@@ -140,7 +120,7 @@ public class BFTestAdapterMinimal {
      */
     public int getNumberOfGameFields() {
         //TODO
-        return global.BOARD.gameFields.length;
+        return 0;
     }
 
     /**
@@ -152,7 +132,7 @@ public class BFTestAdapterMinimal {
      */
     public String getColorOfBase(int playerID, int fieldID) {
         //TODO
-        return global.BOARD.getBase(playerID).get(fieldID).color.toString().toLowerCase();
+        return "";
     }
 
     /**
@@ -164,7 +144,7 @@ public class BFTestAdapterMinimal {
      */
     public String getColorOfHome(int playerID, int fieldID) {
         //TODO
-        return global.BOARD.getHome(playerID).get(fieldID).color.toString().toLowerCase();
+        return "0";
     }
 
     /**
@@ -175,7 +155,7 @@ public class BFTestAdapterMinimal {
      */
     public String getColorOfStartField(int playerID) {
         //TODO
-        return global.BOARD.getGameField(global.players[playerID].startField.getFieldIndex()).color.toString().toLowerCase();
+        return "0";
     }
 
 
@@ -191,7 +171,7 @@ public class BFTestAdapterMinimal {
      */
     public int getFigureCount(int id) {
         //TODO
-        return global.players[id].figures.size();
+        return 0;
     }
 
     /**
@@ -203,10 +183,6 @@ public class BFTestAdapterMinimal {
      */
     public boolean occupiesHomeField(int playerID, int figureID) {
         //TODO
-        for (int i = 0; i < 4; i++) {
-            if (global.players[playerID].figures.get(figureID).getCurrentField().equals(global.players[playerID].homeFields.get(i)))
-                return true;
-        }
         return false;
     }
 
@@ -217,7 +193,7 @@ public class BFTestAdapterMinimal {
      */
     public String getFigureColor(int playerID, int figureID) {
         //TODO
-        return global.players[playerID].figures.get(figureID).color.toString().toLowerCase();
+        return "";
     }
 
     /**
@@ -228,10 +204,7 @@ public class BFTestAdapterMinimal {
      */
     public boolean allHomeFieldsOccupied(int playerID) {
         //TODO
-        for (int i = 0; i < 4; i++) {
-            if (!global.players[playerID].homeFields.get(i).isOccupied()) return false;
-        }
-        return true;
+        return false;
     }
 
     /* ***************************************************
@@ -245,7 +218,7 @@ public class BFTestAdapterMinimal {
      */
     public int getDiceThrow() {
         //TODO
-        return global.BOARD.getDice().throwDice();
+        return 0;
     }
 
     /**
@@ -256,8 +229,7 @@ public class BFTestAdapterMinimal {
      */
     public Vector2f getDicePosition(int playerID) {
         //TODO
-        global.BOARD.getDice().setPosition(playerID);
-        return global.BOARD.getDice().getCurrentPosition();
+        return new Vector2f();
     }
 
     /* ***************************************************
@@ -271,7 +243,6 @@ public class BFTestAdapterMinimal {
      */
     public void setActivePlayer(int id) {
         //TODO
-        global.activePlayer = id;
     }
 
     /**
@@ -281,9 +252,6 @@ public class BFTestAdapterMinimal {
      */
     public void resetFigures(int playerID) {
         //TODO
-        for (int i = 0; i < 4; i++) {
-            global.players[playerID].figures.get(i).reset();
-        }
     }
 
     /**
@@ -296,18 +264,6 @@ public class BFTestAdapterMinimal {
      */
     public void move(int playerID, int figureID, int diceThrow) {
         //TODO
-        GameLogic.spawnMystery = false;
-        GameLogic.setDebugDiceThrow(diceThrow);
-        List<IField> lst = MoveLogic.getMovableField(global.players[playerID].figures.get(figureID).getCurrentField(), diceThrow);
-        GameLogic.executeDicePhase(diceThrow, playerID);
-        if (GameLogic.isNextPlayer) GameLogic.executeDicePhase(diceThrow, playerID);
-        GameLogic.executeSelectFigurePhase(global.players[playerID].figures.get(figureID).getCurrentField(), diceThrow);
-        if (lst.size() > 0) {
-            GameLogic.executeSelectMovementPhase(lst.get(0), diceThrow);
-
-        } else if (GameLogic.isNextPlayer) {
-            GameLogic.executeDicePhase(diceThrow, playerID);
-        }
     }
 
     /**
@@ -318,7 +274,7 @@ public class BFTestAdapterMinimal {
      * @return Index der Figur
      */
     public int getFigureIndex(int playerID, int figureID) {
-        return global.players[playerID].figures.get(figureID).getCurrentField().getFieldIndex();
+        return 0;
     }
 
     /**
@@ -328,7 +284,7 @@ public class BFTestAdapterMinimal {
      */
     public int getDiceThrowAttempts() {
         //TODO
-        return 3 - GameLogic.getOutOfBaseTries;
+        return 0;
     }
 
     /**
@@ -337,19 +293,6 @@ public class BFTestAdapterMinimal {
      */
     public void resetTurn() {
         //TODO
-        GameLogic.getOutOfBaseTries = 0;
-        global.phase = Phase.DICE_PHASE;
-        GameLogic.isNextPlayer = false;
-        for (int i = 0; i < 40; i++) {
-            if (global.BOARD.getGameField(i).isOccupied()) global.BOARD.getGameField(i).getCurrentObject().reset();
-        }
-        for (int i = 0; i < 4; i++) {
-            global.players[i].setBedSpecial(null);
-        }
-        GameLogic.numOfMysteryFields = 0;
-        global.rounds = 0;
-        global.activePlayer = 0;
-        GameLogic.spawnMystery = true;
     }
 
     /**
@@ -361,7 +304,7 @@ public class BFTestAdapterMinimal {
      */
     public boolean occupiesBaseField(int playerID, int figureID) {
         //TODO
-        return global.players[playerID].figures.get(figureID).getCurrentField().getType() == FieldType.BASE;
+        return false;
     }
 
 
@@ -375,7 +318,7 @@ public class BFTestAdapterMinimal {
      * @return ID des aktiven Spielers
      */
     public int getActivePlayer() {
-        return global.activePlayer;
+        return 0;
     }
 
     /**
@@ -385,7 +328,7 @@ public class BFTestAdapterMinimal {
      * @return True, wenn der Spieler gewonnen hat. False, wenn nicht.
      */
     public boolean hasWon(int playerID) {
-        return global.players[playerID].hasWon();
+        return false;
     }
 
     /**
@@ -394,6 +337,6 @@ public class BFTestAdapterMinimal {
      * @return Position des Würfels
      */
     public Vector2f getActiveDicePosition() {
-        return global.BOARD.getDice().getCurrentPosition();
+        return new Vector2f();
     }
 }

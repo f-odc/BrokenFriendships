@@ -1,11 +1,7 @@
 package tests.adapter;
 
-import model.board.fields.IField;
-import model.game.logic.MoveLogic;
-import model.global;
-
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class BFTestAdapterExtended1 extends BFTestAdapterMinimal {
 
@@ -22,6 +18,8 @@ public class BFTestAdapterExtended1 extends BFTestAdapterMinimal {
      */
     public List<Integer> displayField(int playerID, int figureID, int diceThrow) {
         //TODO
-        return MoveLogic.getMovableField(global.players[playerID].figures.get(figureID).getCurrentField(), diceThrow).stream().map(IField::getFieldIndex).collect(Collectors.toList());
+        List<Integer> returnList = new ArrayList<>();
+        returnList.add(1);
+        return returnList;
     }
 }

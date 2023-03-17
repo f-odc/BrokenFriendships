@@ -7,7 +7,7 @@ import tests.students.testcases.BedSpecialTest;
 import tests.students.testcases.BombSpecialTest;
 import tests.students.testcases.MoveFourSpecialTest;
 import tests.students.testcases.SwitchSpecialTest;
-import tests.tutor.testcases.PlusToThreeSpecialTest;
+import tests.students.testcases.PlusToThreeSpecialTest;
 
 public class BFTestsuiteExtended3 {
 

@@ -28,6 +28,7 @@ public class MoveOutSpecialTest {
                 adapter.resetTurn();
                 adapter.setActivePlayer(i);
                 adapter.resetFigures(i);
+                assertTrue(adapter.allHomeFieldsOccupied(i));
                 adapter.forceSimpleSpecialActivation("moveOut", i, j);
                 //moves one figure out of base
                 assertFalse(adapter.allHomeFieldsOccupied(i));

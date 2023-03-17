@@ -1,11 +1,5 @@
 package tests.adapter;
 
-import model.board.objects.specials.BedSpecial;
-import model.board.objects.specials.BombSpecial;
-import model.board.objects.specials.MoveFourSpecial;
-import model.board.objects.specials.SwitchSpecial;
-import model.game.logic.GameLogic;
-import model.global;
 
 public class BFTestAdapterExtended3 extends BFTestAdapterExtended2 {
 
@@ -24,25 +18,18 @@ public class BFTestAdapterExtended3 extends BFTestAdapterExtended2 {
         switch (type) {
             case "bed" -> {
                 //TODO
-                GameLogic.setDebugDiceThrow(6);
-                GameLogic.executeInitSpecialsPhase(0, global.players[playerID].figures.get(figureID));
             }
             case "bomb" -> {
                 //TODO
-                GameLogic.executeInitSpecialsPhase(1, global.players[playerID].figures.get(figureID));
             }
             case "PlusToThree" -> {
                 //TODO
-                GameLogic.executeInitSpecialsPhase(6, global.players[playerID].figures.get(figureID));
             }
             case "MoveFour" -> {
                 //TODO
-                GameLogic.executeInitSpecialsPhase(4, global.players[playerID].figures.get(figureID));
             }
             case "Switch" -> {
                 //TODO
-                GameLogic.setDebugDiceThrow(3);
-                GameLogic.executeInitSpecialsPhase(7, global.players[playerID].figures.get(figureID));
             }
         }
     }
@@ -54,25 +41,27 @@ public class BFTestAdapterExtended3 extends BFTestAdapterExtended2 {
      * @return True, wenn Bett bei dem Spieler aktiv ist. False, wenn nicht.
      */
     public boolean isBedActive(int playerID) {
-        return global.players[playerID].getActiveBed() != null;
+        return false;
     }
 
     /**
      * Gebe zurück, ob auf diesem Feld ein Bett platziert ist.
+     *
      * @param index des Feldes
      * @return True, wenn auf dem Feld ein Bett ist. False, wenn nicht.
      */
     public boolean isOccupiedByBed(int index) {
-        return global.BOARD.getGameField(index).getCurrentObject() instanceof BedSpecial;
+        return false;
     }
 
     /**
      * Gebe zurück, ob auf diesem Feld eine Bombe platziert ist.
+     *
      * @param index des Feldes
      * @return True, wenn auf dem Feld eine Bombe ist. False, wenn nicht.
      */
     public boolean isOccupiedByBomb(int index) {
-        return global.BOARD.getGameField(index).getCurrentObject() instanceof BombSpecial;
+        return false;
     }
 
     /**
@@ -81,7 +70,6 @@ public class BFTestAdapterExtended3 extends BFTestAdapterExtended2 {
      * @param fieldID ID des Feldes
      */
     public void selectField(int fieldID) {
-        GameLogic.executeSelectMovementPhase(global.BOARD.getGameField(fieldID), 6);
     }
 
     /**
@@ -91,8 +79,6 @@ public class BFTestAdapterExtended3 extends BFTestAdapterExtended2 {
      * @param fieldID2 ID des zweiten Feldes.
      */
     public void selectTwoFields(int fieldID1, int fieldID2) {
-        GameLogic.executeMysterySelectionPhase(global.BOARD.getGameField(fieldID1));
-        GameLogic.executeSelectMovementPhase(global.BOARD.getGameField(fieldID2), 6);
     }
 
     /**
@@ -102,8 +88,5 @@ public class BFTestAdapterExtended3 extends BFTestAdapterExtended2 {
      * @param fieldID  ID des Feldes
      */
     public void selectBaseField(int playerID, int figureID, int fieldID) {
-        if (GameLogic.activeSpecial instanceof MoveFourSpecial || GameLogic.activeSpecial instanceof SwitchSpecial)
-            GameLogic.executeMysterySelectionPhase(global.players[playerID].figures.get(figureID).getCurrentField());
-        GameLogic.executeSelectMovementPhase(global.BOARD.getBase(playerID).get(fieldID), 6);
     }
 }
