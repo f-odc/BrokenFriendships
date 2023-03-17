@@ -129,6 +129,8 @@ public class MoveTest {
                 adapter.move(i, j, 5);
                 //moves past base
                 assertFalse(adapter.occupiesBaseField(i, j));
+                adapter.setActivePlayer(i);
+                adapter.resetFigures(i);
                 adapter.move(i, j, 6);
                 adapter.move(i, j, 39);
                 adapter.setActivePlayer(i);
