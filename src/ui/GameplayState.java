@@ -1,10 +1,10 @@
 package ui;
 
 import eea.engine.action.Action;
-import eea.engine.action.basicactions.ChangeStateInitAction;
 import eea.engine.component.render.ImageRenderComponent;
-import eea.engine.event.ANDEvent;
+import eea.engine.event.Event;
 import eea.engine.event.basicevents.*;
+import model.events.TouchEvent;
 import model.game.GameManager;
 import model.global;
 import org.newdawn.slick.*;
@@ -62,7 +62,7 @@ public class GameplayState extends BasicGameState {
             exit.addComponent(new ImageRenderComponent(new Image("/assets/exit.png")));
 
             //add pause event
-            ANDEvent pauseEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
+            Event pauseEvent = new TouchEvent();
             Action pauseAction = new ChangeStateAction(global.PAUSE_STATE);
             pauseEvent.addAction(pauseAction);
             exit.addComponent(pauseEvent);

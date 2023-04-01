@@ -5,9 +5,8 @@ import eea.engine.action.basicactions.ChangeStateAction;
 import eea.engine.action.basicactions.ChangeStateInitAction;
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
-import eea.engine.event.ANDEvent;
-import eea.engine.event.basicevents.MouseClickedEvent;
-import eea.engine.event.basicevents.MouseEnteredEvent;
+import eea.engine.event.Event;
+import model.events.TouchEvent;
 import model.global;
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Vector2f;
@@ -18,7 +17,7 @@ public class OnPauseMenuState extends BasicGameState {
 
     private int stateID;
     private final int distance = 100;
-    private final int start_Position = 280;
+    private final int start_Position = 580;
 
     OnPauseMenuState(int stateID) {
         this.stateID = stateID;
@@ -41,12 +40,12 @@ public class OnPauseMenuState extends BasicGameState {
             Entity new_Game_Entity = new Entity(new_Game);
 
             // Setze Position und Bildkomponente
-            new_Game_Entity.setPosition(new Vector2f(global.X_DIMENSIONS / 2, 290));
+            new_Game_Entity.setPosition(new Vector2f(global.X_DIMENSIONS / 2, 590));
             new_Game_Entity.setScale(0.28f);
             new_Game_Entity.addComponent(new ImageRenderComponent(new Image("/assets/entryButton.png")));
 
             // Erstelle das Ausloese-Event und die zugehoerige Action
-            ANDEvent mainEvents = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
+            Event mainEvents = new TouchEvent();
             Action new_Game_Action = new ChangeStateInitAction(global.GAMEPLAY_STATE);
             mainEvents.addAction(new_Game_Action);
             new_Game_Entity.addComponent(mainEvents);
@@ -58,12 +57,12 @@ public class OnPauseMenuState extends BasicGameState {
             Entity quit_Entity = new Entity("HauptMenue");
 
             // Setze Position und Bildkomponente
-            quit_Entity.setPosition(new Vector2f(global.X_DIMENSIONS / 2, 390));
+            quit_Entity.setPosition(new Vector2f(global.X_DIMENSIONS / 2, 690));
             quit_Entity.setScale(0.28f);
             quit_Entity.addComponent(new ImageRenderComponent(new Image("/assets/entryButton.png")));
 
             // Erstelle das Ausloese-Event und die zugehoerige Action
-            ANDEvent mainEvents_q = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
+            Event mainEvents_q = new TouchEvent();
             Action quit_Action = new ChangeStateAction(global.MAINMENU_STATE);
             mainEvents_q.addAction(quit_Action);
             quit_Entity.addComponent(mainEvents_q);
@@ -75,12 +74,12 @@ public class OnPauseMenuState extends BasicGameState {
             Entity continue_Entity = new Entity("Weiter spielen");
 
             // Setze Position und Bildkomponente
-            continue_Entity.setPosition(new Vector2f(global.X_DIMENSIONS / 2, 490));
+            continue_Entity.setPosition(new Vector2f(global.X_DIMENSIONS / 2, 790));
             continue_Entity.setScale(0.28f);
             continue_Entity.addComponent(new ImageRenderComponent(new Image("/assets/entryButton.png")));
 
             // Erstelle das Ausloese-Event und die zugehoerige Action
-            ANDEvent mainEvents_c = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
+            Event mainEvents_c = new TouchEvent();
             Action continue_Action = new ChangeStateAction(global.GAMEPLAY_STATE);
             mainEvents_c.addAction(continue_Action);
             continue_Entity.addComponent(mainEvents_c);

@@ -1,6 +1,7 @@
 package ui;
 
-import eea.engine.action.basicactions.ChangeStateAction;
+import eea.engine.event.Event;
+import model.events.TouchEvent;
 import model.global;
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Vector2f;
@@ -12,9 +13,6 @@ import eea.engine.action.basicactions.ChangeStateInitAction;
 import eea.engine.action.basicactions.QuitAction;
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
-import eea.engine.event.ANDEvent;
-import eea.engine.event.basicevents.MouseClickedEvent;
-import eea.engine.event.basicevents.MouseEnteredEvent;
 
 /**
  * @author Timo Bähr
@@ -55,8 +53,10 @@ public class MainMenuState extends BasicGameState {    // zugehoeriger entityMan
             new_Game_Entity.addComponent(new ImageRenderComponent(new Image("assets/entryButton.png")));
 
             // Erstelle das Ausloese-Event und die zugehoerige Action
-            ANDEvent mainEvents = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
+            //MouseClickedEvent mainEvents = new MouseClickedEvent();
+            Event mainEvents = new TouchEvent();
             Action new_Game_Action = new ChangeStateInitAction(global.GAMEPLAY_STATE);
+            //Action new_Game_Action = new TestAction();
             mainEvents.addAction(new_Game_Action);
             new_Game_Entity.addComponent(mainEvents);
 
@@ -72,7 +72,7 @@ public class MainMenuState extends BasicGameState {    // zugehoeriger entityMan
             quit_Entity.addComponent(new ImageRenderComponent(new Image("assets/entryButton.png")));
 
             // Erstelle das Ausloese-Event und die zugehoerige Action
-            ANDEvent mainEvents_q = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
+            Event mainEvents_q = new TouchEvent();
             Action quit_Action = new QuitAction();
             mainEvents_q.addAction(quit_Action);
             quit_Entity.addComponent(mainEvents_q);

@@ -2,9 +2,8 @@ package model.board.objects;
 
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
-import eea.engine.event.ANDEvent;
-import eea.engine.event.basicevents.MouseClickedEvent;
-import eea.engine.event.basicevents.MouseEnteredEvent;
+import eea.engine.event.Event;
+import model.events.TouchEvent;
 import model.actions.DiceAction;
 import model.global;
 import org.newdawn.slick.Animation;
@@ -124,7 +123,7 @@ public class Dice {
         dice.addComponent(comp);
         dice.setScale(0.12f);
         // Würfel wurf Event
-        ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
+        Event clickEvent = new TouchEvent();
         clickEvent.addAction(new DiceAction());
         dice.addComponent(clickEvent);
         global.entityManager.addEntity(global.GAMEPLAY_STATE, dice);

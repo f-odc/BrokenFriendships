@@ -2,9 +2,8 @@ package model.board.fields;
 
 import eea.engine.component.render.ImageRenderComponent;
 import eea.engine.entity.Entity;
-import eea.engine.event.ANDEvent;
-import eea.engine.event.basicevents.MouseClickedEvent;
-import eea.engine.event.basicevents.MouseEnteredEvent;
+import eea.engine.event.Event;
+import model.events.TouchEvent;
 import model.actions.BoardFieldAction;
 import model.board.objects.Figure;
 import model.board.objects.IGameObject;
@@ -80,7 +79,7 @@ public class BoardField implements IField{
         }
         else{
             //add action to entity
-            ANDEvent clickEvent = new ANDEvent(new MouseEnteredEvent(), new MouseClickedEvent());
+            Event clickEvent = new TouchEvent();
             clickEvent.addAction(new BoardFieldAction(this));
             fieldEntity.addComponent(clickEvent);
         }
