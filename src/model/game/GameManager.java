@@ -6,6 +6,7 @@ import model.game.logic.GameLogic;
 import model.global;
 import model.player.PlayerManager;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,14 +23,14 @@ public class GameManager {
         // setup player
         PlayerManager.setup();
         // setup specials array
-        global.specialsMap.add(List.of("model.board.objects.specials.BedSpecial", "assets/MysterySelection/bed.png"));
-        global.specialsMap.add(List.of("model.board.objects.specials.BombSpecial", "assets/MysterySelection/bomb.png"));
-        global.specialsMap.add(List.of("model.board.objects.specials.DeadSpecial", "assets/MysterySelection/dead.png"));
-        global.specialsMap.add(List.of("model.board.objects.specials.GrowingSpecial", "assets/MysterySelection/growing.png"));
-        global.specialsMap.add(List.of("model.board.objects.specials.MoveFourSpecial", "assets/MysterySelection/moveFour.png"));
-        global.specialsMap.add(List.of("model.board.objects.specials.MoveOutSpecial", "assets/MysterySelection/moveOutHome.png"));
-        global.specialsMap.add(List.of("model.board.objects.specials.PlusToThreeSpecial", "assets/MysterySelection/plusToThree.png"));
-        global.specialsMap.add(List.of("model.board.objects.specials.SwitchSpecial", "assets/MysterySelection/switch.png"));
+        global.specialsMap.add(Arrays.asList("model.board.objects.specials.BedSpecial", "assets/MysterySelection/bed.png"));
+        global.specialsMap.add(Arrays.asList("model.board.objects.specials.BombSpecial", "assets/MysterySelection/bomb.png"));
+        global.specialsMap.add(Arrays.asList("model.board.objects.specials.DeadSpecial", "assets/MysterySelection/dead.png"));
+        global.specialsMap.add(Arrays.asList("model.board.objects.specials.GrowingSpecial", "assets/MysterySelection/growing.png"));
+        global.specialsMap.add(Arrays.asList("model.board.objects.specials.MoveFourSpecial", "assets/MysterySelection/moveFour.png"));
+        global.specialsMap.add(Arrays.asList("model.board.objects.specials.MoveOutSpecial", "assets/MysterySelection/moveOutHome.png"));
+        global.specialsMap.add(Arrays.asList("model.board.objects.specials.PlusToThreeSpecial", "assets/MysterySelection/plusToThree.png"));
+        global.specialsMap.add(Arrays.asList("model.board.objects.specials.SwitchSpecial", "assets/MysterySelection/switch.png"));
     }
 
     /**

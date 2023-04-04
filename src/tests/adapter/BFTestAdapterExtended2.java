@@ -60,17 +60,20 @@ public class BFTestAdapterExtended2 extends BFTestAdapterExtended1 {
      */
     public void forceSimpleSpecialActivation(String type, int playerID, int figureID) {
         switch (type) {
-            case "dead" -> {
+            case "dead" : {
                 //TODO
                 GameLogic.executeInitSpecialsPhase(2, global.players[playerID].figures.get(figureID));
+                break;
             }
-            case "moveOut" -> {
+            case "moveOut" : {
                 //TODO
                 GameLogic.executeInitSpecialsPhase(5, global.players[playerID].figures.get(figureID));
+                break;
             }
-            case "growing" -> {
+            case "growing" : {
                 //TODO
                 GameLogic.executeInitSpecialsPhase(3, global.players[playerID].figures.get(figureID));
+                break;
             }
         }
     }

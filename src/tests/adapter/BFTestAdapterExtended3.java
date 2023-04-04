@@ -22,27 +22,32 @@ public class BFTestAdapterExtended3 extends BFTestAdapterExtended2 {
      */
     public void forceComplicatedSpecialSpawn(String type, int playerID, int figureID) {
         switch (type) {
-            case "bed" -> {
+            case "bed" : {
                 //TODO
                 GameLogic.setDebugDiceThrow(6);
                 GameLogic.executeInitSpecialsPhase(0, global.players[playerID].figures.get(figureID));
+                break;
             }
-            case "bomb" -> {
+            case "bomb" : {
                 //TODO
                 GameLogic.executeInitSpecialsPhase(1, global.players[playerID].figures.get(figureID));
+                break;
             }
-            case "PlusToThree" -> {
+            case "PlusToThree" : {
                 //TODO
                 GameLogic.executeInitSpecialsPhase(6, global.players[playerID].figures.get(figureID));
+                break;
             }
-            case "MoveFour" -> {
+            case "MoveFour" : {
                 //TODO
                 GameLogic.executeInitSpecialsPhase(4, global.players[playerID].figures.get(figureID));
+                break;
             }
-            case "Switch" -> {
+            case "Switch" : {
                 //TODO
                 GameLogic.setDebugDiceThrow(3);
                 GameLogic.executeInitSpecialsPhase(7, global.players[playerID].figures.get(figureID));
+                break;
             }
         }
     }
