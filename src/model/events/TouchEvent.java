@@ -39,7 +39,6 @@ public class TouchEvent extends Event {
             else{
                 // time diff in milliseconds
                 long timeDif = (new Date().getTime()) - startEventTime;
-                System.out.println(timeDif);
                 // check if 0.8 seconds are passed
                 if (timeDif >= 800){
                     // check coords equality
