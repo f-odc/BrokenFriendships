@@ -14,6 +14,6 @@ public class BoardManager {
      */
     static public void setup(){
             // initialisieren des Spielbrettes
-            global.BOARD = new Board();
+            global.BOARD = new Board(8);
     }
 }

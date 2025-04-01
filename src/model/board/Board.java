@@ -18,40 +18,53 @@ import java.util.List;
  */
 public class Board {
 
-    //-2 == house-field, -3 == base-field, -1 == no field, -4 == dice field
-    //all positive values are standard fields in the correct order
-    private final int[][] boardTemplate = {
-            {-2, -2, -1, -1, 8, 9, 10, -1, -1, -2, -2},
-            {-2, -2, -1, -1, 7, -3, 11, -1, -1, -2, -2},
-            {-1, -4, -1, -1, 6, -3, 12, -1, -1, -4, -1},
-            {-1, -1, -1, -1, 5, -3, 13, -1, -1, -1, -1},
-            {0, 1, 2, 3, 4, -3, 14, 15, 16, 17, 18},
-            {39, -3, -3, -3, -3, -1, -3, -3, -3, -3, 19},
-            {38, 37, 36, 35, 34, -3, 24, 23, 22, 21, 20},
-            {-1, -1, -1, -1, 33, -3, 25, -1, -1, -1, -1},
-            {-1, -4, -1, -1, 32, -3, 26, -1, -1, -4, -1},
-            {-2, -2, -1, -1, 31, -3, 27, -1, -1, -2, -2},
-            {-2, -2, -1, -1, 30, 29, 28, -1, -1, -2, -2},
-    };
-    private static int xOffset; //offset to center the board on the screen
-    private static int stepSize;  //width and height of a board cell
-    private Vector2f[] dicePositions; //positions of dice, relative to screen-size
-    private Dice dice;  //the current dice object
-    public PlayerColorFields bases;  //base fields
-    public PlayerColorFields homes;  //house fields
-    public final BoardField[] gameFields = new BoardField[40]; //Standard- und Start-fields
+    private int[][] boardTemplate;
+    private static int xOffset;
+    private static int stepSize;
+    private Vector2f[] dicePositions;
+    private Dice dice;
+    public PlayerColorFields bases;
+    public PlayerColorFields homes;
+    public BoardField[] gameFields;
+    private int numPlayers;
+    private int boardSize;
 
-    public Board() {
-        //initialize size and offset
+    public Board(int numPlayers) {
+        this.numPlayers = Math.max(2, Math.min(8, numPlayers)); // Ensure between 2-8 players
+        this.boardSize = calculateBoardSize(this.numPlayers);
+        this.boardTemplate = generateBoardTemplate(this.numPlayers, this.boardSize);
+        this.gameFields = new BoardField[boardSize * 4];
         initSizeAndOffset();
-
-        //initialize the board fields
         initBoardFields();
-
-        //initialize the dice
         initDice();
     }
 
+    private int calculateBoardSize(int numPlayers) {
+        if (numPlayers <= 4) return 11;
+        if (numPlayers <= 6) return 15;
+        return 19;
+    }
+
+    private int[][] generateBoardTemplate(int numPlayers, int size) {
+        int[][] template = new int[size][size];
+        
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                template[i][j] = -1; // Default to no field
+            }
+        }
+        
+        int pathSize = size - 2;
+        int numFields = pathSize * 4;
+        
+        for (int i = 0; i < numFields; i++) {
+            int x = (i < pathSize) ? i + 1 : (i < 2 * pathSize) ? pathSize : (i < 3 * pathSize) ? (2 * pathSize - i) : 1;
+            int y = (i < pathSize) ? 1 : (i < 2 * pathSize) ? (i - pathSize + 1) : (i < 3 * pathSize) ? pathSize : (4 * pathSize - i);
+            template[y][x] = i;
+        }
+        
+        return template;
+    }
 
     //private methods to build up the board
 
@@ -59,74 +72,44 @@ public class Board {
      * Funktion um die Größe der Felder und den offset des Spielbrettes auszurechnen.
      */
     private void initSizeAndOffset() {
-        //initialize offset
         xOffset = global.X_DIMENSIONS / 2 - global.Y_DIMENSIONS / 2;
-
-        //initialize step size
-        stepSize = global.Y_DIMENSIONS / global.NUM_OF_FIELDS;
+        stepSize = global.Y_DIMENSIONS / boardSize;
     }
 
     /**
      * Funktion um das Feld mit den einzelnen Feldern zu initialisieren.
      */
     private void initBoardFields() {
-        //initialize house and base fields
         this.bases = new PlayerColorFields();
         this.homes = new PlayerColorFields();
-        this.dicePositions = new Vector2f[4];
+        this.dicePositions = new Vector2f[numPlayers];
 
-        //initialize entities for every field
-        //iterates through every field of the template
-        for (int j = 0; j < global.NUM_OF_FIELDS; j++) {
-            for (int i = 0; i < global.NUM_OF_FIELDS; i++) {
-                //get field type from template
+        for (int j = 0; j < boardSize; j++) {
+            for (int i = 0; i < boardSize; i++) {
                 int type = boardTemplate[j][i];
-                //get color for the field
-                Color color = type < -1 ?
-                        //house of base field
-                        getFieldColor(new Vector2f(i, j)) :
-                        //start fields
-                        (type == 0 || type == 10 || type == 20 || type == 30) ? getFieldColor(new Vector2f(i, j)) :
-                                //standard field
-                                Color.NONE;
+                Color color = type >= 0 ? getFieldColor(new Vector2f(i, j)) : Color.NONE;
 
                 BoardField boardtmp;
                 Vector2f pos = getMidPoint(i, j);
                 switch (type) {
-                    case -4 : {
-                        //initialize the positions for the dice
-                        dicePositions[(i == 1 && j == 2) ? 0 :
-                                (i == 9 && j == 2) ? 1 :
-                                        (i == 9 && j == 8) ? 2 : 3] = pos;
-                        break;
-                    }
-                    case -3 : {
-                        //initialize entity for the base fields
+                    case -4 -> dicePositions[diceIndex(i, j)] = pos;
+                    case -3 -> {
                         boardtmp = new BoardField(pos, type, color, FieldType.BASE);
                         bases.add(boardtmp, color);
-                        break;
                     }
-                    case -2 : {
-                        //initialize entity for the home fields
+                    case -2 -> {
                         boardtmp = new BoardField(pos, type, color, FieldType.HOME);
                         homes.add(boardtmp, color);
-                        break;
                     }
-                    case -1 : {
-                        //no field
-                        break;
-                    }
-                    default : {
-                        //initialize standard and start fields and their entity
-                        FieldType field = (type == 0 || type == 10 || type == 20 || type == 30) ? FieldType.START : FieldType.STANDARD;
+                    case -1 -> {}
+                    default -> {
+                        FieldType field = (type % 10 == 0) ? FieldType.START : FieldType.STANDARD;
                         boardtmp = new BoardField(pos, type, color, field);
                         gameFields[type] = boardtmp;
-                        break;
                     }
                 }
             }
         }
-        //reverse order of bases, to make later access easier
         bases.initCorrectOrder();
     }
 
